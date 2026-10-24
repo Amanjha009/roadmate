@@ -1,6 +1,5 @@
 {
-  "version": 2,
-  "name": "roadmate-preview",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [

@@ -1,7 +1,17 @@
 {
-  "version": 2,
-  "name": "roadmate-india",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "preview",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ]
 }
