@@ -1,0 +1,6 @@
+# Ignore everything except preview directory and vercel configs
+/*
+!preview/
+!preview/**
+!vercel.json
+!.vercelignore
