@@ -237,6 +237,24 @@ The backend reads configuration settings from environment variables or a `.env` 
 
 ---
 
+## 🔄 Automatic GitHub Sync
+
+RoadMate includes an automated continuous sync daemon that monitors the workspace, debounces active edits, and automatically commits and pushes changes to GitHub:
+
+```bash
+# Check auto-sync status & view recent syncs
+./scripts/auto_sync.sh status
+
+# Start / stop the background daemon
+./scripts/auto_sync.sh start
+./scripts/auto_sync.sh stop
+
+# Tail live sync logs
+./scripts/auto_sync.sh logs
+```
+
+---
+
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute with proper attribution.
