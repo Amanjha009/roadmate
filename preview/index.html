@@ -1,0 +1,2800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoadMate India 🏍️ — Safety-First Touring App Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- PWA Manifest & App Shell -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#121212">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="RoadMate India">
+  <!-- Leaflet for interactive real mapping -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body class="theme-dark">
+  <!-- Top Global Header / Showcase Control Bar -->
+  <header class="showcase-header">
+    <div class="header-left">
+      <div class="brand-badge">
+        <span class="brand-icon">🏍️</span>
+        <div class="brand-text">
+          <h1>RoadMate India</h1>
+          <span class="brand-sub">Flutter & FastAPI Motorcycle Touring Platform</span>
+        </div>
+      </div>
+      <div class="status-pill live-pill">
+        <span class="pulsing-dot"></span>
+        <span>Interactive Live Preview</span>
+      </div>
+    </div>
+
+    <!-- View Mode & Platform Switcher -->
+    <div class="view-mode-tabs" role="tablist">
+      <button class="mode-tab active" data-mode="device" data-device="ios" id="mode-ios-btn" title="Apple iPhone 16 Pro iOS Quality">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="3"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+        🍎 iPhone iOS
+      </button>
+      <button class="mode-tab" data-mode="device" data-device="android" id="mode-android-btn" title="Android Flagship Viewport">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"></rect><circle cx="12" cy="5" r="1"></circle></svg>
+        🤖 Android
+      </button>
+      <button class="mode-tab" data-mode="cockpit" id="mode-cockpit-btn" title="Cockpit Handlebar HUD Display">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+        🏍️ Cockpit HUD
+      </button>
+      <button class="mode-tab" data-mode="responsive" id="mode-responsive-btn" title="Responsive Mobile Fullscreen Preview">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+        📱 Responsive App
+      </button>
+      <button class="mode-tab" data-mode="grid" id="mode-grid-btn" title="Architecture & 9 Pillars Grid">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        ▦ 9 Pillars Grid
+      </button>
+    </div>
+
+    <div class="header-right">
+      <button class="audio-toggle-btn" id="audio-toggle" title="Toggle Ride Audio Effects">
+        <span class="icon">🔊</span>
+        <span class="label">Sound FX</span>
+      </button>
+      <div class="connection-sim" id="conn-toggle" title="Toggle Offline Zero-Network Mode">
+        <span class="signal-bars">
+          <span class="bar bar-1 active"></span>
+          <span class="bar bar-2 active"></span>
+          <span class="bar bar-3 active"></span>
+        </span>
+        <span class="conn-text" id="conn-status-text">4G Online</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="showcase-main">
+    
+    <!-- LEFT PANEL: Pillar Navigator & Live Telemetry Inspector -->
+    <aside class="sidebar-nav">
+      <div class="sidebar-section-title">COMMUNITY & SOCIAL FEED</div>
+      <nav class="pillar-menu" style="margin-bottom: 14px;">
+        <button class="pillar-nav-item active" data-screen="home">
+          <span class="pillar-num" style="background: rgba(255,92,0,0.2); color: #FF8A4C;">🏠</span>
+          <span class="pillar-info">
+            <strong>Rider Community Feed</strong>
+            <small>Stories, Reels & Posts</small>
+          </span>
+          <span class="pillar-status live">LIVE</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="explore">
+          <span class="pillar-num" style="background: rgba(33,150,243,0.2); color: #64B5F6;">🧭</span>
+          <span class="pillar-info">
+            <strong>Explore & Discovery</strong>
+            <small>Passes, Routes & Hazards</small>
+          </span>
+          <span class="pillar-badge badge-blue">Map/List</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="clips">
+          <span class="pillar-num" style="background: rgba(156,39,176,0.2); color: #CE93D8;">🎬</span>
+          <span class="pillar-info">
+            <strong>Ride Clips (Reels)</strong>
+            <small>Vertical Touring Video</small>
+          </span>
+          <span class="pillar-badge badge-purple">Reels</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-section-title">9 MVP TOURING PILLARS</div>
+      <nav class="pillar-menu" id="pillar-menu">
+        <button class="pillar-nav-item" data-screen="hud">
+          <span class="pillar-num">01</span>
+          <span class="pillar-info">
+            <strong>Touring HUD & Map</strong>
+            <small>Live GPS & Hazard Radar</small>
+          </span>
+          <span class="pillar-badge badge-orange">Cockpit</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="hazards">
+          <span class="pillar-num">02</span>
+          <span class="pillar-info">
+            <strong>PostGIS Hazards</strong>
+            <small>Landslide, Pothole, Ice</small>
+          </span>
+          <span class="pillar-badge badge-amber">3 Active</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="convoy">
+          <span class="pillar-num">03</span>
+          <span class="pillar-info">
+            <strong>Convoy Coordination</strong>
+            <small>Captain, Sweep & Pack</small>
+          </span>
+          <span class="pillar-badge badge-green">6 Riders</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="ai-planner">
+          <span class="pillar-num">04</span>
+          <span class="pillar-info">
+            <strong>AI Route Copilot</strong>
+            <small>Himalayan High Passes</small>
+          </span>
+          <span class="pillar-badge badge-ai">GPT-4o</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="sos">
+          <span class="pillar-num">05</span>
+          <span class="pillar-info">
+            <strong>Emergency SOS</strong>
+            <small>Crash Beacon & Telemetry</small>
+          </span>
+          <span class="pillar-badge badge-red">Slide 80dp</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="garage">
+          <span class="pillar-num">06</span>
+          <span class="pillar-info">
+            <strong>Digital Garage</strong>
+            <small>Himalayan 450 Maintenance</small>
+          </span>
+          <span class="pillar-badge badge-gray">14,280 km</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="women-safety">
+          <span class="pillar-num">07</span>
+          <span class="pillar-info">
+            <strong>Women Rider Safety</strong>
+            <small>Verified Safe Stays & Dhabas</small>
+          </span>
+          <span class="pillar-badge badge-purple">4.9 ★</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="vault">
+          <span class="pillar-num">08</span>
+          <span class="pillar-info">
+            <strong>Document Vault</strong>
+            <small>RC, Insurance, PUC, DL</small>
+          </span>
+          <span class="pillar-badge badge-green">4 Verified</span>
+        </button>
+
+        <button class="pillar-nav-item" data-screen="auth">
+          <span class="pillar-num">09</span>
+          <span class="pillar-info">
+            <strong>Onboarding & Profile</strong>
+            <small>OTP Dev Bypass (123456)</small>
+          </span>
+          <span class="pillar-badge badge-blue">Verified</span>
+        </button>
+      </nav>
+
+      <!-- Live Telemetry Simulator Controls -->
+      <div class="telemetry-controls-box">
+        <div class="telemetry-box-title">SIMULATED SENSORS</div>
+        <div class="sim-row">
+          <span>Speed:</span>
+          <strong id="sim-speed-val">84 km/h</strong>
+        </div>
+        <input type="range" id="speed-slider" min="0" max="140" value="84" class="range-slider">
+        
+        <div class="sim-row" style="margin-top: 10px;">
+          <span>Altitude:</span>
+          <strong id="sim-alt-val">4,280 m (Baralacha La)</strong>
+        </div>
+        <div class="sim-row">
+          <span>Lean Angle:</span>
+          <strong id="sim-lean-val">22° Right</strong>
+        </div>
+        
+        <!-- Live Map & WebSocket Controls -->
+        <div class="telemetry-box-title" style="margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">LIVE MAP & WEBSOCKET ENGINE</div>
+        <div class="sim-actions" style="display: flex; flex-direction: column; gap: 6px;">
+          <button class="sim-btn" id="toggle-tracking-mode-btn" style="background: rgba(255, 92, 0, 0.2); border-color: var(--brand-orange); color: #FF8A4C;">⚡ Mode: Ride Room (3s GPS)</button>
+          <button class="sim-btn" id="sim-tunnel-btn">🚇 Simulate Tunnel Drop & Queue Flush</button>
+          <button class="sim-btn" id="sim-auto-expire-btn">⏱️ Demo Hazard Pin Auto-Expiry (15s)</button>
+          <button class="sim-btn" id="sim-viewport-poll-btn">📡 Viewport Query (>200m moved)</button>
+          <button class="sim-btn" id="trigger-hazard-btn">⚠️ Simulate Hazard Alert</button>
+          <button class="sim-btn sim-btn-offline" id="trigger-offline-btn">📴 Toggle Offline Sync</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER / DEVICE STAGE -->
+    <section class="device-stage" id="device-stage">
+      
+      <!-- Realistic Mobile Phone Frame -->
+      <div class="smartphone-frame device-ios" id="phone-frame">
+        <div class="phone-speaker"></div>
+        <div class="android-punch-hole"></div>
+        <div class="dynamic-island" id="dynamic-island-el" title="Tap to expand live ride status">
+          <div class="island-icon">🏍️</div>
+          <div class="island-text">NH3 • Keylong 18km</div>
+          <div class="island-pulse"></div>
+        </div>
+
+        <!-- Phone Screen Interior -->
+        <div class="phone-screen" id="phone-screen">
+          
+          <!-- System Status Bar -->
+          <div class="phone-status-bar">
+            <span class="status-time" id="status-clock">12:38</span>
+            <div class="status-icons">
+              <span class="gps-icon">⌖ GPS 3D</span>
+              <span id="screen-conn-icon">4G</span>
+              <span>94% 🔋</span>
+            </div>
+          </div>
+
+          <!-- App Top Header Bar inside Phone -->
+          <header class="phone-app-header">
+            <div class="pah-brand" id="pah-brand-btn" title="RoadMate India Home Feed">
+              <svg class="pah-logo-svg" viewBox="0 0 24 24">
+                <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+              </svg>
+              <div class="pah-brand-text">
+                <span class="pah-title">Road<span>Mate</span></span>
+                <span class="pah-sub">📍 Rohtang Pass • 3,980m</span>
+              </div>
+            </div>
+
+            <div class="pah-actions">
+              <button class="pah-btn" id="btn-quick-hud" title="Cockpit Handlebar HUD Display">🧭</button>
+              <button class="pah-btn btn-sos-glow" id="btn-quick-sos" title="Protected Emergency SOS">🚨 SOS</button>
+              <button class="pah-btn" id="btn-header-notifs" title="Touring Notifications">
+                🔔
+                <span class="pah-badge">2</span>
+              </button>
+              <button class="pah-btn" id="btn-header-messages" title="Convoy Comms Radio">
+                💬
+                <span class="pah-badge">1</span>
+              </button>
+            </div>
+          </header>
+
+          <!-- Active App Screen Content Area -->
+          <div class="screen-viewport" id="screen-viewport">
+
+            <!-- SCREEN 0: HOME — INSTAGRAM-INSPIRED RIDER FEED -->
+            <div class="app-screen active" id="screen-home">
+              <div class="home-scroll-container" id="home-feed-scroll">
+                
+                <!-- Stories Shelf with Branded Blaze Orange Rings -->
+                <div class="stories-shelf-wrapper">
+                  <div class="stories-shelf" id="stories-shelf">
+                    <!-- Story 1: Khardung La Weather -->
+                    <div class="story-circle-item" data-story-id="0">
+                      <div class="story-ring-outer">
+                        <img src="assets/images/himalayan_khardungla.jpg" class="story-avatar-img" alt="Khardung La">
+                        <span class="story-badge-icon">🏔️</span>
+                      </div>
+                      <span class="story-label">Khardung La</span>
+                    </div>
+
+                    <!-- Story 2: PostGIS Road Hazard Radar -->
+                    <div class="story-circle-item" data-story-id="1">
+                      <div class="story-ring-outer">
+                        <img src="assets/images/hazard.jpg" class="story-avatar-img" alt="Road Hazard">
+                        <span class="story-badge-icon">⚠️</span>
+                      </div>
+                      <span class="story-label">Road Radar</span>
+                    </div>
+
+                    <!-- Story 3: Spiti River Crossing -->
+                    <div class="story-circle-item" data-story-id="2">
+                      <div class="story-ring-outer">
+                        <img src="assets/images/spiti_water_crossing.jpg" class="story-avatar-img" alt="Kunzum Pass">
+                        <span class="story-badge-icon">🌊</span>
+                      </div>
+                      <span class="story-label">Spiti River</span>
+                    </div>
+
+                    <!-- Story 4: Convoy #07 Sarchu -->
+                    <div class="story-circle-item" data-story-id="3">
+                      <div class="story-ring-outer">
+                        <img src="assets/images/rider.jpg" class="story-avatar-img" alt="Convoy 07">
+                        <span class="story-badge-icon">👥</span>
+                      </div>
+                      <span class="story-label">Convoy #07</span>
+                    </div>
+
+                    <!-- Story 5: Women Rider Safe Stays -->
+                    <div class="story-circle-item" data-story-id="4">
+                      <div class="story-ring-outer">
+                        <img src="assets/images/women_rider_priya.jpg" class="story-avatar-img" alt="Safe Stays">
+                        <span class="story-badge-icon">🛡️</span>
+                      </div>
+                      <span class="story-label">Safe Stays</span>
+                    </div>
+
+                    <!-- Story 6: Garage Maintenance -->
+                    <div class="story-circle-item" data-story-id="5">
+                      <div class="story-ring-outer seen">
+                        <img src="assets/images/hero.jpg" class="story-avatar-img" alt="Tech Tips">
+                        <span class="story-badge-icon">🔧</span>
+                      </div>
+                      <span class="story-label">Tech Tips</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Feed Filter Controls: Following, For You, Nearby -->
+                <div class="feed-segmented-nav" role="tablist">
+                  <button class="feed-tab-btn" data-feed="following" id="tab-feed-following">Following</button>
+                  <button class="feed-tab-btn active" data-feed="foryou" id="tab-feed-foryou">For You</button>
+                  <button class="feed-tab-btn" data-feed="nearby" id="tab-feed-nearby">Nearby (50km)</button>
+                </div>
+
+                <!-- Feed Stream Content -->
+                <div class="feed-stream" id="feed-stream">
+                  
+                  <!-- Post Card 1: Himalayan 450 Khardung La -->
+                  <article class="rider-feed-card" data-post-id="post-1">
+                    <div class="rfc-header">
+                      <div class="rfc-user-meta">
+                        <div class="rfc-avatar-wrap">
+                          <img src="assets/images/rider.jpg" class="rfc-avatar" alt="Vikram Singh">
+                        </div>
+                        <div class="rfc-user-info">
+                          <div class="rfc-user-row">
+                            <span class="rfc-name">Vikram Singh</span>
+                            <span class="rfc-verified-badge" title="Verified Tour Captain">✓</span>
+                          </div>
+                          <div class="rfc-sub-row">
+                            <span class="rfc-bike-tag">RE Himalayan 450</span>
+                            <span class="rfc-location">Tanglang La • 5,328m</span>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="rfc-follow-btn" onclick="window.appPreview && window.appPreview.toggleFollow(this)">+ Follow</button>
+                    </div>
+
+                    <!-- Card Media Container with Double Tap Heart Pop -->
+                    <div class="rfc-media-container" ondblclick="window.appPreview && window.appPreview.handleDoubleTap(this, 'post-1')">
+                      <img src="assets/images/himalayan_khardungla.jpg" class="rfc-media-img" alt="Himalayan 450 Khardung La">
+                      <div class="heart-pop-burst">❤️</div>
+                      
+                      <!-- Telemetry Ribbon Overlay -->
+                      <div class="rfc-telemetry-ribbon">
+                        <div class="rfc-tel-item">
+                          <span class="rfc-tel-lbl">Distance</span>
+                          <span class="rfc-tel-val">342 km</span>
+                        </div>
+                        <div class="rfc-tel-item">
+                          <span class="rfc-tel-lbl">Elevation</span>
+                          <span class="rfc-tel-val val-orange">5,328 m</span>
+                        </div>
+                        <div class="rfc-tel-item">
+                          <span class="rfc-tel-lbl">Temp</span>
+                          <span class="rfc-tel-val">-4°C Crisp</span>
+                        </div>
+                        <div class="rfc-tel-item">
+                          <span class="rfc-tel-lbl">Avg Speed</span>
+                          <span class="rfc-tel-val">54 km/h</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Hazard Alert Notice -->
+                    <div class="rfc-hazard-alert-pill">
+                      <span>⚠️</span>
+                      <div><strong>Active Hazard Alert:</strong> Loose shale & black ice reported 1.2km below crest. Pass in 2nd gear.</div>
+                    </div>
+
+                    <!-- Actions Bar -->
+                    <div class="rfc-actions-bar">
+                      <div class="rfc-actions-left">
+                        <button class="rfc-action-btn btn-like" onclick="window.appPreview && window.appPreview.toggleLike('post-1', this)" title="Like Post">
+                          <span class="icon-heart">🤍</span>
+                          <span class="rfc-count-text like-count">482</span>
+                        </button>
+                        <button class="rfc-action-btn btn-comment" onclick="window.appPreview && window.appPreview.openComments('post-1')" title="View & Add Comments">
+                          <span>💬</span>
+                          <span class="rfc-count-text comment-count">38</span>
+                        </button>
+                        <button class="rfc-action-btn btn-share" onclick="window.appPreview && window.appPreview.sharePost('post-1')" title="Share Expedition">
+                          <span>↗️</span>
+                        </button>
+                      </div>
+                      <button class="rfc-action-btn btn-save" onclick="window.appPreview && window.appPreview.toggleBookmark('post-1', this)" title="Bookmark Route">
+                        <span>🔖</span>
+                      </button>
+                    </div>
+
+                    <!-- Likes summary -->
+                    <div class="rfc-likes-row">
+                      Liked by <strong>priya_rides</strong>, <strong>rohit_adv</strong> and <strong>480 others</strong>
+                    </div>
+
+                    <!-- Caption -->
+                    <div class="rfc-caption-box">
+                      <span class="rfc-caption-author">vikram_adv</span>
+                      First light at 17,480 ft on Tanglang La pass. The Royal Enfield Himalayan 450 Kamet White handled the freezing high-altitude ascent effortlessly. Road surface is dry till Debring, but watch out for fresh rockfall near the hairpin! 🏔️🏍️
+                      <span class="rfc-hashtags">#RoadMateIndia #HimalayanTouring #LehLadakh #RE450 #HighPasses</span>
+                    </div>
+
+                    <!-- Comments Preview Link -->
+                    <span class="rfc-comments-link" onclick="window.appPreview && window.appPreview.openComments('post-1')">
+                      View all 38 rider comments...
+                    </span>
+                  </article>
+
+                  <!-- Post Card 2: Priya Sharma Spiti Water Crossing -->
+                  <article class="rider-feed-card" data-post-id="post-2">
+                    <div class="rfc-header">
+                      <div class="rfc-user-meta">
+                        <div class="rfc-avatar-wrap">
+                          <img src="assets/images/women_rider_priya.jpg" class="rfc-avatar" alt="Priya Sharma">
+                        </div>
+                        <div class="rfc-user-info">
+                          <div class="rfc-user-row">
+                            <span class="rfc-name">Priya Sharma</span>
+                            <span class="rfc-verified-badge" title="Verified Women Rider">✓</span>
+                          </div>
+                          <div class="rfc-sub-row">
+                            <span class="rfc-bike-tag">KTM 390 Adventure</span>
+                            <span class="rfc-location">Spiti Valley • Batal 4,150m</span>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="rfc-follow-btn following" onclick="window.appPreview && window.appPreview.toggleFollow(this)">Following</button>
+                    </div>
+
+                    <div class="rfc-media-container" ondblclick="window.appPreview && window.appPreview.handleDoubleTap(this, 'post-2')">
+                      <img src="assets/images/spiti_water_crossing.jpg" class="rfc-media-img" alt="Spiti Valley Water Crossing">
+                      <div class="heart-pop-burst">❤️</div>
+                      
+                      <div class="rfc-telemetry-ribbon">
+                        <div class="rfc-tel-item">
+                          <span class="rfc-tel-lbl">Water Depth</span>
+                          <span class="rfc-tel-val val-orange">1.5 ft</span>
+                        </div>
+                        <div class="rfc-tel-item">
+                          <span class="rfc-tel-lbl">Stream Flow</span>
+                          <span class="rfc-tel-val">High (Glacial)</span>
+                        </div>
+                        <div class="rfc-tel-item">
+                          <span class="rfc-tel-lbl">Traction</span>
+                          <span class="rfc-tel-val">Loose Boulders</span>
+                        </div>
+                        <div class="rfc-tel-item">
+                          <span class="rfc-tel-lbl">Safety Halt</span>
+                          <span class="rfc-tel-val">Chacha Chachi 12km</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Women Rider Safety Corridor Note -->
+                    <div class="rfc-hazard-alert-pill" style="background: rgba(156, 39, 176, 0.15); border-color: rgba(156, 39, 176, 0.4); color: #CE93D8;">
+                      <span>🛡️</span>
+                      <div><strong>Women Rider Safe Corridor:</strong> Verified night halt at Kaza Travelers Nest (CCTV, clean washroom, audited 4.9★).</div>
+                    </div>
+
+                    <div class="rfc-actions-bar">
+                      <div class="rfc-actions-left">
+                        <button class="rfc-action-btn btn-like active-like" onclick="window.appPreview && window.appPreview.toggleLike('post-2', this)">
+                          <span class="icon-heart">❤️</span>
+                          <span class="rfc-count-text like-count">326</span>
+                        </button>
+                        <button class="rfc-action-btn btn-comment" onclick="window.appPreview && window.appPreview.openComments('post-2')">
+                          <span>💬</span>
+                          <span class="rfc-count-text comment-count">24</span>
+                        </button>
+                        <button class="rfc-action-btn btn-share" onclick="window.appPreview && window.appPreview.sharePost('post-2')">
+                          <span>↗️</span>
+                        </button>
+                      </div>
+                      <button class="rfc-action-btn btn-save active-save" onclick="window.appPreview && window.appPreview.toggleBookmark('post-2', this)">
+                        <span>🔖</span>
+                      </button>
+                    </div>
+
+                    <div class="rfc-likes-row">
+                      Liked by <strong>ananya_moto</strong> and <strong>325 others</strong>
+                    </div>
+
+                    <div class="rfc-caption-box">
+                      <span class="rfc-caption-author">priya_rides</span>
+                      Mallig Nallah crossing was roaring today with glacial meltwater! Picked the shallow line on the left, stood up on the pegs, and powered through in 2nd gear. Solo touring Spiti as a female rider has been so reassuring with RoadMate's verified emergency radar and safe corridor audits! 🌊🏍️
+                      <span class="rfc-hashtags">#WomenRidersIndia #SpitiKunzum #KTM390Adv #SoloTouring #SafeRiding</span>
+                    </div>
+
+                    <span class="rfc-comments-link" onclick="window.appPreview && window.appPreview.openComments('post-2')">
+                      View all 24 rider comments...
+                    </span>
+                  </article>
+
+                  <!-- Post Card 3: Ride Clips Teaser Card -->
+                  <div class="rider-feed-card" style="padding: 16px; background: linear-gradient(135deg, rgba(255, 92, 0, 0.18), rgba(20, 22, 28, 0.9)); border-color: rgba(255, 92, 0, 0.4);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span style="font-size: 11px; font-weight: 800; color: #FF8A4C; letter-spacing: 0.5px; text-transform: uppercase;">🎬 FEATURED RIDE CLIPS</span>
+                      <span style="font-size: 11px; color: var(--text-tertiary);">Reels Experience</span>
+                    </div>
+                    <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 4px; color: #FFFFFF;">Rohtang Hairpin Water Crossing</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Watch vertical touring reels and report road hazards directly from video playback.</p>
+                    <button class="cta-blaze-btn interactive-squish" onclick="window.appPreview && window.appPreview.switchScreen('clips')" style="padding: 10px 16px; font-size: 12px;">
+                      ▶ Open Ride Clips Player
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 1B: EXPLORE — DISCOVERY MAP & ROUTE CATALOG -->
+            <div class="app-screen" id="screen-explore">
+              <div class="explore-container">
+                <!-- Search Input -->
+                <div class="explore-search-wrap">
+                  <div class="explore-search-box">
+                    <span>🔍</span>
+                    <input type="text" id="explore-search-input" placeholder="Search passes, routes, dhabas, hazards..." oninput="window.appPreview && window.appPreview.filterExplore(this.value)">
+                  </div>
+                </div>
+
+                <!-- Category Filter Chips -->
+                <div class="explore-filter-chips">
+                  <button class="ef-chip active" data-category="all" onclick="window.appPreview && window.appPreview.setExploreCategory('all', this)">🌐 All</button>
+                  <button class="ef-chip" data-category="passes" onclick="window.appPreview && window.appPreview.setExploreCategory('passes', this)">🏔️ High Passes</button>
+                  <button class="ef-chip" data-category="routes" onclick="window.appPreview && window.appPreview.setExploreCategory('routes', this)">🛣️ Scenic Routes</button>
+                  <button class="ef-chip" data-category="hazards" onclick="window.appPreview && window.appPreview.setExploreCategory('hazards', this)">⚠️ Road Hazards</button>
+                  <button class="ef-chip" data-category="fuel" onclick="window.appPreview && window.appPreview.setExploreCategory('fuel', this)">⛽ Fuel Stops</button>
+                  <button class="ef-chip" data-category="women-safety" onclick="window.appPreview && window.appPreview.setExploreCategory('women-safety', this)">🛡️ Women-Safe</button>
+                </div>
+
+                <!-- View Toggle Bar: Map vs List -->
+                <div class="explore-view-toggle-bar">
+                  <span class="evt-title" id="explore-count-title">DISCOVERING 6 VERIFIED ROUTES</span>
+                  <div class="evt-segmented">
+                    <button class="evt-btn active" id="evt-btn-list" onclick="window.appPreview && window.appPreview.toggleExploreView('list')">List</button>
+                    <button class="evt-btn" id="evt-btn-map" onclick="window.appPreview && window.appPreview.toggleExploreView('map')">Map</button>
+                  </div>
+                </div>
+
+                <!-- Body Content: Map + List of Catalog Cards -->
+                <div class="explore-body-content" id="explore-cards-container">
+                  
+                  <!-- Interactive Exploration Map -->
+                  <div class="explore-map-container" id="explore-map-wrapper" style="display: none;">
+                    <div id="explore-leaflet-map"></div>
+                  </div>
+
+                  <!-- Route 1: Khardung La Pass -->
+                  <div class="route-discovery-card interactive-squish" data-cat="passes" onclick="window.appPreview && window.appPreview.openRouteDetail('khardungla')">
+                    <img src="assets/images/himalayan_khardungla.jpg" class="rdc-thumb" alt="Khardung La Pass">
+                    <div class="rdc-info">
+                      <div class="rdc-badge-row">
+                        <span class="rdc-badge badge-altitude">5,359 m</span>
+                        <span class="rdc-badge badge-difficulty">HARD</span>
+                      </div>
+                      <h4 class="rdc-title">Khardung La Mountain Pass</h4>
+                      <div class="rdc-meta">Leh to Nubra Valley • 39.4 km • Loose shale & snow</div>
+                    </div>
+                  </div>
+
+                  <!-- Route 2: Rohtang Pass Crest -->
+                  <div class="route-discovery-card interactive-squish" data-cat="passes" onclick="window.appPreview && window.appPreview.openRouteDetail('rohtang')">
+                    <img src="assets/images/hero.jpg" class="rdc-thumb" alt="Rohtang Pass">
+                    <div class="rdc-info">
+                      <div class="rdc-badge-row">
+                        <span class="rdc-badge badge-altitude">3,980 m</span>
+                        <span class="rdc-badge badge-scenic">SCENIC</span>
+                      </div>
+                      <h4 class="rdc-title">Rohtang Crest & Hairpin Loop</h4>
+                      <div class="rdc-meta">Manali to Koksar • 51 km • Hairpins & waterfalls</div>
+                    </div>
+                  </div>
+
+                  <!-- Route 3: Spiti Kunzum Circuit -->
+                  <div class="route-discovery-card interactive-squish" data-cat="routes" onclick="window.appPreview && window.appPreview.openRouteDetail('spiti')">
+                    <img src="assets/images/spiti_water_crossing.jpg" class="rdc-thumb" alt="Spiti Valley">
+                    <div class="rdc-info">
+                      <div class="rdc-badge-row">
+                        <span class="rdc-badge badge-scenic">518 KM</span>
+                        <span class="rdc-badge badge-difficulty">EXPERT</span>
+                      </div>
+                      <h4 class="rdc-title">Spiti Valley & Kunzum La Circuit</h4>
+                      <div class="rdc-meta">Shimla • Kaza • Kunzum • Manali • River crossings</div>
+                    </div>
+                  </div>
+
+                  <!-- Route 4: Women Safe Dhaba & Night Halt -->
+                  <div class="route-discovery-card interactive-squish" data-cat="women-safety" onclick="window.appPreview && window.appPreview.openRouteDetail('babu-dhaba')">
+                    <img src="assets/images/women_rider_priya.jpg" class="rdc-thumb" alt="Safe Dhaba">
+                    <div class="rdc-info">
+                      <div class="rdc-badge-row">
+                        <span class="rdc-badge badge-women-safe">4.9 ★ AUDITED</span>
+                        <span class="rdc-badge badge-scenic">NH44</span>
+                      </div>
+                      <h4 class="rdc-title">Babu Dhaba & Travelers Halt</h4>
+                      <div class="rdc-meta">24/7 Guarded parking • CCTV • Clean western washrooms</div>
+                    </div>
+                  </div>
+
+                  <!-- Route 5: Tandi Fuel Station -->
+                  <div class="route-discovery-card interactive-squish" data-cat="fuel" onclick="window.appPreview && window.appPreview.openRouteDetail('tandi')">
+                    <div class="rdc-thumb" style="background: rgba(255, 152, 0, 0.2); display: flex; align-items: center; justify-content: center; font-size: 32px; border-radius: 12px;">⛽</div>
+                    <div class="rdc-info">
+                      <div class="rdc-badge-row">
+                        <span class="rdc-badge badge-difficulty">CRITICAL STOP</span>
+                      </div>
+                      <h4 class="rdc-title">Tandi Indian Oil Station</h4>
+                      <div class="rdc-meta">Last petrol pump before Karu • 365 km dry zone ahead</div>
+                    </div>
+                  </div>
+
+                  <!-- Route 6: Active Landslide Hazard -->
+                  <div class="route-discovery-card interactive-squish" data-cat="hazards" onclick="window.appPreview && window.appPreview.switchScreen('hazards')">
+                    <img src="assets/images/hazard.jpg" class="rdc-thumb" alt="Landslide Hazard">
+                    <div class="rdc-info">
+                      <div class="rdc-badge-row">
+                        <span class="rdc-badge badge-difficulty">POSTGIS RADAR</span>
+                      </div>
+                      <h4 class="rdc-title">Baralacha La Rockfall Zone</h4>
+                      <div class="rdc-meta">NH3 km marker 142 • BRO clearance team on site</div>
+                    </div>
+                  </div>
+
+                  <!-- Promotional AI Route Planner Banner -->
+                  <div class="glass-surface interactive-squish" style="padding: 14px; border-radius: 16px; border-color: rgba(255, 92, 0, 0.35); background: rgba(255, 92, 0, 0.08);" onclick="window.appPreview && window.appPreview.switchScreen('ai-planner')">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <span style="font-size: 26px;">🤖</span>
+                      <div>
+                        <strong style="color: #fff; font-size: 13px;">Plan Route with AI Route Copilot</strong>
+                        <div style="font-size: 11px; color: var(--text-secondary);">Custom Himalayan itineraries, fuel dry-zones, and weather advice.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 1C: RIDE CLIPS (REELS-STYLE VERTICAL VIDEO) -->
+            <div class="app-screen" id="screen-clips">
+              <div class="clips-viewport" id="clips-viewport">
+                
+                <!-- Active Clip Stage -->
+                <div class="clip-card-stage" id="clip-stage">
+                  <img src="assets/images/spiti_water_crossing.jpg" class="clip-bg-media" id="clip-bg-img" alt="Ride Clip">
+                  <div class="clip-overlay-gradient"></div>
+
+                  <!-- Navigation Arrows -->
+                  <div class="clip-nav-controls">
+                    <button class="clip-nav-arrow" onclick="window.appPreview && window.appPreview.prevClip()" title="Previous Clip">▲</button>
+                    <button class="clip-nav-arrow" onclick="window.appPreview && window.appPreview.nextClip()" title="Next Clip">▼</button>
+                  </div>
+
+                  <!-- Right Floating Actions Column -->
+                  <div class="clip-right-actions">
+                    <div class="clip-action-item">
+                      <button class="clip-action-btn" id="clip-like-btn" onclick="window.appPreview && window.appPreview.toggleClipLike(this)">
+                        ❤️
+                      </button>
+                      <span class="clip-action-count" id="clip-like-count">1.4k</span>
+                    </div>
+
+                    <div class="clip-action-item">
+                      <button class="clip-action-btn" onclick="window.appPreview && window.appPreview.openComments('clip-1')">
+                        💬
+                      </button>
+                      <span class="clip-action-count">86</span>
+                    </div>
+
+                    <div class="clip-action-item">
+                      <button class="clip-action-btn" onclick="window.appPreview && window.appPreview.sharePost('clip-1')">
+                        ↗️
+                      </button>
+                      <span class="clip-action-count">Share</span>
+                    </div>
+
+                    <div class="clip-action-item">
+                      <button class="clip-action-btn" onclick="window.appPreview && window.appPreview.toggleClipSave(this)">
+                        🔖
+                      </button>
+                      <span class="clip-action-count">Save</span>
+                    </div>
+
+                    <!-- Contextual Safety Feature: Report Hazard directly from Clip! -->
+                    <div class="clip-action-item">
+                      <button class="clip-action-btn btn-hazard-flag" onclick="window.appPreview && window.appPreview.openReportHazardFromClip()" title="Report Hazard from this Clip">
+                        ⚠️
+                      </button>
+                      <span class="clip-action-count" style="color: #FF8A4C;">Report</span>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Clip Details -->
+                  <div class="clip-bottom-info">
+                    <div class="clip-author-row">
+                      <img src="assets/images/women_rider_priya.jpg" class="clip-avatar" id="clip-author-avatar" alt="Author">
+                      <span class="clip-author-name" id="clip-author-name">@priya_rides</span>
+                      <button class="rfc-follow-btn" style="padding: 2px 10px; font-size: 10px;">Follow</button>
+                    </div>
+                    <div class="clip-caption-text" id="clip-caption-text">
+                      Glacial stream crossing on Kunzum Pass approach! Keep in 2nd gear and keep throttle smooth. 🌊🏍️
+                    </div>
+                    <div class="clip-audio-pill">
+                      <span>🎵</span>
+                      <span id="clip-audio-title">RE Himalayan 450 Sherpa Exhaust Note</span>
+                      <div class="audio-sound-wave">
+                        <span class="asw-bar"></span>
+                        <span class="asw-bar"></span>
+                        <span class="asw-bar"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 1D: UNIFIED PROFILE, DIGITAL GARAGE & DOCUMENT VAULT -->
+            <div class="app-screen" id="screen-profile">
+              <div class="screen-scroll-body" style="padding: 0;">
+                <!-- Profile Hero Header -->
+                <div style="padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(24, 26, 32, 0.7);">
+                  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+                    <div style="position: relative; width: 68px; height: 68px;">
+                      <img src="assets/images/rider.jpg" style="width: 68px; height: 68px; border-radius: 50%; object-fit: cover; border: 2.5px solid #FF5C00;" alt="Rider Profile">
+                      <span style="position: absolute; bottom: 0; right: 0; background: #4CAF50; color: #fff; width: 20px; height: 20px; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; border: 2px solid #121212;">✓</span>
+                    </div>
+                    <div style="flex: 1;">
+                      <div style="display: flex; align-items: center; gap: 6px;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: #fff;">Vikram Singh</h3>
+                        <span style="background: rgba(255,92,0,0.18); color: #FF8A4C; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 6px;">LEAD CAPTAIN</span>
+                      </div>
+                      <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">@vikram_adv • New Delhi, India</div>
+                      <div style="display: flex; gap: 6px; margin-top: 6px;">
+                        <span style="background: rgba(244, 67, 54, 0.15); color: #FF8A80; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🩸 Blood Group: O+</span>
+                        <span style="background: rgba(76, 175, 80, 0.15); color: #81C784; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🛡️ Trust 94%</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Rider Touring Stats -->
+                  <div style="display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 8px 10px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="text-align: center;">
+                      <span style="display: block; font-size: 14px; font-weight: 800; color: #FF8A4C; font-family: var(--font-mono);">18,420</span>
+                      <small style="font-size: 9px; color: var(--text-tertiary); text-transform: uppercase;">KM TOUR</small>
+                    </div>
+                    <div style="text-align: center;">
+                      <span style="display: block; font-size: 14px; font-weight: 800; color: #fff; font-family: var(--font-mono);">42</span>
+                      <small style="font-size: 9px; color: var(--text-tertiary); text-transform: uppercase;">PASSES</small>
+                    </div>
+                    <div style="text-align: center;">
+                      <span style="display: block; font-size: 14px; font-weight: 800; color: #fff; font-family: var(--font-mono);">14</span>
+                      <small style="font-size: 9px; color: var(--text-tertiary); text-transform: uppercase;">CONVOYS</small>
+                    </div>
+                    <div style="text-align: center;">
+                      <span style="display: block; font-size: 14px; font-weight: 800; color: #64B5F6; font-family: var(--font-mono);">68</span>
+                      <small style="font-size: 9px; color: var(--text-tertiary); text-transform: uppercase;">HAZARDS</small>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Profile Sub Tabs: Garage, Vault, Settings, RideStories -->
+                <div class="profile-sub-tabs">
+                  <button class="pst-tab active" data-tab="garage" onclick="window.appPreview && window.appPreview.switchProfileTab('garage', this)">🏍️ Garage</button>
+                  <button class="pst-tab" data-tab="ridestory" onclick="window.appPreview && window.appPreview.switchProfileTab('ridestory', this)">🎬 RideStories</button>
+                  <button class="pst-tab" data-tab="vault" onclick="window.appPreview && window.appPreview.switchProfileTab('vault', this)">📁 Vault</button>
+                  <button class="pst-tab" data-tab="settings" onclick="window.appPreview && window.appPreview.switchProfileTab('settings', this)">⚙️ Settings</button>
+                </div>
+
+                <!-- Tab Pane 1: Digital Garage -->
+                <div class="profile-tab-pane active" id="pane-garage">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                      <strong style="color: #fff; font-size: 14px;">Active Motorcycle</strong>
+                      <div style="font-size: 11px; color: var(--text-secondary);">Royal Enfield Himalayan 450 (Kamet White)</div>
+                    </div>
+                    <button class="cta-blaze-btn interactive-squish" style="padding: 6px 12px; font-size: 11px;" onclick="window.appPreview && window.appPreview.openLogServiceModal()">
+                      ＋ Log Service
+                    </button>
+                  </div>
+
+                  <!-- Garage Bike Card -->
+                  <div class="glass-surface" style="padding: 12px; border-radius: 16px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                      <span style="color: var(--text-secondary);">Odometer Reading:</span>
+                      <strong style="color: #FF8A4C; font-family: var(--font-mono);">14,280 km</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                      <span style="color: var(--text-secondary);">Registration No:</span>
+                      <strong style="color: #fff; font-family: var(--font-mono);">DL-01-AB-1234</strong>
+                    </div>
+
+                    <!-- Maintenance Meters -->
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                      <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px;">
+                          <span>Engine Oil (15W-50 Semi-Synth)</span>
+                          <span style="color: #4CAF50;">Healthy (Due in 1,720 km)</span>
+                        </div>
+                        <div style="height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                          <div style="width: 78%; height: 100%; background: #4CAF50;"></div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px;">
+                          <span>Chain Cleaning & Lube</span>
+                          <span style="color: #FFC107;">Due Soon (High Dust)</span>
+                        </div>
+                        <div style="height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                          <div style="width: 92%; height: 100%; background: #FFC107;"></div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px;">
+                          <span>Brake Pads (Front/Rear Sintered)</span>
+                          <span style="color: #4CAF50;">Healthy (74% life)</span>
+                        </div>
+                        <div style="height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                          <div style="width: 74%; height: 100%; background: #4CAF50;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tab Pane 2: Document Vault -->
+                <div class="profile-tab-pane" id="pane-vault">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                      <strong style="color: #fff; font-size: 14px;">Compliance Shield</strong>
+                      <div style="font-size: 11px; color: var(--text-secondary);">AES-256 Encrypted Vehicle Safe</div>
+                    </div>
+                    <button class="cta-blaze-btn interactive-squish" style="padding: 6px 12px; font-size: 11px;" onclick="window.appPreview && window.appPreview.openUploadDocModal()">
+                      ＋ Upload
+                    </button>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="glass-surface" style="padding: 10px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+                      <div>
+                        <strong style="font-size: 12px; color: #fff;">Registration Certificate (RC)</strong>
+                        <div style="font-size: 10px; color: var(--text-tertiary);">DL-01-AB-1234 • Valid till 2039</div>
+                      </div>
+                      <span style="background: rgba(76, 175, 80, 0.15); color: #81C784; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">VERIFIED</span>
+                    </div>
+
+                    <div class="glass-surface" style="padding: 10px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+                      <div>
+                        <strong style="font-size: 12px; color: #fff;">Comprehensive Insurance</strong>
+                        <div style="font-size: 10px; color: #FFB74D;">HDFC ERGO • Expires in 18 days!</div>
+                      </div>
+                      <span style="background: rgba(255, 152, 0, 0.15); color: #FFB74D; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">DUE SOON</span>
+                    </div>
+
+                    <div class="glass-surface" style="padding: 10px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+                      <div>
+                        <strong style="font-size: 12px; color: #fff;">BS6 PUC Certificate</strong>
+                        <div style="font-size: 10px; color: var(--text-tertiary);">Valid till Dec 2026</div>
+                      </div>
+                      <span style="background: rgba(76, 175, 80, 0.15); color: #81C784; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">VERIFIED</span>
+                    </div>
+
+                    <div class="glass-surface" style="padding: 10px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+                      <div>
+                        <strong style="font-size: 12px; color: #fff;">Driving License (MCWG)</strong>
+                        <div style="font-size: 10px; color: var(--text-tertiary);">Valid till 2038</div>
+                      </div>
+                      <span style="background: rgba(76, 175, 80, 0.15); color: #81C784; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">VERIFIED</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tab Pane 3: Onboarding & Settings -->
+                <div class="profile-tab-pane" id="pane-settings">
+                  <strong style="color: #fff; font-size: 14px; display: block; margin-bottom: 8px;">Developer OTP Bypass & Auth</strong>
+                  <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 12px;">Fast phone onboarding allows instant mock bypass with code <code>123456</code>:</p>
+                  
+                  <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+                    <input type="text" value="+91 98765 43210" class="mfc-input" style="flex: 1; font-size: 12px;" readonly>
+                    <button class="cta-blaze-btn interactive-squish" style="padding: 8px 12px; font-size: 11px;" onclick="window.appPreview && window.appPreview.showToast('✅ Verified with Developer Bypass Code (123456)')">
+                      Verify OTP
+                    </button>
+                  </div>
+
+                  <strong style="color: #fff; font-size: 14px; display: block; margin-bottom: 8px;">Emergency Contacts</strong>
+                  <div class="glass-surface" style="padding: 10px 12px; border-radius: 12px; margin-bottom: 8px;">
+                    <div style="font-size: 12px; font-weight: 700; color: #fff;">Dr. Rajesh Sharma (Brother)</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">+91 98765 43210 • Primary SOS Dispatch</div>
+                  </div>
+                </div>
+
+                <!-- Tab Pane 4: RideStories & Safe Exploration Badges -->
+                <div class="profile-tab-pane" id="pane-ridestory">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                      <strong style="color: #fff; font-size: 14px;">RideStory Recaps</strong>
+                      <div style="font-size: 11px; color: var(--text-secondary);">Verified 9:16 Viral Route Stories</div>
+                    </div>
+                    <button class="cta-blaze-btn interactive-squish" style="padding: 6px 12px; font-size: 11px;" onclick="window.appPreview && window.appPreview.openRideStoryModal()">
+                      🎬 Studio Replay
+                    </button>
+                  </div>
+
+                  <!-- Featured Story Card -->
+                  <div class="glass-surface interactive-squish" style="border-radius: 16px; padding: 14px; margin-bottom: 14px; border: 1.5px solid rgba(255, 92, 0, 0.4); background: linear-gradient(135deg, rgba(255, 92, 0, 0.12), rgba(0,0,0,0.4));" onclick="window.appPreview && window.appPreview.openRideStoryModal()">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                      <span class="pillar-badge badge-orange" style="font-size: 9px;">🏔️ MOUNTAIN ESCAPE</span>
+                      <span style="font-size: 10px; color: var(--text-tertiary);">23 Oct 2026</span>
+                    </div>
+                    <h4 style="font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 4px;">Manali to Keylong Expedition</h4>
+                    <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">Rohtang Pass Crest • 42.8 km • 1h 14m moving • +1,280m Elevation Gain</p>
+
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                      <span style="font-size: 10px; color: #81C784; font-weight: 700;">✓ Filtered Telemetry (No Jitter)</span>
+                      <span style="font-size: 10px; color: #FFA726; font-weight: 700;">🔒 Safe Speed Active</span>
+                    </div>
+                  </div>
+
+                  <!-- Safe Exploration Achievements -->
+                  <div style="margin-top: 10px;">
+                    <strong style="color: #fff; font-size: 13px; display: block; margin-bottom: 8px;">Safe Exploration Badges Awarded</strong>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                      <div class="glass-surface" style="padding: 10px; border-radius: 12px;">
+                        <span style="font-size: 20px;">🎖️</span>
+                        <strong style="font-size: 11px; display: block; color: #FFE082; margin-top: 4px;">First Ride Logged</strong>
+                        <small style="font-size: 9px; color: var(--text-tertiary);">Verified on-chain telemetry</small>
+                      </div>
+                      <div class="glass-surface" style="padding: 10px; border-radius: 12px;">
+                        <span style="font-size: 20px;">⛰️</span>
+                        <strong style="font-size: 11px; display: block; color: #FFE082; margin-top: 4px;">Mountain Route (≥500m)</strong>
+                        <small style="font-size: 9px; color: var(--text-tertiary);">+1,280m gain achieved</small>
+                      </div>
+                      <div class="glass-surface" style="padding: 10px; border-radius: 12px;">
+                        <span style="font-size: 20px;">🏁</span>
+                        <strong style="font-size: 11px; display: block; color: #FFE082; margin-top: 4px;">100 km in a Day</strong>
+                        <small style="font-size: 9px; color: var(--text-tertiary);">124 km verified touring</small>
+                      </div>
+                      <div class="glass-surface" style="padding: 10px; border-radius: 12px;">
+                        <span style="font-size: 20px;">👥</span>
+                        <strong style="font-size: 11px; display: block; color: #FFE082; margin-top: 4px;">Group Ride Finisher</strong>
+                        <small style="font-size: 9px; color: var(--text-tertiary);">Himalayan Wanderers squad</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 1: TOURING HUD & MAP (PRESERVED & ENHANCED) -->
+            <div class="app-screen" id="screen-hud">
+              <!-- Top HUD Ribbon -->
+              <div class="hud-top-ribbon">
+                <div class="hud-nav-instruction">
+                  <div class="turn-arrow">↱</div>
+                  <div class="turn-detail">
+                    <span class="turn-dist">850 m</span>
+                    <span class="turn-name">Hairpin Bend • Rohtang Pass</span>
+                  </div>
+                </div>
+                <div class="hud-altitude-pill">
+                  <span class="alt-label">ALT</span>
+                  <span class="alt-value">4,280 m</span>
+                </div>
+              </div>
+
+              <!-- Ride Recording Lifecycle State Machine Ribbon -->
+              <div class="hud-recording-bar" id="hud-recording-bar">
+                <div class="rec-status-indicator">
+                  <span class="rec-dot" id="hud-rec-dot"></span>
+                  <span id="hud-rec-state-label">IDLE</span>
+                </div>
+                <div class="rec-telemetry-mini">
+                  <span>⏱️ <strong id="hud-rec-timer">00:00</strong></span>
+                  <span>📍 <strong id="hud-rec-dist">0.0 km</strong></span>
+                  <span>⛰️ <strong id="hud-rec-elev">+0m</strong></span>
+                </div>
+                <div class="rec-actions">
+                  <button class="rec-btn interactive-squish" id="btn-hud-record-toggle">🔴 Start Ride</button>
+                  <button class="rec-btn rec-btn-danger interactive-squish" id="btn-hud-record-finish" style="display: none;">⏹️ Finish & Story</button>
+                </div>
+              </div>
+
+              <!-- Hysteresis Convoy Separation Alert Banner -->
+              <div class="hud-separation-alert" id="hud-separation-alert">
+                <div class="hsa-header">
+                  <span>⚠️</span>
+                  <span class="hsa-title">Convoy Separation Advisory</span>
+                </div>
+                <div class="hsa-desc" id="hsa-desc-text">
+                  Pack separation > 1.5 km (1.8 km) sustained for 45s — Suggest Convoy Check-In.
+                </div>
+                <div class="hsa-actions">
+                  <button class="hsa-btn hsa-btn-primary interactive-squish" id="btn-hsa-regroup">📍 Request Regroup</button>
+                  <button class="hsa-btn interactive-squish" id="btn-hsa-im-ok">📸 I'm OK / Photo Break</button>
+                </div>
+              </div>
+
+              <!-- Map Container -->
+              <div class="hud-map-wrapper">
+                <div id="real-leaflet-map" class="leaflet-map-view"></div>
+                
+                <!-- Live Map Dynamic Status Bar -->
+                <div class="map-live-status-bar" id="map-live-status-bar">
+                  <div class="map-badge freshness-badge" id="map-freshness-badge" title="Viewport Polling Freshness (60-90s / 200m moved)">
+                    <span class="pulsing-green-dot"></span>
+                    <span id="freshness-text">Updated 4s ago</span>
+                  </div>
+                  <div class="map-badge mode-badge" id="map-mode-badge" title="Active GPS Tracking Frequency">
+                    <span id="mode-badge-text">⚡ Ride Room (3s GPS)</span>
+                  </div>
+                </div>
+
+                <!-- Network / Reconnect Alert Banners (Explicit UI Failure Indicator) -->
+                <div class="map-live-alert-banner alert-reconnect" id="map-reconnect-alert" style="display: none;">
+                  <span class="alert-spinner"></span>
+                  <span id="reconnect-alert-text">Tunnel Dead-Zone: Priya reconnecting... (Local queue: 3 pts)</span>
+                </div>
+
+                <div class="map-live-alert-banner alert-offline" id="map-offline-alert" style="display: none;">
+                  <span>⚠️ Live Hazard Layer Offline: Showing cached PostGIS pins</span>
+                </div>
+                
+                <!-- Speedometer Overlay (Dark Touring Styling) -->
+                <div class="speedo-overlay">
+                  <div class="speedo-dial">
+                    <span class="speed-num" id="hud-speed-display">84</span>
+                    <span class="speed-unit">KM/H</span>
+                  </div>
+                  <div class="speedo-sub">
+                    <span class="gear-tag">4TH GEAR</span>
+                    <span class="temp-tag">11°C CRISP</span>
+                  </div>
+                </div>
+
+                <!-- Live Radar Ping Widget -->
+                <div class="radar-ping-card" id="active-hazard-banner">
+                  <div class="hazard-icon-pulse">⚠️</div>
+                  <div class="hazard-banner-text">
+                    <strong>CAUTION: Fresh Landslide Rockfall</strong>
+                    <small>BRO clearing road 850m ahead • Pass with caution</small>
+                  </div>
+                  <span class="hazard-dist-tag">850m</span>
+                </div>
+
+                <!-- Floating Map Controls -->
+                <div class="map-fab-stack">
+                  <button class="fab-btn" id="fab-recenter" title="Recenter on Bike">📍</button>
+                  <button class="fab-btn" id="fab-layer" title="Toggle Elevation Layer">⛰️</button>
+                  <button class="fab-btn fab-report" id="fab-report-hazard" title="Report Road Hazard">＋ Hazard</button>
+                </div>
+              </div>
+
+              <!-- Bottom Touring Telemetry Drawer (Floating Tier 3 Glass Sheet) -->
+              <div class="hud-drawer" id="hud-drawer" title="Tap to expand expedition telemetry and altitude breakdown">
+                <div class="drawer-handle-wrap" id="drawer-handle-wrap">
+                  <div class="drawer-handle"></div>
+                  <span class="drawer-expand-hint" id="drawer-hint-text">EXPEDITION TELEMETRY ▾</span>
+                </div>
+                <div class="trip-summary-row">
+                  <div class="trip-stat">
+                    <span class="stat-label">TRIP DIST</span>
+                    <span class="stat-val">342.6 km</span>
+                  </div>
+                  <div class="trip-stat">
+                    <span class="stat-label">REMAINING</span>
+                    <span class="stat-val text-orange" style="background: rgba(255,92,0,0.15); border-radius: 6px; padding: 1px 4px;">128 km</span>
+                  </div>
+                  <div class="trip-stat">
+                    <span class="stat-label">EST. ARRIVAL</span>
+                    <span class="stat-val">16:45</span>
+                  </div>
+                  <div class="trip-stat">
+                    <span class="stat-label">CONVOY</span>
+                    <span class="stat-val text-green" style="background: rgba(76,175,80,0.15); border-radius: 6px; padding: 1px 4px;">6/6 OK</span>
+                  </div>
+                </div>
+
+                <!-- Expanded Telemetry Details (Revealed with Parallax Map Shift) -->
+                <div class="hud-drawer-expanded" id="hud-drawer-expanded" style="display: none;">
+                  <div class="drawer-expanded-grid">
+                    <div class="drawer-expanded-card">
+                      <span class="dec-icon">⛽</span>
+                      <div class="dec-info">
+                        <strong>Tandi Petrol Pump</strong>
+                        <small>Last Fuel • 42 km ahead</small>
+                      </div>
+                    </div>
+                    <div class="drawer-expanded-card">
+                      <span class="dec-icon">❄️</span>
+                      <div class="dec-info">
+                        <strong>Rohtang Crest</strong>
+                        <small>-2°C • BRO Clearing</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="drawer-elevation-row">
+                    <span class="der-title">ELEVATION PROFILE: 4,280m → 3,080m (Keylong)</span>
+                    <span class="der-badge">📉 -1,200m Descent</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 2: POSTGIS HAZARDS RADAR FEED -->
+            <div class="app-screen" id="screen-hazards">
+              <div class="screen-app-bar glass-surface-top">
+                <span class="bar-title">Road Hazard Radar</span>
+                <span class="bar-action">PostGIS 3.4 Geography</span>
+              </div>
+              <div class="screen-scroll-body">
+                <!-- Hero Hazard Card in Liquid Glass with Gradient Mask -->
+                <div class="hero-hazard-image-card glass-surface interactive-squish" style="border-radius: 20px; overflow: hidden; position: relative;">
+                  <img src="assets/images/hazard.jpg" alt="Active Landslide Hazard" class="hazard-hero-img" style="border-radius: 20px;">
+                  <div class="hazard-image-overlay" style="border-radius: 20px; background: linear-gradient(to top, rgba(14, 16, 22, 0.95) 0%, rgba(14, 16, 22, 0.45) 60%, transparent 100%);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                      <span class="hazard-tag-red" style="font-weight: 800; font-size: 10px;">🚨 CRITICAL OBSTACLE</span>
+                      <span style="background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.2); font-size: 10px; padding: 2px 8px; border-radius: 12px; font-family: var(--font-mono); color: #FFA726;">⏱️ Expires in 2h 15m</span>
+                    </div>
+                    <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 800;">NH3 Rohtang-Keylong Pass</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary);">Verified by 14 riders via spatial cluster consensus</p>
+                  </div>
+                </div>
+
+                <div class="hazard-filter-chips" style="overflow-x: auto; white-space: nowrap; padding-bottom: 6px;">
+                  <button class="chip active interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('all', this)">All (8)</button>
+                  <button class="chip interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('black_ice', this)">🧊 Black Ice (8h)</button>
+                  <button class="chip interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('water_crossing', this)">🌊 Water Crossing (12h)</button>
+                  <button class="chip interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('loose_gravel', this)">🪨 Loose Gravel (48h)</button>
+                  <button class="chip interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('landslide', this)">🚨 Landslides (72h)</button>
+                  <button class="chip interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('road_closure', this)">🛑 Closure (168h)</button>
+                  <button class="chip interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('construction', this)">🚧 Construction (336h)</button>
+                  <button class="chip interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('pothole', this)">⚠️ Potholes (720h)</button>
+                  <button class="chip interactive-squish" onclick="window.appPreview && window.appPreview.filterHazards('dangerous_bend', this)">↩️ Dangerous Bend (2160h)</button>
+                </div>
+
+                <div class="hazards-list" id="preview-hazards-list">
+                  <!-- Hazard Card 1: Landslide (BRO Source, 72h TTL) -->
+                  <div class="hazard-card glass-surface interactive-squish" data-hz-type="landslide" style="border-radius: 18px; padding: 14px; border-left: 3px solid #F44336 !important;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <img src="assets/images/rider.jpg" alt="Vikram" style="width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #FFD700; object-fit: cover;">
+                        <div>
+                          <strong style="font-size: 13px; display: block;">Vikramaditya Rao (Lead)</strong>
+                          <span style="font-size: 10px; color: var(--text-tertiary);">Reported 12m ago • NH3 Km 42.4</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                        <span class="trust-badge" style="background: rgba(255, 92, 0, 0.15); border: 1px solid var(--brand-orange); color: #FF8A4C; font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 800;">98% Trust • BRO Source</span>
+                        <span style="font-size: 9px; color: #FFA726; font-family: var(--font-mono);">⏱️ TTL: 71h 48m left</span>
+                      </div>
+                    </div>
+
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 4px; color: #FFF;">🚨 Massive Rockfall & Mudslide</h4>
+                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 10px;">Single lane blocked. BRO heavy bulldozer actively clearing road. Fast water stream crossing tarmac.</p>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+                      <span class="hz-confirm-count" style="font-size: 11px; color: var(--status-green); font-weight: 700;">✓ 14 Rider Confirmations (CONFIRMED)</span>
+                      <div style="display: flex; gap: 6px;">
+                        <button class="hz-btn interactive-squish" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-edge); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;" onclick="window.appPreview && window.appPreview.verifyHazardCard('hz-01', 'CONFIRM', 0.85)">Confirm Active (0.8km)</button>
+                        <button class="hz-btn interactive-squish" style="background: rgba(76, 175, 80, 0.15); border: 1px solid rgba(76, 175, 80, 0.4); color: #81C784; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;" onclick="window.appPreview && window.appPreview.verifyHazardCard('hz-01', 'RESOLVE', 0.85)">Mark Cleared</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Hazard Card 2: Potholes (480h TTL, 3.4 km away - Within 5km) -->
+                  <div class="hazard-card glass-surface interactive-squish" data-hz-type="pothole" style="border-radius: 18px; padding: 14px; border-left: 3px solid #FFC107 !important;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #2196F3; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: white; border: 1.5px solid white;">R</div>
+                        <div>
+                          <strong style="font-size: 13px; display: block;">Rohit Verma (ADV 390)</strong>
+                          <span style="font-size: 10px; color: var(--text-tertiary);">Reported 34m ago • 3.4 km ahead</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                        <span class="trust-badge" style="background: rgba(255, 92, 0, 0.15); border: 1px solid var(--brand-orange); color: #FF8A4C; font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 800;">87% Trust • Community</span>
+                        <span style="font-size: 9px; color: #FFA726; font-family: var(--font-mono);">⏱️ TTL: 719h 26m</span>
+                      </div>
+                    </div>
+
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 4px; color: #FFF;">⚠️ Deep Pothole Swarm</h4>
+                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 10px;">Cluster of 4 unlit sharp-rim potholes right after blind curve on bridge descent.</p>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+                      <span class="hz-confirm-count" style="font-size: 11px; color: var(--status-green); font-weight: 700;">✓ 8 Rider Confirmations</span>
+                      <div style="display: flex; gap: 6px;">
+                        <button class="hz-btn interactive-squish" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-edge); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;" onclick="window.appPreview && window.appPreview.verifyHazardCard('hz-02', 'CONFIRM', 3.4)">Confirm Active (3.4km)</button>
+                        <button class="hz-btn interactive-squish" style="background: rgba(244, 67, 54, 0.15); border: 1px solid rgba(244, 67, 54, 0.4); color: #FF8A80; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;" onclick="window.appPreview && window.appPreview.verifyHazardCard('hz-02', 'DISPUTE', 3.4)">Dispute (3.4km)</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Hazard Card 3: Black Ice (8h TTL, 14.2 km away - Exceeds 5km Anti-Spam Guard) -->
+                  <div class="hazard-card glass-surface interactive-squish" data-hz-type="black_ice" style="border-radius: 18px; padding: 14px; border-left: 3px solid #2196F3 !important;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #9C27B0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: white; border: 1.5px solid white;">P</div>
+                        <div>
+                          <strong style="font-size: 13px; display: block;">Priya Sundaram (Scram 411)</strong>
+                          <span style="font-size: 10px; color: var(--text-tertiary);">Reported 1h ago • Shaded Valley (14.2 km)</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                        <span class="trust-badge" style="background: rgba(255, 92, 0, 0.15); border: 1px solid var(--brand-orange); color: #FF8A4C; font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 800;">92% Trust</span>
+                        <span style="font-size: 9px; color: #FFA726; font-family: var(--font-mono);">⏱️ TTL: 6h 58m</span>
+                      </div>
+                    </div>
+
+                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 4px; color: #FFF;">🧊 Black Ice on Shaded Ghats</h4>
+                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 10px;">Sub-zero temperature causing invisible black ice on north-facing hairpins.</p>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+                      <span class="hz-confirm-count" style="font-size: 11px; color: var(--status-green); font-weight: 700;">✓ 19 Rider Confirmations</span>
+                      <div style="display: flex; gap: 6px;">
+                        <button class="hz-btn interactive-squish" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-edge); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;" onclick="window.appPreview && window.appPreview.verifyHazardCard('hz-03', 'CONFIRM', 14.2)" title="Tests the 5km anti-spam proximity rejection">Confirm Active (14.2km)</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="cta-blaze-btn interactive-squish" id="btn-quick-report-hazard">
+                  <span>＋ Report Hazard with Voice/Photo</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- SCREEN 3: GROUP CONVOY & LIVE ROLL CALL -->
+            <div class="app-screen" id="screen-convoy">
+              <div class="screen-app-bar glass-surface-top">
+                <span class="bar-title">Convoy: Himalayan Wanderers</span>
+                <span class="bar-action status-green">Live Sync</span>
+              </div>
+              <div class="screen-scroll-body">
+                <!-- Overlapping Member Avatar Stack (Instagram Group Chat Style) -->
+                <div class="avatar-stack-container interactive-squish" id="convoy-avatar-stack" title="Tap to inspect full convoy squad roster" onclick="window.appPreview && window.appPreview.showToast('👥 Convoy Roster: Vikram (Lead), Rohit, Priya, Aman (Sweep) + 2 Guest Riders. All 6 connected.')">
+                  <div class="avatar-stack-group">
+                    <div class="stacked-avatar" style="background: #FFD700; color: black; z-index: 5;">👑</div>
+                    <div class="stacked-avatar" style="background: #2196F3; z-index: 4;">🏍️</div>
+                    <div class="stacked-avatar" style="background: #9C27B0; z-index: 3;">🛵</div>
+                    <div class="stacked-avatar" style="background: #FF5C00; z-index: 2;">🛡️</div>
+                    <div class="stacked-avatar" style="background: #374151; font-size: 11px; z-index: 1;">+2</div>
+                  </div>
+                  <div class="avatar-stack-info">
+                    <span class="avatar-stack-title">Himalayan Squad (6 Riders)</span>
+                    <span class="avatar-stack-sub">6/6 Synced • +950m Pack</span>
+                  </div>
+                </div>
+
+                <!-- Convoy Radar Visualizer in Liquid Glass -->
+                <div class="convoy-radar-box glass-surface">
+                  <div class="radar-circle circle-outer"></div>
+                  <div class="radar-circle circle-mid"></div>
+                  <div class="radar-circle circle-inner"></div>
+                  <div class="radar-sweep-arm"></div>
+                  
+                  <!-- Convoy Member Dots -->
+                  <div class="rider-dot captain-dot" style="top: 25%; left: 52%;" title="Vikram (Road Captain)">
+                    <span class="dot-label">👑 Vikram (Lead)</span>
+                  </div>
+                  <div class="rider-dot pack-dot" style="top: 42%; left: 48%;" title="Rohit (Member)">
+                    <span class="dot-label">Rohit (+210m)</span>
+                  </div>
+                  <div class="rider-dot pack-dot" style="top: 55%; left: 51%;" title="Priya (Member)">
+                    <span class="dot-label">Priya (+480m)</span>
+                  </div>
+                  <div class="rider-dot me-dot" style="top: 75%; left: 50%;" title="You (Sweep Position)">
+                    <span class="dot-label">🛵 YOU (Sweep)</span>
+                  </div>
+                </div>
+
+                <div class="convoy-quick-metrics">
+                  <div class="c-metric">
+                    <span class="c-val">6 / 6</span>
+                    <span class="c-lbl">Riders Checked In</span>
+                  </div>
+                  <div class="c-metric">
+                    <span class="c-val text-orange">950 m</span>
+                    <span class="c-lbl">Pack Separation</span>
+                  </div>
+                  <div class="c-metric">
+                    <span class="c-val text-green">Optimal</span>
+                    <span class="c-lbl">Pacing Speed</span>
+                  </div>
+                </div>
+
+                <div class="convoy-member-list">
+                  <div class="convoy-member-card">
+                    <div class="m-avatar lead-avatar">👑</div>
+                    <div class="m-info">
+                      <strong>Vikramaditya Rao</strong>
+                      <span>Road Captain • BMW R1250 GS • +950m</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
+                      <span class="m-status-pill pill-lead">LEAD</span>
+                      <span class="freshness-tag freshness-live">● LIVE (4s ago)</span>
+                    </div>
+                  </div>
+
+                  <div class="convoy-member-card">
+                    <div class="m-avatar pack-avatar">🏍️</div>
+                    <div class="m-info">
+                      <strong>Rohit Verma</strong>
+                      <span>Pack Rider • KTM 390 ADV • +640m</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
+                      <span class="m-status-pill pill-ok">SYNCED</span>
+                      <span class="freshness-tag freshness-delayed">▲ DELAYED (42s ago)</span>
+                    </div>
+                  </div>
+
+                  <div class="convoy-member-card" style="border-left: 3px solid #F44336 !important;">
+                    <div class="m-avatar pack-avatar" style="opacity: 0.6;">🛵</div>
+                    <div class="m-info">
+                      <strong style="color: #FF8A80;">Priya Sundaram</strong>
+                      <span>Hairpin Dead-Zone • RE Scram 411 • Last seen 32.251°N, 77.192°E</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
+                      <span class="m-status-pill" style="background: rgba(244, 67, 54, 0.2); color: #FF8A80;">CELL DEAD-ZONE</span>
+                      <span class="freshness-tag freshness-offline">✖ OFFLINE (4m ago)</span>
+                    </div>
+                  </div>
+
+                  <div class="convoy-member-card sweep-card">
+                    <div class="m-avatar sweep-avatar">🛡️</div>
+                    <div class="m-info">
+                      <strong>Aman Jha (You)</strong>
+                      <span>Sweep Position • RE Himalayan 450 • Last Rider</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
+                      <span class="m-status-pill pill-sweep">SWEEP</span>
+                      <span class="freshness-tag freshness-live" id="convoy-you-freshness">● LIVE (Local Fix)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="convoy-buttons-row" style="flex-wrap: wrap;">
+                  <button class="convoy-ping-btn interactive-squish" id="btn-convoy-ping" style="flex: 1 1 45%;">
+                    <span>📡 Mesh Ping</span>
+                  </button>
+                  <button class="convoy-regroup-btn interactive-squish" id="btn-convoy-regroup" style="flex: 1 1 45%;">
+                    <span>📍 Call Regroup</span>
+                  </button>
+                  <button class="convoy-ping-btn interactive-squish" id="btn-convoy-im-ok" style="flex: 1 1 100%; background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.4); color: #81C784;">
+                    <span>📸 Broadcast "I'm OK / Stopping for Photo"</span>
+                  </button>
+                </div>
+
+                <!-- Floating Glass Convoy Roster Bottom Sheet -->
+                <div class="convoy-roster-sheet" id="convoy-roster-sheet">
+                  <div class="roster-header">
+                    <h4>👥 Himalayan Convoy Squad (6 Riders)</h4>
+                    <button class="roster-close-btn" id="btn-close-roster">✕</button>
+                  </div>
+                  <div class="roster-rider-list">
+                    <div class="roster-rider-item">
+                      <div class="r-rider-left">
+                        <div class="r-rider-avatar" style="background: #FFD700; color: black;">👑</div>
+                        <div class="r-rider-meta">
+                          <strong>Vikramaditya Rao</strong>
+                          <small>BMW R1250 GS • Lead (0.1s ping)</small>
+                        </div>
+                      </div>
+                      <div class="r-rider-right">
+                        <span class="r-role-pill pill-lead">LEAD</span>
+                        <small style="color: var(--status-green); font-size: 9px; font-weight: 700;">● Online</small>
+                      </div>
+                    </div>
+
+                    <div class="roster-rider-item">
+                      <div class="r-rider-left">
+                        <div class="r-rider-avatar" style="background: #2196F3;">🏍️</div>
+                        <div class="r-rider-meta">
+                          <strong>Rohit Verma</strong>
+                          <small>KTM 390 Adventure • +210m (0.3s ping)</small>
+                        </div>
+                      </div>
+                      <div class="r-rider-right">
+                        <span class="r-role-pill pill-pack">PACK</span>
+                        <small style="color: var(--status-green); font-size: 9px; font-weight: 700;">● Online</small>
+                      </div>
+                    </div>
+
+                    <div class="roster-rider-item">
+                      <div class="r-rider-left">
+                        <div class="r-rider-avatar" style="background: #9C27B0;">🛵</div>
+                        <div class="r-rider-meta">
+                          <strong>Priya Sundaram</strong>
+                          <small>RE Scram 411 • +480m (0.4s ping)</small>
+                        </div>
+                      </div>
+                      <div class="r-rider-right">
+                        <span class="r-role-pill pill-pack">PACK</span>
+                        <small style="color: var(--status-green); font-size: 9px; font-weight: 700;">● Online</small>
+                      </div>
+                    </div>
+
+                    <div class="roster-rider-item">
+                      <div class="r-rider-left">
+                        <div class="r-rider-avatar" style="background: #00897B;">🏍️</div>
+                        <div class="r-rider-meta">
+                          <strong>Arjun Mehta</strong>
+                          <small>BMW G310 GS • +720m (0.8s ping)</small>
+                        </div>
+                      </div>
+                      <div class="r-rider-right">
+                        <span class="r-role-pill pill-pack">PACK</span>
+                        <small style="color: var(--status-green); font-size: 9px; font-weight: 700;">● Online</small>
+                      </div>
+                    </div>
+
+                    <div class="roster-rider-item">
+                      <div class="r-rider-left">
+                        <div class="r-rider-avatar" style="background: #5C6BC0;">🏍️</div>
+                        <div class="r-rider-meta">
+                          <strong>Rohan Kapoor</strong>
+                          <small>Triumph Scrambler 400X • +890m</small>
+                        </div>
+                      </div>
+                      <div class="r-rider-right">
+                        <span class="r-role-pill pill-pack">PACK</span>
+                        <small style="color: var(--status-green); font-size: 9px; font-weight: 700;">● Online</small>
+                      </div>
+                    </div>
+
+                    <div class="roster-rider-item">
+                      <div class="r-rider-left">
+                        <div class="r-rider-avatar" style="background: #FF5C00; color: white;">🛡️</div>
+                        <div class="r-rider-meta">
+                          <strong>Aman Jha (You)</strong>
+                          <small>RE Himalayan 450 • Last Rider (+950m)</small>
+                        </div>
+                      </div>
+                      <div class="r-rider-right">
+                        <span class="r-role-pill pill-sweep">SWEEPER</span>
+                        <small style="color: var(--status-green); font-size: 9px; font-weight: 700;">● Online</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 4: AI ROUTE COPILOT -->
+            <div class="app-screen" id="screen-ai-planner">
+              <div class="screen-app-bar glass-surface-top">
+                <span class="bar-title">AI Route & High Pass Copilot</span>
+                <span class="bar-action badge-ai">GPT-4o</span>
+              </div>
+              <div class="screen-scroll-body">
+                <div class="copilot-input-box glass-surface">
+                  <label class="input-label">Destination / Expedition Goal:</label>
+                  <div class="copilot-search-wrap">
+                    <input type="text" class="copilot-input" value="Manali to Leh Circuit via Zanskar & Khardung La" readonly>
+                    <button class="copilot-send-btn interactive-squish">✨</button>
+                  </div>
+                </div>
+
+                <div class="ai-recommendation-card glass-surface">
+                  <div class="ai-card-badge">🏔️ HIMALAYAN EXPEDITION ADVISORY</div>
+                  <h4>Optimal 6-Day Ladakh High-Pass Schedule</h4>
+                  <p class="ai-summary">Route passes through 4 mountain passes exceeding 16,000 ft. Acclimatization stop mandatory at Jispa (3,200m) before crossing Baralacha La.</p>
+
+                  <!-- Instagram-Style Oversized Headline Numbers Row -->
+                  <div class="trust-score-row" style="margin: 4px 0 10px;">
+                    <div class="trust-stat-box">
+                      <span class="stat-headline-number stat-headline-accent">5,359m</span>
+                      <span class="stat-headline-label">MAX ELEVATION</span>
+                    </div>
+                    <div class="trust-stat-box">
+                      <span class="stat-headline-number">6 Days</span>
+                      <span class="stat-headline-label">DURATION</span>
+                    </div>
+                    <div class="trust-stat-box">
+                      <span class="stat-headline-number" style="color: #FF5252;">365 km</span>
+                      <span class="stat-headline-label">FUEL DRY ZONE</span>
+                    </div>
+                  </div>
+
+                  <div class="pass-elevation-track" style="border-radius: 14px; background: rgba(0,0,0,0.35); border: 1px solid var(--glass-edge);">
+                    <div class="pass-point">
+                      <span class="pass-alt">2,050m</span>
+                      <div class="pass-bar" style="height: 35%;"></div>
+                      <span class="pass-name">Manali</span>
+                    </div>
+                    <div class="pass-point">
+                      <span class="pass-alt">3,978m</span>
+                      <div class="pass-bar" style="height: 65%;"></div>
+                      <span class="pass-name">Rohtang</span>
+                    </div>
+                    <div class="pass-point">
+                      <span class="pass-alt">4,890m</span>
+                      <div class="pass-bar highlight-bar" style="height: 82%;"></div>
+                      <span class="pass-name">Baralacha</span>
+                    </div>
+                    <div class="pass-point">
+                      <span class="pass-alt">5,359m</span>
+                      <div class="pass-bar pass-peak" style="height: 100%;"></div>
+                      <span class="pass-name">Khardung La</span>
+                    </div>
+                  </div>
+
+                  <div class="critical-advisories">
+                    <div class="adv-item warn-red" style="background: rgba(244,67,54,0.12); border: 1px solid rgba(244,67,54,0.35); border-radius: 12px;">
+                      <span class="adv-icon">⛽</span>
+                      <div class="adv-text">
+                        <strong>Fuel Dry Zone (365 km):</strong>
+                        <p>Last trusted petrol pump is at Tandi. Carry minimum 5L jerry cans for Himalayan 450.</p>
+                      </div>
+                    </div>
+                    <div class="adv-item warn-amber" style="background: rgba(255,193,7,0.12); border: 1px solid rgba(255,193,7,0.35); border-radius: 12px;">
+                      <span class="adv-icon">🫁</span>
+                      <div class="adv-text">
+                        <strong>Oxygen Saturation Alert:</strong>
+                        <p>Baralacha La drops O2 to 58%. Carry Diamox & portable O2 canisters.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="packing-checklist-box glass-surface" style="border-radius: 18px; padding: 14px; margin-bottom: 12px;">
+                  <h4 style="margin-bottom: 8px;">Automated Touring Checklist (Pre-Ride Ready)</h4>
+                  <div class="check-item checked"><span>✅ Tire plug kit & 12V portable inflator</span></div>
+                  <div class="check-item checked"><span>✅ Spare clutch & accelerator cables</span></div>
+                  <div class="check-item checked"><span>✅ Water-resistant chain lubricant (O-ring safe)</span></div>
+                  <div class="check-item checked"><span>✅ Offline GPS maps cached (240MB Ladakh Pack)</span></div>
+                </div>
+
+                <!-- Personal Fuel-Range & Dry-Zone Planner (Feature 3) -->
+                <div class="fuel-planner-card glass-surface" id="fuel-planner-card">
+                  <div class="fpc-title-row">
+                    <strong style="color: #FF8A4C; font-size: 13px;">⛽ PERSONAL FUEL-RANGE & DRY-ZONE PLANNER</strong>
+                    <span class="pillar-badge badge-orange" style="font-size: 9px;">NH3 Touring Math</span>
+                  </div>
+
+                  <div class="fpc-presets-row">
+                    <button class="fpc-preset-chip active" onclick="window.appPreview && window.appPreview.applyFuelPreset(17, 28, 6.5, 2.0, 365, true, this)">Tandi → Karu (365 km)</button>
+                    <button class="fpc-preset-chip" onclick="window.appPreview && window.appPreview.applyFuelPreset(17, 32, 10.0, 2.0, 145, false, this)">Bengaluru → Mysuru (145 km)</button>
+                    <button class="fpc-preset-chip" onclick="window.appPreview && window.appPreview.applyFuelPreset(17, 26, 8.0, 2.0, 78, true, this)">Manali → Keylong (78 km)</button>
+                  </div>
+
+                  <div class="fpc-inputs-grid">
+                    <div class="fpc-input-group">
+                      <label class="fpc-input-label">Tank Capacity (L)</label>
+                      <input type="number" id="fp-tank-capacity" class="fpc-number-input" value="17.0" step="0.5">
+                    </div>
+                    <div class="fpc-input-group">
+                      <label class="fpc-input-label">Recent Efficiency (km/L)</label>
+                      <input type="number" id="fp-efficiency" class="fpc-number-input" value="28.0" step="0.5">
+                    </div>
+                    <div class="fpc-input-group">
+                      <label class="fpc-input-label">Current Fuel (L)</label>
+                      <input type="number" id="fp-current-fuel" class="fpc-number-input" value="6.5" step="0.5">
+                    </div>
+                    <div class="fpc-input-group">
+                      <label class="fpc-input-label">Safety Reserve (L)</label>
+                      <input type="number" id="fp-reserve" class="fpc-number-input" value="2.0" step="0.5">
+                    </div>
+                    <div class="fpc-input-group" style="grid-column: span 2;">
+                      <label class="fpc-input-label">Distance to Next Verified Pump (km)</label>
+                      <input type="number" id="fp-distance" class="fpc-number-input" value="365.0" step="1">
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11px; padding: 4px 0;">
+                    <span style="color: var(--text-secondary);">🏔️ Route Above 3,000m (18% Alt Loss)</span>
+                    <input type="checkbox" id="fp-altitude-chk" checked onchange="window.appPreview && window.appPreview.recalculateFuelPlanner()">
+                  </div>
+
+                  <button class="cta-blaze-btn interactive-squish" style="padding: 8px;" onclick="window.appPreview && window.appPreview.recalculateFuelPlanner()">
+                    ⚡ Compute Safe Usable Range & Deficit
+                  </button>
+
+                  <div class="fpc-result-box deficit" id="fp-result-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <strong id="fp-status-label" style="color: #FF5252; font-size: 12px;">🚨 DEFICIT WARNING: Short by 262 km</strong>
+                      <span class="trust-badge" id="fp-usable-badge" style="background: rgba(255,255,255,0.1); color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 4px;">Usable: 103 km</span>
+                    </div>
+                    <div id="fp-advisory-text" style="font-size: 11px; color: #fff; line-height: 1.35;">
+                      Short by 262 km to next pump. Minimum 11.5L extra fuel needed — carry 15L auxiliary jerry cans!
+                    </div>
+                    <div class="fpc-disclaimer-text">
+                      * Disclaimer: Range estimated from user inputs (not live ECU float sensors). Range degrades by 15–25% at high altitude (>3,000m), steep gradients, or heavy luggage.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Verified Touring Corridor Services -->
+                <div class="glass-surface" style="border-radius: 18px; padding: 14px; margin-bottom: 12px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: #fff; font-size: 13px;">🗺️ VERIFIED HIGHWAY CORRIDOR SERVICES</strong>
+                    <span style="font-size: 9px; color: var(--text-secondary);">NH3 Manali - Leh</span>
+                  </div>
+
+                  <div class="touring-services-container">
+                    <!-- Service 1: Tandi Pump (Cash only alert) -->
+                    <div class="service-card">
+                      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                          <strong style="font-size: 12px; color: #fff;">IndianOil Tandi (Last Pump before Karu)</strong>
+                          <div style="font-size: 10px; color: var(--text-tertiary);">NH3 Km 110 • Open 06:00 - 19:00</div>
+                        </div>
+                        <span class="service-provenance-tag prov-verified">VERIFIED_PARTNER</span>
+                      </div>
+                      <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                        <span class="cash-alert-tag">⚠️ BSNL Only • UPI Fails • Cash Required</span>
+                        <span class="trust-badge" style="background: rgba(76,175,80,0.15); color: #81C784; font-size: 8px; padding: 2px 4px; border-radius: 4px;">Clean Washrooms</span>
+                      </div>
+                      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10px; margin-top: 4px;">
+                        <span class="touring-confirm-label" id="srv-tandi-confirm" style="color: var(--status-green);">✓ 84 Rider Audits</span>
+                        <div style="display: flex; gap: 4px;">
+                          <button class="loc-btn interactive-squish" onclick="window.appPreview && window.appPreview.confirmTouringService('srv-01', 'IndianOil Tandi')">Confirm Visited</button>
+                          <button class="loc-btn interactive-squish" style="color: #FF8A80;" onclick="window.appPreview && window.appPreview.reportTouringClosed('srv-01', 'IndianOil Tandi')">Report Issue</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Service 2: Jispa Spoke Specialist & O2 -->
+                    <div class="service-card">
+                      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                          <strong style="font-size: 12px; color: #fff;">Jispa Bikers Camp & Spoke Repair</strong>
+                          <div style="font-size: 10px; color: var(--text-tertiary);">NH3 Km 138 • High-Altitude Specialist</div>
+                        </div>
+                        <span class="service-provenance-tag prov-women">WOMEN_RIDER_AUDITED</span>
+                      </div>
+                      <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                        <span style="background: rgba(33,150,243,0.2); color: #90CAF9; font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 700;">🫁 Emergency O2 Canister</span>
+                        <span style="background: rgba(255,152,0,0.2); color: #FFB74D; font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 700;">🔧 Spoke & Tube Repair</span>
+                        <span style="background: rgba(156,39,176,0.2); color: #CE93D8; font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 700;">🛡️ CCTV & Guarded Parking</span>
+                      </div>
+                      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10px; margin-top: 4px;">
+                        <span class="touring-confirm-label" id="srv-jispa-confirm" style="color: var(--status-green);">✓ 42 Rider Audits</span>
+                        <div style="display: flex; gap: 4px;">
+                          <button class="loc-btn interactive-squish" onclick="window.appPreview && window.appPreview.confirmTouringService('srv-02', 'Jispa Spoke Specialist')">Confirm Visited</button>
+                          <button class="loc-btn interactive-squish" style="color: #FF8A80;" onclick="window.appPreview && window.appPreview.reportTouringClosed('srv-02', 'Jispa Spoke Specialist')">Report Issue</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 5: EMERGENCY SOS & CRASH BEACON -->
+            <div class="app-screen" id="screen-sos">
+              <div class="screen-app-bar bg-dark-red">
+                <span class="bar-title text-red">Emergency SOS & Hands-Free Triggers</span>
+                <span class="bar-action status-pill-red">ARMED</span>
+              </div>
+              <div class="screen-scroll-body text-center">
+                <!-- Voice Trigger Banner -->
+                <div class="voice-trigger-card">
+                  <div class="vtc-icon">🎙️</div>
+                  <div class="vtc-text">
+                    <strong>Hands-Free Voice SOS: Active</strong>
+                    <small>Say "Hey RoadMate, I need help" • On-Device Wake Word</small>
+                  </div>
+                  <button class="vtc-setup-btn" id="btn-open-voice-setup">Setup / Privacy</button>
+                </div>
+
+                <!-- Simulation Trigger Buttons -->
+                <div class="emergency-trigger-grid">
+                  <button class="trigger-card-btn voice-btn" id="btn-simulate-voice-sos">
+                    <span class="t-icon">🎙️</span>
+                    <span class="t-title">Simulate Voice Trigger</span>
+                    <small>"Hey RoadMate, I need help"</small>
+                  </button>
+
+                  <button class="trigger-card-btn crash-btn" id="btn-simulate-crash-sos">
+                    <span class="t-icon">💥</span>
+                    <span class="t-title">Major Crash (10s AI Check)</span>
+                    <small>8.4G Spike → Unresponsive Auto-Call</small>
+                  </button>
+                </div>
+
+                <div class="sos-explainer">
+                  <span class="or-divider">── OR USE MANUAL SLIDE ──</span>
+                </div>
+
+                <!-- Slide to Activate SOS Slider Component (Matching sos_button.dart) -->
+                <div class="sos-slider-container" id="sos-slider-track">
+                  <div class="sos-track-label">SLIDE FOR SOS >>></div>
+                  <div class="sos-thumb" id="sos-slider-thumb">
+                    <span class="sos-thumb-text">SOS</span>
+                  </div>
+                </div>
+
+                <!-- 10-Second Audible/Vibrating Local Countdown Overlay -->
+                <div class="sos-active-overlay" id="sos-active-countdown" style="display: none;">
+                  <div class="sos-trigger-badge" id="sos-active-trigger-badge">
+                    🎙️ VOICE TRIGGER: "Hey RoadMate, I need help"
+                  </div>
+
+                  <!-- AI Voice Responsiveness Challenge Waveform & Banner -->
+                  <div class="sos-voice-challenge-banner" id="sos-voice-challenge-banner" style="display: none;">
+                    <div class="ai-speech-wave">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="ai-challenge-text">
+                      <strong>AI Voice Checking Rider Consciousness...</strong>
+                      <small id="sos-ai-vocal-instruction">Say "I am okay" or tap button within 10s</small>
+                    </div>
+                    <button class="voice-abort-simulate-chip" id="btn-simulate-voice-abort" title="Click to simulate saying 'I am okay'">
+                      🗣️ "I am okay"
+                    </button>
+                  </div>
+                  
+                  <div class="countdown-circle">
+                    <span class="countdown-seconds" id="sos-countdown-val">10</span>
+                    <span class="countdown-label" id="sos-countdown-label">SECONDS TO DISPATCH</span>
+                  </div>
+                  
+                  <h3 id="sos-overlay-title">LOCAL SAFETY CANCEL WINDOW</h3>
+                  <p id="sos-overlay-desc">Cancel within 10s if accidental. Parallel tasks are already active below:</p>
+
+                  <!-- Parallel Status Pills -->
+                  <div class="parallel-tasks-box">
+                    <div class="pt-item done">
+                      <span class="pt-dot">✓</span>
+                      <span>GPS Fix Locked: <code>32.3712° N, 77.2144° E</code></span>
+                    </div>
+                    <div class="pt-item in-progress">
+                      <span class="pt-dot pulse">●</span>
+                      <span>Recording 30s Ambient Audio (Encrypted, 30-day auto-delete)</span>
+                    </div>
+                    <div class="pt-item ready">
+                      <span class="pt-dot">●</span>
+                      <span>Contacts Queued in Priority Order (Push → SMS Fallback → Telegram)</span>
+                    </div>
+                  </div>
+
+                  <!-- AI Automated Dispatch HUD (When 10s Countdown Completes Unresponsive) -->
+                  <div class="sos-unresponsive-dispatch-panel" id="sos-unresponsive-panel" style="display: none;">
+                    <div class="unresponsive-status-badge">
+                      <span class="pulse-red">●</span> RIDER UNRESPONSIVE — EMERGENCY AI DISPATCH ACTIVE
+                    </div>
+
+                    <!-- Police 112 Card -->
+                    <div class="ai-call-hud-card police-card">
+                      <div class="call-card-hdr">
+                        <div class="call-badge-col">
+                          <span class="call-icon">🚓</span>
+                          <div>
+                            <strong>POLICE STATION (112)</strong>
+                            <small class="call-status-live" id="police-call-status-pill">● CONNECTED & TRANSMITTED</small>
+                          </div>
+                        </div>
+                        <button class="listen-ai-speech-btn" id="btn-play-police-ai" title="Listen to AI voice spoken to police">
+                          🔊 Speak Call
+                        </button>
+                      </div>
+                      <div class="call-card-body">
+                        <p><strong>Rider Identified:</strong> Aman Jha • +91 98765 43200 • Blood: O+</p>
+                        <p><strong>Impact Location:</strong> Rohtang Pass Highway NH3 (32.3712° N, 77.2144° E)</p>
+                        <p class="map-link-preview">📍 Maps Link: <a href="https://maps.google.com/?q=32.371200,77.214400" target="_blank">maps.google.com/?q=32.3712,77.2144</a></p>
+                      </div>
+                    </div>
+
+                    <!-- Ambulance 108 Card -->
+                    <div class="ai-call-hud-card ambulance-card">
+                      <div class="call-card-hdr">
+                        <div class="call-badge-col">
+                          <span class="call-icon">🚑</span>
+                          <div>
+                            <strong>AMBULANCE / EMS (108)</strong>
+                            <small class="call-status-live" id="ambulance-call-status-pill">● TRAUMA UNIT DISPATCHED</small>
+                          </div>
+                        </div>
+                        <button class="listen-ai-speech-btn" id="btn-play-ambulance-ai" title="Listen to AI voice spoken to ambulance">
+                          🔊 Speak Call
+                        </button>
+                      </div>
+                      <div class="call-card-body">
+                        <p><strong>Medical Trauma Priority 1:</strong> 8.4G Crash • Rider Incapacitated</p>
+                        <p><strong>Blood Group Required:</strong> O+ (Immediate blood readiness requested)</p>
+                        <p><strong>Nearest Center:</strong> District Hospital Keylong (8.4 km)</p>
+                      </div>
+                    </div>
+
+                    <!-- Real-time Spoken Transcript Box -->
+                    <div class="ai-transcript-box">
+                      <div class="transcript-hdr">
+                        <span>🎙️ LIVE AI VOICE BROADCAST TRANSCRIPT</span>
+                        <span class="transcript-live-pill" id="transcript-live-tag">TRANSMITTING</span>
+                      </div>
+                      <div class="transcript-content" id="sos-live-ai-transcript">
+                        "Emergency automated broadcast from RoadMate Indian Rider Safety Network. A critical motorcycle crash has occurred. The rider is completely UNRESPONSIVE after 10-second vocal checks..."
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- National Emergency 112 Dialing Action -->
+                  <div class="dialer-action-box">
+                    <div class="dialer-info">
+                      <strong>NATIONAL EMERGENCY (112)</strong>
+                      <small id="dialer-platform-note">iOS: Opens emergency call sheet ready to connect (1 tap) • Android: Direct call</small>
+                    </div>
+                    <button class="call-112-btn" id="btn-dial-112-now">📞 Call 112</button>
+                  </div>
+
+                  <button class="sos-abort-btn" id="sos-abort-btn">ABORT (FALSE ALARM)</button>
+                </div>
+
+                <div class="sos-medical-preview-card">
+                  <div class="med-header">
+                    <span>VITAL EMERGENCY PASSPORT</span>
+                    <span class="blood-badge">BLOOD GROUP: O+</span>
+                  </div>
+                  <div class="med-grid">
+                    <div class="med-col">
+                      <span class="lbl">Primary Contact (Priority 1)</span>
+                      <strong>Aditi Sharma (Wife)</strong>
+                      <small>+91 98765 43210 • TG: @aditi_s</small>
+                    </div>
+                    <div class="med-col">
+                      <span class="lbl">Secondary Contact (Priority 2)</span>
+                      <strong>Vikramaditya Rao (Lead)</strong>
+                      <small>+91 98765 43211 • Convoy</small>
+                    </div>
+                  </div>
+                  <div class="incident-trail-status">
+                    <span>🛰️ Last Fix: 32.2396° N, 77.1887° E • Elev: 4,280m • G-Force: 1.0G (Normal)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCREEN 6: DIGITAL GARAGE -->
+            <div class="app-screen" id="screen-garage">
+              <div class="screen-app-bar glass-surface-top">
+                <span class="bar-title">Digital Garage</span>
+                <span class="bar-action">2 Bikes</span>
+              </div>
+              <div class="screen-scroll-body">
+                <div class="bike-hero-card glass-surface">
+                  <img src="assets/images/hero.jpg" alt="RE Himalayan 450" class="bike-card-photo">
+                  <div class="bike-card-badge">PRIMARY EXPEDITION BIKE</div>
+                  <div class="bike-title-row">
+                    <div>
+                      <h3>Royal Enfield Himalayan 450</h3>
+                      <p>DL 01 AB 4529 • Sherpa 452cc DOHC</p>
+                    </div>
+                    <div class="odometer-pill">
+                      <span class="odo-val">14,280</span>
+                      <span class="odo-unit">KM</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="maintenance-section-title">PREVENTIVE MAINTENANCE RADAR</div>
+                <div class="maintenance-cards">
+                  <div class="maint-card glass-surface interactive-squish">
+                    <div class="maint-icon">⛓️</div>
+                    <div class="maint-info">
+                      <div class="maint-row">
+                        <strong>Chain Clean & Lubrication</strong>
+                        <span class="maint-due text-amber">Due in 120 km</span>
+                      </div>
+                      <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-amber" style="width: 82%;"></div>
+                      </div>
+                      <small>Interval: 500 km • Harsh Himalayan conditions</small>
+                    </div>
+                  </div>
+
+                  <div class="maint-card glass-surface interactive-squish">
+                    <div class="maint-icon">🛢️</div>
+                    <div class="maint-info">
+                      <div class="maint-row">
+                        <strong>Engine Oil & Filter (15W-50 Semi-Syn)</strong>
+                        <span class="maint-due text-green">Good (4,280 km left)</span>
+                      </div>
+                      <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-green" style="width: 35%;"></div>
+                      </div>
+                      <small>Next scheduled service: 18,500 km</small>
+                    </div>
+                  </div>
+
+                  <div class="maint-card glass-surface interactive-squish">
+                    <div class="maint-icon">🛑</div>
+                    <div class="maint-info">
+                      <div class="maint-row">
+                        <strong>Front / Rear Brake Pad Wear</strong>
+                        <span class="maint-due text-green">Front 68% / Rear 54%</span>
+                      </div>
+                      <div class="progress-bar-bg">
+                        <div class="progress-bar-fill fill-green" style="width: 60%;"></div>
+                      </div>
+                      <small>Sintered pads recommended for Ladakh passes</small>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="cta-blaze-btn interactive-squish" id="btn-add-service-log">
+                  <span>＋ Log Odometer / Service Maintenance</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- SCREEN 7: WOMEN RIDER SAFETY & SAFE ZONES -->
+            <div class="app-screen" id="screen-women-safety">
+              <div class="screen-app-bar glass-surface-top">
+                <span class="bar-title">Women Rider Highway Safe Zones</span>
+                <span class="bar-action badge-purple">Shield Active</span>
+              </div>
+              <div class="screen-scroll-body">
+                <div class="safe-zone-hero glass-surface">
+                  <div class="shield-badge">🛡️ VERIFIED SAFE NETWORK</div>
+                  <h3>Community-Audited Night Stays & Highway Stops</h3>
+                  <p>Every location verified by solo women touring riders for clean washrooms, 24/7 active CCTV, well-lit parking, and verified staff.</p>
+                </div>
+
+                <div class="verified-locations-list">
+                  <div class="location-card glass-surface interactive-squish">
+                    <div class="loc-head">
+                      <div>
+                        <h4>NH3 Highway Oasis & Dhaba</h4>
+                        <span class="loc-sub">Near Bilaspur • Km 114</span>
+                      </div>
+                      <span class="loc-rating">4.9 ★★★★★</span>
+                    </div>
+                    <div class="loc-tags">
+                      <span class="loc-tag">✅ Guarded Bike Parking</span>
+                      <span class="loc-tag">✅ Clean Western Washrooms</span>
+                      <span class="loc-tag">✅ Women Staff On-duty</span>
+                      <span class="loc-tag">✅ High-Speed Wi-Fi</span>
+                    </div>
+                    <div class="loc-footer">
+                      <span>Audited by 28 female riders</span>
+                      <button class="loc-btn interactive-squish">Directions</button>
+                    </div>
+                  </div>
+
+                  <div class="location-card glass-surface interactive-squish">
+                    <div class="loc-head">
+                      <div>
+                        <h4>HPTDC Tourist Lodge & Cafe</h4>
+                        <span class="loc-sub">Keylong Valley • Elevation 3,080m</span>
+                      </div>
+                      <span class="loc-rating">4.8 ★★★★★</span>
+                    </div>
+                    <div class="loc-tags">
+                      <span class="loc-tag">✅ Govt Recognized</span>
+                      <span class="loc-tag">✅ Heated Rooms</span>
+                      <span class="loc-tag">✅ Enclosed Courtyard</span>
+                    </div>
+                    <div class="loc-footer">
+                      <span>Audited by 41 female riders</span>
+                      <button class="loc-btn interactive-squish">Directions</button>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="cta-blaze-btn interactive-squish" style="background: #9C27B0;">
+                  <span>🛡️ Flag Unsafe / Poorly Lit Road Section</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- SCREEN 8: DOCUMENT VAULT -->
+            <div class="app-screen" id="screen-vault">
+              <div class="screen-app-bar glass-surface-top">
+                <span class="bar-title">Encrypted Document Vault</span>
+                <span class="bar-action status-green">DigiLocker Synced</span>
+              </div>
+              <div class="screen-scroll-body">
+                <p class="vault-caption">Government compliance shield for state highway border checks (Ladakh, HP, J&K entry permits).</p>
+
+                <div class="doc-cards">
+                  <div class="doc-card glass-surface interactive-squish">
+                    <div class="doc-card-top">
+                      <span class="doc-badge">REGISTRATION CERTIFICATE (RC)</span>
+                      <span class="doc-validity valid">VALID</span>
+                    </div>
+                    <h3>DL 01 AB 4529</h3>
+                    <p>Royal Enfield Himalayan 450 • Engine: SHP452098</p>
+                    <div class="doc-meta-row">
+                      <span>Issued: Delhi RTO</span>
+                      <span>Valid till: Nov 2038</span>
+                    </div>
+                  </div>
+
+                  <div class="doc-card glass-surface interactive-squish">
+                    <div class="doc-card-top">
+                      <span class="doc-badge">COMPREHENSIVE INSURANCE</span>
+                      <span class="doc-validity valid">ACTIVE</span>
+                    </div>
+                    <h3>ICICI Lombard Bumper-to-Bumper</h3>
+                    <p>Policy: OG-24-1902-882194-001</p>
+                    <div class="doc-meta-row">
+                      <span>Zero Depreciation</span>
+                      <span>Expires: 14 Oct 2027</span>
+                    </div>
+                  </div>
+
+                  <div class="doc-card glass-surface interactive-squish card-caution">
+                    <div class="doc-card-top">
+                      <span class="doc-badge">POLLUTION CHECK (PUC)</span>
+                      <span class="doc-validity expiring">RENEW IN 14 DAYS</span>
+                    </div>
+                    <h3>Bharat Stage VI Compliant</h3>
+                    <p>Certificate: DL-PUC-2024-99812</p>
+                    <div class="doc-meta-row">
+                      <span>Emission: 0.12% CO</span>
+                      <span>Expires: 05 Nov 2026</span>
+                    </div>
+                  </div>
+
+                  <div class="doc-card glass-surface interactive-squish">
+                    <div class="doc-card-top">
+                      <span class="doc-badge">DRIVING LICENSE</span>
+                      <span class="doc-validity valid">VALID</span>
+                    </div>
+                    <h3>DL-0420180092144 (MCWG & LMV)</h3>
+                    <p>Holder: Aman Jha • Blood Group: O+</p>
+                    <div class="doc-meta-row">
+                      <span>All India Permit</span>
+                      <span>Valid till: Aug 2042</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="cta-blaze-btn interactive-squish">
+                  <span>＋ Upload New Vehicle Permit / Document</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- SCREEN 9: AUTH & INSTAGRAM-INFLUENCED RIDER PROFILE -->
+            <div class="app-screen" id="screen-auth">
+              <div class="screen-app-bar glass-surface-top">
+                <span class="bar-title">Rider Identity & Trust Profile</span>
+                <span class="bar-action status-green">Tier 3 Verified</span>
+              </div>
+              <div class="screen-scroll-body">
+                <!-- Hero Profile Card in Liquid Glass -->
+                <div class="profile-hero-card glass-surface">
+                  <!-- Instagram Story-Style Trust Score Ring (Conic gradient proportional to 94% trust score) -->
+                  <div class="story-avatar-container" title="Trust Score 94/100 (Verified ADV Tourer)">
+                    <div class="story-trust-ring" id="profile-trust-ring">
+                      <img src="assets/images/rider.jpg" alt="Aman Jha" class="story-avatar-inner">
+                    </div>
+                    <span class="trust-badge-floating">94</span>
+                  </div>
+
+                  <div class="profile-info">
+                    <div class="rider-name-row">
+                      <h3>Aman Jha</h3>
+                      <span class="verified-tick-badge" title="DigiLocker & KYC Verified">✓ VERIFIED</span>
+                    </div>
+                    <p>High-Altitude ADV Tourer • RE Himalayan 450 • 14 Expeditions</p>
+                    
+                    <!-- Oversized Instagram-style Headline Numbers -->
+                    <div class="trust-score-row">
+                      <div class="trust-stat-box">
+                        <span class="stat-headline-number stat-headline-accent">18.4k</span>
+                        <span class="stat-headline-label">KM RIDDEN</span>
+                      </div>
+                      <div class="trust-stat-box">
+                        <span class="stat-headline-number">94</span>
+                        <span class="stat-headline-label">TRUST SCORE</span>
+                      </div>
+                      <div class="trust-stat-box">
+                        <span class="stat-headline-number">42</span>
+                        <span class="stat-headline-label">VERIFIED RADAR</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Past Rides Horizontal Scroll Carousel (Instagram-influenced visual showcase) -->
+                <div class="ride-carousel-section">
+                  <div class="section-head-row">
+                    <span class="section-head-title">EXPEDITION HISTORY & ROUTES</span>
+                    <span class="section-head-action">See All (14) →</span>
+                  </div>
+                  <div class="ride-carousel-container" id="past-rides-carousel">
+                    <!-- Carousel Card 1 -->
+                    <div class="ride-carousel-card interactive-squish" onclick="window.appPreview && window.appPreview.showToast('📍 Opened expedition log: NH3 Rohtang to Keylong (342.6 km)')">
+                      <div class="ride-carousel-img-wrap">
+                        <img src="assets/images/hero.jpg" class="ride-carousel-img" alt="NH3 Rohtang Pass">
+                        <div class="ride-carousel-gradient"></div>
+                        <span class="ride-carousel-badge">4,280m ALT</span>
+                      </div>
+                      <div class="ride-carousel-content">
+                        <h4>NH3 Rohtang to Keylong</h4>
+                        <p>High-pass switchbacks • BRO clearing</p>
+                        <div class="ride-carousel-meta">
+                          <span>342.6 km</span>
+                          <span>22 Oct 2026</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Carousel Card 2 -->
+                    <div class="ride-carousel-card interactive-squish" onclick="window.appPreview && window.appPreview.showToast('📍 Opened expedition log: Spiti Kunzum La Circuit (518.0 km)')">
+                      <div class="ride-carousel-img-wrap">
+                        <img src="assets/images/hazard.jpg" class="ride-carousel-img" alt="Spiti Valley">
+                        <div class="ride-carousel-gradient"></div>
+                        <span class="ride-carousel-badge">4,590m ALT</span>
+                      </div>
+                      <div class="ride-carousel-content">
+                        <h4>Spiti Kunzum La Circuit</h4>
+                        <p>Glacial stream crossings • Kunzum Crest</p>
+                        <div class="ride-carousel-meta">
+                          <span>518.0 km</span>
+                          <span>14 Sep 2026</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Carousel Card 3 -->
+                    <div class="ride-carousel-card interactive-squish" onclick="window.appPreview && window.appPreview.showToast('📍 Opened expedition log: Zanskar & Shinku La Pass (412.0 km)')">
+                      <div class="ride-carousel-img-wrap">
+                        <img src="assets/images/hero.jpg" class="ride-carousel-img" alt="Zanskar Shinku La">
+                        <div class="ride-carousel-gradient"></div>
+                        <span class="ride-carousel-badge">5,091m ALT</span>
+                      </div>
+                      <div class="ride-carousel-content">
+                        <h4>Zanskar & Shinku La Pass</h4>
+                        <p>Black ice hairpins • 365km zero fuel zone</p>
+                        <div class="ride-carousel-meta">
+                          <span>412.0 km</span>
+                          <span>28 Aug 2026</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Developer Auth Bypass in Liquid Glass -->
+                <div class="auth-demo-box glass-surface">
+                  <h4>Developer Authentication Bypass</h4>
+                  <p>In accordance with MVP specs, fast OTP phone onboarding allows instant mock bypass with code <code>123456</code>:</p>
+                  
+                  <div class="demo-otp-form">
+                    <div class="input-with-prefix">
+                      <span class="country-prefix">+91</span>
+                      <input type="text" id="demo-phone-input" value="98765 43210" class="phone-input">
+                    </div>
+                    <div class="otp-digits-row">
+                      <input type="text" maxlength="1" value="1" class="otp-box" readonly>
+                      <input type="text" maxlength="1" value="2" class="otp-box" readonly>
+                      <input type="text" maxlength="1" value="3" class="otp-box" readonly>
+                      <input type="text" maxlength="1" value="4" class="otp-box" readonly>
+                      <input type="text" maxlength="1" value="5" class="otp-box" readonly>
+                      <input type="text" maxlength="1" value="6" class="otp-box" readonly>
+                    </div>
+                    <button class="cta-blaze-btn interactive-squish" id="btn-demo-verify-otp">
+                      <span>✓ Verify & Refresh Rider Token</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Glove-Friendly Navigation Bar (56dp touch targets) -->
+          <nav class="phone-bottom-nav">
+            <button class="nav-item active" data-screen="home" title="Rider Community Feed">
+              <span class="nav-icon">🏠</span>
+              <span class="nav-label">Home</span>
+            </button>
+            <button class="nav-item" data-screen="explore" title="Discover Routes & Hazards">
+              <span class="nav-icon">🧭</span>
+              <span class="nav-label">Explore</span>
+            </button>
+            <button class="nav-item nav-item-create" id="btn-open-create-sheet" title="Create / Publish">
+              <div class="nav-item-create-circle">＋</div>
+            </button>
+            <button class="nav-item" data-screen="clips" title="Ride Clips Reels">
+              <span class="nav-icon">🎬</span>
+              <span class="nav-label">Clips</span>
+            </button>
+            <button class="nav-item" data-screen="profile" title="Rider Profile & Garage">
+              <span class="nav-icon">👤</span>
+              <span class="nav-label">Profile</span>
+            </button>
+          </nav>
+
+          <!-- iOS Home Indicator & Android Navigation Pill -->
+          <div class="ios-home-indicator"></div>
+          <div class="android-nav-pill"></div>
+
+          <!-- FULL-SCREEN STORY VIEWER MODAL OVERLAY -->
+          <div class="story-viewer-modal" id="story-viewer-modal">
+            <!-- Segmented Progress Bars (Auto-advancing) -->
+            <div class="svm-progress-bars" id="svm-progress-bars">
+              <div class="svm-bar-track"><div class="svm-bar-fill" id="sv-fill-0"></div></div>
+              <div class="svm-bar-track"><div class="svm-bar-fill" id="sv-fill-1"></div></div>
+              <div class="svm-bar-track"><div class="svm-bar-fill" id="sv-fill-2"></div></div>
+              <div class="svm-bar-track"><div class="svm-bar-fill" id="sv-fill-3"></div></div>
+              <div class="svm-bar-track"><div class="svm-bar-fill" id="sv-fill-4"></div></div>
+              <div class="svm-bar-track"><div class="svm-bar-fill" id="sv-fill-5"></div></div>
+            </div>
+
+            <!-- Story Header -->
+            <div class="svm-header">
+              <div class="svm-author-info">
+                <img src="assets/images/rider.jpg" class="svm-avatar" id="sv-avatar" alt="Story Author">
+                <div>
+                  <span class="svm-author-name" id="sv-author-name">@vikram_adv</span>
+                  <div class="svm-time" id="sv-time">2h ago • Khardung La Crest</div>
+                </div>
+              </div>
+              <button class="svm-close-btn" id="sv-close-btn" onclick="window.appPreview && window.appPreview.closeStoryViewer()">✕</button>
+            </div>
+
+            <!-- Story Media & Tap Zones -->
+            <div class="svm-media-stage">
+              <img src="assets/images/himalayan_khardungla.jpg" class="svm-img" id="sv-media-img" alt="Story Media">
+              <div class="svm-tap-zone-left" onclick="window.appPreview && window.appPreview.prevStory()"></div>
+              <div class="svm-tap-zone-right" onclick="window.appPreview && window.appPreview.nextStory()"></div>
+              
+              <div class="svm-caption-overlay" id="sv-caption">
+                Khardung La weather advisory: Light snowfall near north pullu. Clear for all 450s and dual-sport tires. 🏔️🏍️
+              </div>
+            </div>
+
+            <!-- Bottom Story Reply Bar -->
+            <div class="svm-bottom-bar">
+              <input type="text" class="svm-reply-input" id="sv-reply-input" placeholder="Send reply to rider...">
+              <button class="svm-heart-btn" onclick="window.appPreview && window.appPreview.showToast('❤️ Reaction sent!')">❤️</button>
+            </div>
+          </div>
+
+          <!-- COMMENTS BOTTOM SHEET -->
+          <div class="comments-bottom-sheet" id="comments-sheet">
+            <div class="cbs-handle-bar"></div>
+            <div class="cbs-header">
+              <span class="cbs-title" id="cbs-title">Comments (38)</span>
+              <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeComments()">✕</button>
+            </div>
+
+            <div class="cbs-comments-list" id="cbs-comments-list">
+              <!-- Comment 1 -->
+              <div class="cbs-comment-item">
+                <img src="assets/images/women_rider_priya.jpg" class="cbs-comment-avatar" alt="Priya">
+                <div class="cbs-comment-content">
+                  <div>
+                    <span class="cbs-comment-author">priya_rides</span>
+                    <span class="cbs-comment-text">How was the traction on the north descent past the prayer flags? Any hidden black ice?</span>
+                  </div>
+                  <div class="cbs-comment-time">14m ago • Reply • 4 likes</div>
+                </div>
+                <button class="cbs-comment-like">🤍</button>
+              </div>
+
+              <!-- Comment 2 -->
+              <div class="cbs-comment-item">
+                <img src="assets/images/hero.jpg" class="cbs-comment-avatar" alt="Rohit">
+                <div class="cbs-comment-content">
+                  <div>
+                    <span class="cbs-comment-author">rohit_adv</span>
+                    <span class="cbs-comment-text">That Sherpa 450 engine sounds crisp at 17,000 ft! Our convoy is leaving Sarchu tomorrow morning.</span>
+                  </div>
+                  <div class="cbs-comment-time">32m ago • Reply • 7 likes</div>
+                </div>
+                <button class="cbs-comment-like">❤️</button>
+              </div>
+
+              <!-- Comment 3 -->
+              <div class="cbs-comment-item">
+                <img src="assets/images/rider.jpg" class="cbs-comment-avatar" alt="Dev">
+                <div class="cbs-comment-content">
+                  <div>
+                    <span class="cbs-comment-author">dev_mechanic</span>
+                    <span class="cbs-comment-text">Make sure to check chain tension after the rocky descent. Enjoy Leh!</span>
+                  </div>
+                  <div class="cbs-comment-time">1h ago • Reply • 2 likes</div>
+                </div>
+                <button class="cbs-comment-like">🤍</button>
+              </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="cbs-input-bar">
+              <input type="text" class="cbs-input" id="cbs-new-comment-input" placeholder="Add a touring comment...">
+              <button class="cbs-post-btn interactive-squish" id="cbs-post-btn" onclick="window.appPreview && window.appPreview.addComment()">Post</button>
+            </div>
+          </div>
+
+          <!-- UNIFIED CREATE ACTION SHEET -->
+          <div class="create-action-sheet" id="create-action-sheet">
+            <div class="cbs-handle-bar"></div>
+            <div class="cas-title">CREATE & PUBLISH</div>
+            <div class="cas-options-grid">
+              <!-- Option 1: Publish Ride Post -->
+              <div class="cas-option-row interactive-squish" onclick="window.appPreview && window.appPreview.openCreatePostModal()">
+                <div class="cas-icon ci-orange">📸</div>
+                <div class="cas-info">
+                  <strong>Publish Ride Post</strong>
+                  <small>Share photos, route stats & touring notes with the community</small>
+                </div>
+              </div>
+
+              <!-- Option 2: Upload Ride Clip -->
+              <div class="cas-option-row interactive-squish" onclick="window.appPreview && window.appPreview.openCreateClipModal()">
+                <div class="cas-icon ci-purple">🎬</div>
+                <div class="cas-info">
+                  <strong>Upload Ride Clip (Reels)</strong>
+                  <small>Share 15-60s vertical touring clips with exhaust audio notes</small>
+                </div>
+              </div>
+
+              <!-- Option 3: Report Road Hazard (Pillar 2) -->
+              <div class="cas-option-row interactive-squish" onclick="window.appPreview && window.appPreview.openReportHazardModal()">
+                <div class="cas-icon ci-red">⚠️</div>
+                <div class="cas-info">
+                  <strong>Report Road Hazard (PostGIS)</strong>
+                  <small>Alert riders of landslides, potholes, black ice or flood crossings</small>
+                </div>
+              </div>
+
+              <!-- Option 4: Create Convoy (Pillar 3) -->
+              <div class="cas-option-row interactive-squish" onclick="window.appPreview && window.appPreview.openCreateConvoyModal()">
+                <div class="cas-icon ci-green">👥</div>
+                <div class="cas-info">
+                  <strong>Create / Lead Convoy</strong>
+                  <small>Organize group ride with Lead Captain, Sweep and live radar</small>
+                </div>
+              </div>
+
+              <!-- Option 5: Plan AI Route (Pillar 4) -->
+              <div class="cas-option-row interactive-squish" onclick="window.appPreview && window.appPreview.openAiPlannerFromCreate()">
+                <div class="cas-icon ci-blue">🤖</div>
+                <div class="cas-info">
+                  <strong>Plan Route with AI Copilot</strong>
+                  <small>Generate curated expedition itinerary with fuel stop advisories</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 1: PUBLISH RIDE POST -->
+          <div class="modal-form-overlay" id="modal-create-post">
+            <div class="modal-form-card">
+              <div class="mfc-header">
+                <h3>Publish Expedition Post</h3>
+                <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeModal('modal-create-post')">✕</button>
+              </div>
+              <div class="mfc-body">
+                <div class="mfc-group">
+                  <label class="mfc-label">Expedition Title / Location</label>
+                  <input type="text" id="cp-location" class="mfc-input" placeholder="e.g. Rohtang Pass Crest • 3,980m" value="Rohtang Pass Crest • 3,980m">
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Motorcycle Model</label>
+                  <input type="text" id="cp-bike" class="mfc-input" placeholder="e.g. Royal Enfield Himalayan 450" value="Royal Enfield Himalayan 450">
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Distance & Elevation</label>
+                  <input type="text" id="cp-stats" class="mfc-input" placeholder="e.g. 342 km • 3,980m • 11°C" value="342 km • 3,980m • 11°C">
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Rider Caption & Notes</label>
+                  <textarea id="cp-caption" class="mfc-textarea" placeholder="Share road conditions, tire recommendations, and your riding experience...">Loose shale on the hairpins but stunning clear skies! Powering through in 2nd gear.</textarea>
+                </div>
+              </div>
+              <div class="mfc-footer">
+                <button class="cta-blaze-btn interactive-squish" style="flex: 1;" onclick="window.appPreview && window.appPreview.submitCreatePost()">
+                  🚀 Publish to Community Feed
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 2: REPORT ROAD HAZARD (PILLAR 2) -->
+          <div class="modal-form-overlay" id="modal-report-hazard">
+            <div class="modal-form-card">
+              <div class="mfc-header">
+                <h3>⚠️ Report PostGIS Road Hazard</h3>
+                <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeModal('modal-report-hazard')">✕</button>
+              </div>
+              <div class="mfc-body">
+                <div class="mfc-group">
+                  <label class="mfc-label">Hazard Category</label>
+                  <select id="rh-category" class="mfc-select">
+                    <option value="Landslide / Rockfall">Landslide / Rockfall (High Risk)</option>
+                    <option value="Potholes / Broken Surface">Potholes / Broken Surface</option>
+                    <option value="Black Ice / Slippery">Black Ice / Slippery Road</option>
+                    <option value="Water Crossing / Riverflow">Water Crossing / Riverflow</option>
+                    <option value="Stray Cattle / Animals">Stray Cattle / Animals on Highway</option>
+                    <option value="Road Closure / Blockade">Road Closure / Temporary Blockade</option>
+                  </select>
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Location / Highway Marker</label>
+                  <input type="text" id="rh-location" class="mfc-input" value="NH3 • 850m North of Rohtang Crest">
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Severity Level</label>
+                  <select id="rh-severity" class="mfc-select">
+                    <option value="Critical">🚨 Critical (Passable with extreme caution)</option>
+                    <option value="Moderate">⚠️ Moderate (Slow down to 20 km/h)</option>
+                    <option value="Advisory">ℹ️ Advisory (Information only)</option>
+                  </select>
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Description & Workaround</label>
+                  <textarea id="rh-desc" class="mfc-textarea" placeholder="Describe the hazard and recommend safe riding line...">Fresh rockfall after blasting. Single lane open. BRO dozer on site clearing debris.</textarea>
+                </div>
+              </div>
+              <div class="mfc-footer">
+                <button class="cta-blaze-btn interactive-squish" style="flex: 1; background: #F44336;" onclick="window.appPreview && window.appPreview.submitReportHazard()">
+                  ⚠️ Broadcast Hazard to Nearby Riders
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 3: LOG MOTORCYCLE SERVICE (PILLAR 6) -->
+          <div class="modal-form-overlay" id="modal-log-service">
+            <div class="modal-form-card">
+              <div class="mfc-header">
+                <h3>🏍️ Log Motorcycle Service</h3>
+                <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeModal('modal-log-service')">✕</button>
+              </div>
+              <div class="mfc-body">
+                <div class="mfc-group">
+                  <label class="mfc-label">Motorcycle</label>
+                  <input type="text" class="mfc-input" value="Royal Enfield Himalayan 450 (Kamet White)" readonly>
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Current Odometer (km)</label>
+                  <input type="number" id="ls-odo" class="mfc-input" value="14280">
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Service Type Performed</label>
+                  <select id="ls-type" class="mfc-select">
+                    <option value="Chain Clean & Lubrication">Chain Clean & Lubrication</option>
+                    <option value="Engine Oil & Filter Change">Engine Oil & Filter Change</option>
+                    <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                    <option value="Air Filter Cleaning">Air Filter Cleaning (High Dust)</option>
+                    <option value="General Expedition Inspection">General Expedition Inspection</option>
+                  </select>
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Service Notes / Dealer</label>
+                  <input type="text" id="ls-notes" class="mfc-input" placeholder="e.g. RE Authorized Service Center Manali" value="Motul C2 Chain Lube applied post stream crossing">
+                </div>
+              </div>
+              <div class="mfc-footer">
+                <button class="cta-blaze-btn interactive-squish" style="flex: 1;" onclick="window.appPreview && window.appPreview.submitLogService()">
+                  ✓ Record Service & Reset Interval
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 4: UPLOAD DOCUMENT (PILLAR 8) -->
+          <div class="modal-form-overlay" id="modal-upload-doc">
+            <div class="modal-form-card">
+              <div class="mfc-header">
+                <h3>📁 Upload Vault Document</h3>
+                <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeModal('modal-upload-doc')">✕</button>
+              </div>
+              <div class="mfc-body">
+                <div class="mfc-group">
+                  <label class="mfc-label">Document Category</label>
+                  <select id="ud-type" class="mfc-select">
+                    <option value="Insurance Policy">Comprehensive Insurance Policy</option>
+                    <option value="Pollution Certificate (PUC)">BS6 Pollution Under Control (PUC)</option>
+                    <option value="Driving License">Driving License (MCWG)</option>
+                    <option value="Registration Certificate (RC)">Registration Certificate (RC)</option>
+                  </select>
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Document / Policy Number</label>
+                  <input type="text" id="ud-number" class="mfc-input" placeholder="e.g. POL-849204918-IN" value="POL-849204918-IN">
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Expiry Date</label>
+                  <input type="date" id="ud-expiry" class="mfc-input" value="2027-10-31">
+                </div>
+                <div style="font-size: 11px; color: #81C784; background: rgba(76,175,80,0.1); padding: 8px 12px; border-radius: 8px;">
+                  🔒 Encrypted on-device with AES-256 before synchronization with secure S3 storage.
+                </div>
+              </div>
+              <div class="mfc-footer">
+                <button class="cta-blaze-btn interactive-squish" style="flex: 1;" onclick="window.appPreview && window.appPreview.submitUploadDoc()">
+                  🔒 Encrypt & Save to Vault
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS SHEET -->
+          <div class="comments-bottom-sheet" id="notifications-sheet">
+            <div class="cbs-handle-bar"></div>
+            <div class="cbs-header">
+              <span class="cbs-title">Touring Notifications</span>
+              <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeNotifications()">✕</button>
+            </div>
+            <div class="cbs-comments-list">
+              <div class="cbs-comment-item">
+                <span style="font-size: 24px;">❤️</span>
+                <div class="cbs-comment-content">
+                  <div><strong>Priya Sharma</strong> liked your expedition photo from Khardung La Crest.</div>
+                  <div class="cbs-comment-time">12m ago</div>
+                </div>
+              </div>
+              <div class="cbs-comment-item">
+                <span style="font-size: 24px;">⚠️</span>
+                <div class="cbs-comment-content">
+                  <div><strong style="color: #FFA726;">PostGIS Radar Alert:</strong> Fresh landslide reported 850m ahead on NH3. BRO team active.</div>
+                  <div class="cbs-comment-time">24m ago</div>
+                </div>
+              </div>
+              <div class="cbs-comment-item">
+                <span style="font-size: 24px;">👥</span>
+                <div class="cbs-comment-content">
+                  <div><strong>Convoy #07:</strong> Captain Vikram requested roll call check-in at Keylong.</div>
+                  <div class="cbs-comment-time">1h ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MESSAGES / CONVOY COMMS SHEET -->
+          <div class="comments-bottom-sheet" id="messages-sheet">
+            <div class="cbs-handle-bar"></div>
+            <div class="cbs-header">
+              <span class="cbs-title">Convoy Comms Radio</span>
+              <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeMessages()">✕</button>
+            </div>
+            <div class="cbs-comments-list" id="convoy-chat-list">
+              <div class="cbs-comment-item">
+                <img src="assets/images/rider.jpg" class="cbs-comment-avatar" alt="Vikram">
+                <div class="cbs-comment-content">
+                  <div style="font-size: 11px; font-weight: 700; color: #FF8A4C;">Vikram (Captain)</div>
+                  <div class="cbs-comment-text">Pack regrouping at Keylong Indian Oil for tank fill-up. Regroup in 15 mins.</div>
+                  <div class="cbs-comment-time">10m ago</div>
+                </div>
+              </div>
+              <div class="cbs-comment-item">
+                <img src="assets/images/women_rider_priya.jpg" class="cbs-comment-avatar" alt="Priya">
+                <div class="cbs-comment-content">
+                  <div style="font-size: 11px; font-weight: 700; color: #81C784;">Priya (Sweeper)</div>
+                  <div class="cbs-comment-text">Copy that Captain! I'm tailing Rohit and Dev. Passing Koksar now.</div>
+                  <div class="cbs-comment-time">6m ago</div>
+                </div>
+              </div>
+            </div>
+            <div class="cbs-input-bar">
+              <input type="text" class="cbs-input" id="comms-input" placeholder="Broadcast to Convoy #07...">
+              <button class="cbs-post-btn interactive-squish" onclick="window.appPreview && window.appPreview.sendCommsMessage()">Send</button>
+            </div>
+          </div>
+
+          <!-- MODAL 5: RIDESTORY STUDIO & 9:16 SUMMARY EXPORT (FEATURE 1) -->
+          <div class="ridestory-modal-overlay" id="modal-ridestory">
+            <div class="ridestory-card-container">
+              <div class="rsc-top-bar">
+                <div class="rsc-brand-badge">
+                  <span>🏍️</span>
+                  <span>ROADMATE RIDESTORY</span>
+                </div>
+                <button class="rsc-close-btn" onclick="window.appPreview && window.appPreview.closeRideStoryModal()">✕</button>
+              </div>
+
+              <div class="rsc-scroll-content">
+                <!-- Header / Story Title & Route -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span class="pillar-badge badge-orange" style="font-size: 8px;">VIRAL 9:16 RECAP</span>
+                    <span style="font-size: 10px; color: var(--text-tertiary); font-family: var(--font-mono);">23 OCT 2026</span>
+                  </div>
+                  <h3 id="rs-title-display" style="font-size: 16px; font-weight: 800; color: #FFF; margin-bottom: 2px;">Manali to Keylong Expedition</h3>
+                  <div style="font-size: 11px; color: #FFA726; font-weight: 600;">Manali (2,050m) → Rohtang → Keylong (3,080m)</div>
+                </div>
+
+                <!-- Theme Selector -->
+                <div>
+                  <label style="font-size: 9px; color: var(--text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; display: block;">Theme Selector</label>
+                  <div class="theme-selector-pills">
+                    <button class="theme-pill active" onclick="window.appPreview && window.appPreview.setRideStoryTheme('Mountain Escape', this)">🏔️ Mountain Escape</button>
+                    <button class="theme-pill" onclick="window.appPreview && window.appPreview.setRideStoryTheme('Weekend Ride', this)">⚡ Weekend Ride</button>
+                    <button class="theme-pill" onclick="window.appPreview && window.appPreview.setRideStoryTheme('Long-Distance Tour', this)">🧭 Long-Distance</button>
+                    <button class="theme-pill" onclick="window.appPreview && window.appPreview.setRideStoryTheme('Scenic Route', this)">🌄 Scenic Route</button>
+                    <button class="theme-pill" onclick="window.appPreview && window.appPreview.setRideStoryTheme('Group Adventure', this)">👥 Group Adventure</button>
+                  </div>
+                </div>
+
+                <!-- Animated Route Replay with Motorcycle Marker -->
+                <div class="rsc-route-visualizer" id="rsc-visualizer">
+                  <svg class="rsc-route-svg" viewBox="0 0 320 180" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#FF5C00" />
+                        <stop offset="50%" stop-color="#FFB300" />
+                        <stop offset="100%" stop-color="#4CAF50" />
+                      </linearGradient>
+                      <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(255, 92, 0, 0.35)" />
+                        <stop offset="100%" stop-color="rgba(0, 0, 0, 0)" />
+                      </linearGradient>
+                    </defs>
+                    <path d="M 10 130 Q 80 40, 160 25 T 310 90 L 310 180 L 10 180 Z" fill="url(#areaGrad)"></path>
+                    <path id="rs-route-path" d="M 10 130 Q 80 40, 160 25 T 310 90" fill="none" stroke="url(#routeGrad)" stroke-width="4" stroke-linecap="round"></path>
+                    <circle cx="10" cy="130" r="4" fill="#FF5C00"></circle>
+                    <circle cx="160" cy="25" r="5" fill="#FFD700"></circle>
+                    <circle cx="310" cy="90" r="4" fill="#4CAF50"></circle>
+                  </svg>
+                  <div class="rsc-bike-marker" id="rsc-bike-marker" style="top: 130px; left: 10px;">🏍️</div>
+                  <div style="position: absolute; top: 8px; right: 8px; font-size: 9px; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 6px; color: #FFD700; font-family: var(--font-mono);">
+                    Rohtang Crest: 3,980m
+                  </div>
+                </div>
+
+                <!-- Elevation Scrubber Slider -->
+                <div class="rsc-scrubber-wrap">
+                  <input type="range" id="rs-elevation-scrubber" min="0" max="100" value="0" class="range-slider" style="width: 100%;" oninput="window.appPreview && window.appPreview.scrubElevationProfile(this.value)">
+                  <div class="rsc-scrubber-label">
+                    <span>Manali (2,050m)</span>
+                    <span id="rs-scrubber-status" style="color: #FF8A4C; font-weight: 700;">Start (0%)</span>
+                    <span>Keylong (3,080m)</span>
+                  </div>
+                </div>
+
+                <!-- Verified Telemetry Metrics Grid -->
+                <div class="rsc-metrics-grid">
+                  <div class="rsc-metric-item">
+                    <span class="rsc-m-val" id="rs-stat-dist">42.8 km</span>
+                    <span class="rsc-m-lbl">Distance</span>
+                  </div>
+                  <div class="rsc-metric-item">
+                    <span class="rsc-m-val" id="rs-stat-time">1h 14m</span>
+                    <span class="rsc-m-lbl">Moving Time</span>
+                  </div>
+                  <div class="rsc-metric-item">
+                    <span class="rsc-m-val" id="rs-stat-elev" style="color: #81C784;">+1,280m</span>
+                    <span class="rsc-m-lbl">Elev Gain</span>
+                  </div>
+                </div>
+
+                <!-- Safe Exploration Badges -->
+                <div>
+                  <label style="font-size: 9px; color: var(--text-tertiary); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; display: block;">Safe Exploration Badges Awarded</label>
+                  <div class="rsc-badges-row">
+                    <span class="rsc-badge-chip">🎖️ First Ride Logged</span>
+                    <span class="rsc-badge-chip">⛰️ Mountain Route (≥500m)</span>
+                    <span class="rsc-badge-chip">👥 Group Ride</span>
+                  </div>
+                </div>
+
+                <!-- Privacy & Safe Speed Toggles -->
+                <div class="rsc-toggles-box">
+                  <div class="rsc-toggle-item">
+                    <span>🛡️ Clip 500m Start/End Privacy Zone</span>
+                    <input type="checkbox" id="rs-toggle-privacy" checked onchange="window.appPreview && window.appPreview.toggleStoryPrivacy(this.checked)">
+                  </div>
+                  <div class="rsc-toggle-item">
+                    <span>🔒 Safe Speed: Hide Max Speed Publicly</span>
+                    <input type="checkbox" id="rs-toggle-safespeed" checked>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Export Actions -->
+              <div class="rsc-bottom-actions">
+                <button class="rsc-export-btn interactive-squish" id="btn-export-story-png" onclick="window.appPreview && window.appPreview.exportRideStoryImage()">
+                  ⬇️ Download 9:16 Story Card (1080x1920 PNG)
+                </button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                  <button class="rsc-export-btn interactive-squish" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2);" id="btn-export-gpx" onclick="window.appPreview && window.appPreview.exportGPXTrack()">
+                    🗺️ Download .GPX
+                  </button>
+                  <button class="rsc-export-btn interactive-squish" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2);" id="btn-export-geojson" onclick="window.appPreview && window.appPreview.exportGeoJSONTrack()">
+                    📐 Download .GeoJSON
+                  </button>
+                </div>
+                <button class="rsc-export-btn interactive-squish" style="background: #4CAF50; color: #FFF; margin-top: 8px;" id="btn-share-story" onclick="window.appPreview && window.appPreview.shareOrPublishStory()">
+                  🚀 Share Story / Publish to Live Feed
+                </button>
+                <div id="rs-export-status" style="display: none; text-align: center; font-size: 11px; color: var(--status-green); margin-top: 6px;">
+                  Exporting file to your device...
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hidden 1080x1920 Canvas for High-Res PNG Generation -->
+          <canvas id="offscreen-story-canvas" width="1080" height="1920" style="display: none;"></canvas>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Live Architecture & Technical Spec Viewer -->
+    <aside class="sidebar-details">
+      <div class="sidebar-section-title">ACTIVE PILLAR SPECIFICATION</div>
+      
+      <div class="spec-card" id="active-spec-card">
+        <h3 id="spec-title">Rider Community Feed & Social Hub</h3>
+        <span class="spec-tech-tag" id="spec-tech">Apple iOS Patterns • Instagram Warmth • Motorcycle Touring</span>
+        <p class="spec-desc" id="spec-desc">
+          Unified rider community feed with high-contrast expedition cards, ephemeral high-pass stories with progress bars, double-tap heart micro-interactions, and contextual road safety radar alerts.
+        </p>
+
+        <div class="spec-metrics-grid" id="spec-metrics">
+          <div class="sm-item">
+            <span class="sm-lbl">Contrast Ratio</span>
+            <strong class="sm-val text-green">14.2 : 1 (WCAG AAA)</strong>
+          </div>
+          <div class="sm-item">
+            <span class="sm-lbl">Min Touch Target</span>
+            <strong class="sm-val text-orange">56 dp (Glove Ready)</strong>
+          </div>
+          <div class="sm-item">
+            <span class="sm-lbl">Spatial Query</span>
+            <strong class="sm-val">ST_DWithin (POINT, 2000m)</strong>
+          </div>
+          <div class="sm-item">
+            <span class="sm-lbl">Offline Cache</span>
+            <strong class="sm-val text-green">Drift (SQLite) Ready</strong>
+          </div>
+        </div>
+
+        <div class="spec-interactive-actions">
+          <div class="sia-title">INTERACTIVE TEST ACTIONS</div>
+          <button class="test-action-btn" id="btn-test-alert">🔊 Trigger Hazard Warning Sound</button>
+          <button class="test-action-btn" id="btn-test-speedup">⚡ Accelerate to 105 km/h</button>
+          <button class="test-action-btn" id="btn-test-sos-trigger">🚨 Test Slide SOS Action</button>
+        </div>
+      </div>
+
+      <!-- Backend Connection Status -->
+      <div class="backend-status-card">
+        <div class="bsc-head">
+          <span>BACKEND MICROSERVICES</span>
+          <span class="bsc-badge">FastAPI Async</span>
+        </div>
+        <ul class="microservice-list">
+          <li><span class="ms-dot dot-green"></span> <code>/api/v1/hazards/proximity</code> <span class="ms-ms">14ms</span></li>
+          <li><span class="ms-dot dot-green"></span> <code>/api/v1/group-rides/convoy-stream</code> <span class="ms-ms">WSS</span></li>
+          <li><span class="ms-dot dot-green"></span> <code>/api/v1/trips/ai-route</code> <span class="ms-ms">GPT-4o</span></li>
+          <li><span class="ms-dot dot-green"></span> <code>/api/v1/sos/trigger</code> <span class="ms-ms">Ready</span></li>
+        </ul>
+      </div>
+
+      <!-- Theme Swatch Information -->
+      <div class="palette-swatch-box">
+        <div class="swatch-title">DARK TOURING DESIGN TOKENS</div>
+        <div class="swatch-row">
+          <div class="swatch-item" style="background: #121212; border: 1px solid #333;" title="#121212 Matte Charcoal">#121212</div>
+          <div class="swatch-item" style="background: #1E1E1E;" title="#1E1E1E Elevated Surface">#1E1E1E</div>
+          <div class="swatch-item" style="background: #FF5C00; color: #fff;" title="#FF5C00 Blaze Orange">#FF5C00</div>
+          <div class="swatch-item" style="background: #4CAF50; color: #fff;" title="#4CAF50 Status Green">#4CAF50</div>
+          <div class="swatch-item" style="background: #F44336; color: #fff;" title="#F44336 SOS Red">#F44336</div>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
