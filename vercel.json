@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "roadmate-india",
+  "outputDirectory": "preview",
+  "cleanUrls": true,
+  "trailingSlash": false
+}
