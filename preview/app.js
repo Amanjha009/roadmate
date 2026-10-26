@@ -2408,11 +2408,272 @@ class AppPreview {
   }
 
   openCreateConvoyModal() {
-    this.closeCreateSheet();
-    sfx.playTap();
-    this.showToast('👥 Convoy ride creation wizard: Configure Lead & Sweep');
-    this.switchScreen('convoy');
+    this.openCreateGroupModal();
   }
+
+  // ── Trip Group, Squad Codes & Solo Mode Management ────────────────────────
+  setRideMode(mode) {
+    this.rideMode = mode; // 'solo' or 'group'
+    const btnSolo = document.getElementById('btn-mode-solo');
+    const btnGroup = document.getElementById('btn-mode-group');
+    const groupBanner = document.getElementById('hud-group-status-banner');
+    const soloBanner = document.getElementById('hud-solo-status-banner');
+    const convoyVisuals = document.getElementById('convoy-live-visuals-wrap');
+    const soloCenter = document.getElementById('solo-command-center');
+    const convoyToggleText = document.getElementById('convoy-mode-toggle-text');
+
+    if (mode === 'solo') {
+      if (btnSolo) btnSolo.classList.add('active');
+      if (btnGroup) btnGroup.classList.remove('active');
+      if (groupBanner) groupBanner.style.display = 'none';
+      if (soloBanner) soloBanner.style.display = 'flex';
+      if (convoyVisuals) convoyVisuals.style.display = 'none';
+      if (soloCenter) soloCenter.style.display = 'block';
+      if (convoyToggleText) convoyToggleText.textContent = 'Switch to Group 👥';
+
+      // Hide squad teammates on OpenStreetMap
+      if (this.teammates) {
+        Object.values(this.teammates).forEach(marker => {
+          if (marker && this.map && this.map.hasLayer(marker)) {
+            this.map.removeLayer(marker);
+          }
+        });
+      }
+
+      sfx.playTap();
+      this.showToast('🏍️ Solo Ride Mode Active: Individual safety shield armed.');
+    } else {
+      if (btnGroup) btnGroup.classList.add('active');
+      if (btnSolo) btnSolo.classList.remove('active');
+      if (groupBanner) groupBanner.style.display = 'flex';
+      if (soloBanner) soloBanner.style.display = 'none';
+      if (convoyVisuals) convoyVisuals.style.display = 'block';
+      if (soloCenter) soloCenter.style.display = 'none';
+      if (convoyToggleText) convoyToggleText.textContent = 'Switch to Solo 🏍️';
+
+      // Show squad teammates on OpenStreetMap
+      if (this.teammates) {
+        Object.values(this.teammates).forEach(marker => {
+          if (marker && this.map && !this.map.hasLayer(marker)) {
+            this.map.addLayer(marker);
+          }
+        });
+      }
+
+      sfx.playConvoyPing();
+      this.showToast(`👥 Group Convoy Mode Active: Connected to squad [${this.activeSquad.code}]`);
+    }
+  }
+
+  toggleRideMode() {
+    this.setRideMode(this.rideMode === 'solo' ? 'group' : 'solo');
+  }
+
+  openCreateGroupModal() {
+    this.closeCreateSheet();
+    const modal = document.getElementById('modal-create-group-trip');
+    if (modal) {
+      modal.classList.add('open');
+      const succ = document.getElementById('cgt-success-card');
+      const footInit = document.getElementById('cgt-footer-initial');
+      const footSucc = document.getElementById('cgt-footer-success');
+      if (succ) succ.style.display = 'none';
+      if (footInit) footInit.style.display = 'flex';
+      if (footSucc) footSucc.style.display = 'none';
+    }
+    sfx.playTap();
+  }
+
+  submitCreateGroup() {
+    const title = document.getElementById('cgt-title')?.value.trim() || 'My Expedition Squad';
+    const route = document.getElementById('cgt-route')?.value.trim() || 'Manali → Rohtang → Keylong';
+    const dest = document.getElementById('cgt-destination')?.value.trim() || 'Keylong';
+    const capacity = parseInt(document.getElementById('cgt-capacity')?.value || '8', 10);
+    const bike = document.getElementById('cgt-bike')?.value.trim() || 'RE Himalayan 450';
+
+    // Generate random memorable 6-char code
+    const randNum = Math.floor(1000 + Math.random() * 9000);
+    const code = `RDM-${randNum}`;
+
+    this.activeSquad = {
+      code,
+      title,
+      route,
+      destination: dest,
+      capacity,
+      captainName: 'Aman Jha (You)',
+      captainBike: bike,
+      isCaptain: true,
+      membersCount: 1,
+      members: [
+        { name: 'Aman Jha (You)', role: 'lead', bike, status: 'online' }
+      ]
+    };
+
+    const codeDisplay = document.getElementById('cgt-generated-code');
+    if (codeDisplay) codeDisplay.textContent = code;
+
+    const succCard = document.getElementById('cgt-success-card');
+    const footInit = document.getElementById('cgt-footer-initial');
+    const footSucc = document.getElementById('cgt-footer-success');
+    if (succCard) succCard.style.display = 'block';
+    if (footInit) footInit.style.display = 'none';
+    if (footSucc) footSucc.style.display = 'flex';
+
+    sfx.playConvoyPing();
+    this.showToast(`🎉 Squad "${title}" created! Group code: ${code}`);
+  }
+
+  enterCreatedGroupRoom() {
+    this.closeModal('modal-create-group-trip');
+    this.updateSquadUI();
+    this.setRideMode('group');
+    this.switchScreen('convoy');
+    sfx.playTap();
+  }
+
+  openJoinGroupModal() {
+    this.closeCreateSheet();
+    const modal = document.getElementById('modal-join-group-code');
+    if (modal) {
+      modal.classList.add('open');
+      const input = document.getElementById('jgc-code-input');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      this.handleCodeInput('HIM-7492');
+    }
+    sfx.playTap();
+  }
+
+  handleCodeInput(val) {
+    const clean = val.trim().toUpperCase();
+    const titleEl = document.getElementById('jgc-preview-title');
+    const routeEl = document.getElementById('jgc-preview-route');
+    const captEl = document.getElementById('jgc-preview-captain');
+
+    if (clean === 'HIM-7492' || clean === 'HIM7492') {
+      if (titleEl) titleEl.textContent = 'Himalayan Wanderers';
+      if (routeEl) routeEl.textContent = 'Route: Manali → Rohtang Pass → Keylong';
+      if (captEl) captEl.textContent = '👑 Captain: Vikramaditya Rao (BMW R1250 GS) • 5 Riders Checked In';
+    } else if (clean.startsWith('SPI') || clean.includes('8391')) {
+      if (titleEl) titleEl.textContent = 'Spiti Valley Dawn Loop';
+      if (routeEl) routeEl.textContent = 'Route: Shimla → Narkanda → Kaza (3,800m)';
+      if (captEl) captEl.textContent = '👑 Captain: Priya Sharma (KTM 390 Adv) • 4 Riders Active';
+    } else if (clean.startsWith('GOA') || clean.includes('4029')) {
+      if (titleEl) titleEl.textContent = 'Konkan Coastal Cruise';
+      if (routeEl) routeEl.textContent = 'Route: Mumbai → Alibaug → Goa Coastal Hwy';
+      if (captEl) captEl.textContent = '👑 Captain: Arjun Mehta (Triumph Scrambler 400X) • 6 Riders';
+    } else if (clean.length >= 4) {
+      if (titleEl) titleEl.textContent = `Personal Touring Squad #${clean}`;
+      if (routeEl) routeEl.textContent = 'Route: High Altitude Mountain Highway (NH3)';
+      if (captEl) captEl.textContent = '👑 Verified Captain • Open Convoy Room Ready';
+    }
+  }
+
+  fillJoinCode(code) {
+    const input = document.getElementById('jgc-code-input');
+    if (input) {
+      input.value = code;
+      this.handleCodeInput(code);
+    }
+    sfx.playTap();
+  }
+
+  submitJoinGroupByCode() {
+    const input = document.getElementById('jgc-code-input');
+    const code = (input?.value.trim() || 'HIM-7492').toUpperCase();
+    const riderName = document.getElementById('jgc-rider-name')?.value.trim() || 'Aman Jha';
+    const bike = document.getElementById('jgc-bike-model')?.value.trim() || 'RE Himalayan 450';
+    const role = document.getElementById('jgc-role')?.value || 'member';
+
+    this.activeSquad = {
+      code,
+      title: code === 'HIM-7492' ? 'Himalayan Wanderers' : `Squad ${code}`,
+      route: 'Manali → Rohtang Pass → Keylong',
+      isCaptain: false,
+      membersCount: 6,
+      captainName: 'Vikramaditya Rao',
+      captainBike: 'BMW R1250 GS'
+    };
+
+    this.closeModal('modal-join-group-code');
+    this.updateSquadUI();
+    this.setRideMode('group');
+    this.switchScreen('convoy');
+    sfx.playConvoyPing();
+    this.showToast(`🏍️ Successfully joined Squad ${code}! Live radar & roll call connected.`);
+  }
+
+  updateSquadUI() {
+    const squad = this.activeSquad;
+    // Update Screen 1 mini badge and banners
+    const badgeMini = document.getElementById('hud-squad-code-badge');
+    if (badgeMini) badgeMini.textContent = squad.code;
+
+    const bannerName = document.getElementById('hud-banner-squad-name');
+    if (bannerName) bannerName.textContent = squad.title;
+
+    const bannerCode = document.getElementById('hud-banner-code-val');
+    if (bannerCode) bannerCode.textContent = squad.code;
+
+    // Update Screen 3 hero card and titles
+    const convoyTitle = document.getElementById('convoy-screen-title');
+    if (convoyTitle) convoyTitle.textContent = `Convoy: ${squad.title}`;
+
+    const activeCode = document.getElementById('active-squad-code');
+    if (activeCode) activeCode.textContent = squad.code;
+
+    const roleBadge = document.getElementById('squad-role-badge');
+    if (roleBadge) {
+      roleBadge.innerHTML = squad.isCaptain ? '<span>👑 ROAD CAPTAIN (LEAD)</span>' : '<span>🛡️ SWEEPER POSITION</span>';
+    }
+
+    const squadTitleBadge = document.getElementById('convoy-squad-title-badge');
+    if (squadTitleBadge) squadTitleBadge.textContent = `${squad.title} (${squad.membersCount} Riders)`;
+  }
+
+  copySquadCode() {
+    const code = this.activeSquad.code;
+    navigator.clipboard?.writeText(code).catch(() => {});
+    sfx.playTap();
+    this.showToast(`📋 Squad Code "${code}" copied to clipboard! Send to friends.`);
+  }
+
+  copyGeneratedCode() {
+    const code = document.getElementById('cgt-generated-code')?.textContent || this.activeSquad.code;
+    navigator.clipboard?.writeText(code).catch(() => {});
+    sfx.playTap();
+    this.showToast(`📋 Squad Code "${code}" copied!`);
+  }
+
+  shareSquadInvite() {
+    const squad = this.activeSquad;
+    const shareText = `🏍️ Join our RoadMate Group Ride: "${squad.title}"!\nSquad Code: ${squad.code}\nRoute: ${squad.route}\n\nOpen RoadMate app -> Tap "Join via Code" -> Enter ${squad.code} to ride with us on live radar!`;
+
+    if (navigator.share) {
+      navigator.share({
+        title: `Join ${squad.title} on RoadMate`,
+        text: shareText,
+        url: window.location.href
+      }).catch(() => {
+        navigator.clipboard?.writeText(shareText);
+        this.showToast('📋 Squad invite message copied to clipboard!');
+      });
+    } else {
+      navigator.clipboard?.writeText(shareText).catch(() => {});
+      this.showToast('📋 WhatsApp/SMS invite message copied to clipboard!');
+    }
+  }
+
+  copySoloLink() {
+    const url = document.getElementById('solo-tracking-url')?.textContent || 'https://roadmate.in/track/solo-aman-450';
+    navigator.clipboard?.writeText(url).catch(() => {});
+    sfx.playTap();
+    this.showToast('📋 Private emergency live tracking link copied!');
+  }
+
 
   openAiPlannerFromCreate() {
     this.closeCreateSheet();
