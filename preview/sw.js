@@ -3,7 +3,7 @@
  * Caches application shell, dark map tiles, and handles offline fallbacks.
  */
 
-const CACHE_NAME = 'roadmate-india-v2';
+const CACHE_NAME = 'roadmate-india-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
