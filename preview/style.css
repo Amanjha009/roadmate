@@ -7090,13 +7090,22 @@ body.mode-responsive .smartphone-frame {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  transition: opacity 0.6s var(--spring-smooth), visibility 0.6s;
+  cursor: pointer;
+  animation: splashAutoDismiss 0.5s ease 1.8s forwards;
+  transition: opacity 0.4s ease, visibility 0.4s;
 }
 
 .app-launch-sequence.launch-complete {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: none !important;
+}
+
+@keyframes splashAutoDismiss {
+  0% { opacity: 1; pointer-events: auto; }
+  85% { opacity: 0; pointer-events: auto; }
+  100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
 }
 
 .als-emblem-wrap {
