@@ -9,8 +9,13 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import Boolean, DateTime, Enum, Float, ForeignKey, String, Text, func
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
 from app.models import Base
+
+if TYPE_CHECKING:
+    from app.models.rider import Rider
+    from app.models.group_ride import GroupRide
 
 
 class SOSTriggerTypeEnum(str, enum.Enum):
@@ -93,5 +98,5 @@ class SOSEvent(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    rider: Mapped["Rider"] = relationship("Rider", lazy="selectin")  # noqa: F821
-    group_ride: Mapped["GroupRide | None"] = relationship("GroupRide", lazy="selectin")  # noqa: F821
+    rider: Mapped[Rider] = relationship("Rider", lazy="selectin")
+    group_ride: Mapped[GroupRide | None] = relationship("GroupRide", lazy="selectin")

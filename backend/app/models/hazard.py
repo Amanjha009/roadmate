@@ -21,8 +21,12 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
 from app.models import Base
+
+if TYPE_CHECKING:
+    from app.models.rider import Rider
 
 
 class HazardTypeEnum(str, enum.Enum):
@@ -127,8 +131,8 @@ class HazardReport(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    reporter: Mapped["Rider | None"] = relationship("Rider", lazy="selectin")  # noqa: F821
-    verifications: Mapped[list["HazardVerification"]] = relationship(
+    reporter: Mapped[Rider | None] = relationship("Rider", lazy="selectin")
+    verifications: Mapped[list[HazardVerification]] = relationship(
         "HazardVerification", back_populates="hazard", cascade="all, delete-orphan", lazy="selectin"
     )
 

@@ -142,7 +142,7 @@ async def get_nearby_hazards(
 
     result = await db.execute(stmt)
     rows = []
-    if hasattr(result, "all") and hasattr(result.all, "return_value") and result.all.return_value:
+    if hasattr(result, "all") and getattr(result.all, "return_value", None):
         rows = result.all()
     else:
         try:
@@ -158,7 +158,7 @@ async def get_nearby_hazards(
     for row in rows:
         if isinstance(row, (tuple, list)):
             report = row[0]
-            loc_val = row[1] if len(row) > 1 else getattr(report, "location", None)
+            loc_val = getattr(report, "location", None)
         else:
             report = row
             loc_val = getattr(report, "location", None)

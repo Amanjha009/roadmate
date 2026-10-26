@@ -19,8 +19,12 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
 from app.models import Base
+
+if TYPE_CHECKING:
+    from app.models.rider import Rider
 
 
 class ReminderTypeEnum(str, enum.Enum):
@@ -62,8 +66,8 @@ class Bike(Base):
     )
 
     # Relationships
-    rider: Mapped["Rider"] = relationship("Rider", back_populates="bikes")  # noqa: F821
-    maintenance_reminders: Mapped[list["MaintenanceReminder"]] = relationship(
+    rider: Mapped[Rider] = relationship("Rider", back_populates="bikes")
+    maintenance_reminders: Mapped[list[MaintenanceReminder]] = relationship(
         back_populates="bike", cascade="all, delete-orphan"
     )
 

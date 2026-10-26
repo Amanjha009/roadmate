@@ -9,8 +9,13 @@ from datetime import datetime
 from sqlalchemy import DateTime, Enum, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
 from app.models import Base
+
+if TYPE_CHECKING:
+    from app.models.rider import Rider
+    from app.models.bike import Bike
 
 
 class ExperienceLevelEnum(str, enum.Enum):
@@ -67,5 +72,5 @@ class Trip(Base):
     )
 
     # Relationships
-    rider: Mapped["Rider"] = relationship("Rider", back_populates="trips")  # noqa: F821
-    bike: Mapped["Bike | None"] = relationship("Bike", lazy="selectin")  # noqa: F821
+    rider: Mapped[Rider] = relationship("Rider", back_populates="trips")
+    bike: Mapped[Bike | None] = relationship("Bike", lazy="selectin")

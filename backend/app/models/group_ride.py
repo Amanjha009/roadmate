@@ -17,11 +17,17 @@ from sqlalchemy import (
     Text,
     func,
 )
+from typing import TYPE_CHECKING
+
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models import Base
 from app.models.trip import ExperienceLevelEnum
+
+if TYPE_CHECKING:
+    from app.models.rider import Rider
+    from app.models.trip import Trip
 
 
 class GroupRideStatusEnum(str, enum.Enum):
@@ -89,9 +95,9 @@ class GroupRide(Base):
     )
 
     # Relationships
-    captain: Mapped["Rider"] = relationship("Rider", lazy="selectin")  # noqa: F821
-    trip: Mapped["Trip | None"] = relationship("Trip", lazy="selectin")  # noqa: F821
-    members: Mapped[list["GroupRideMember"]] = relationship(
+    captain: Mapped[Rider] = relationship("Rider", lazy="selectin")
+    trip: Mapped[Trip | None] = relationship("Trip", lazy="selectin")
+    members: Mapped[list[GroupRideMember]] = relationship(
         back_populates="group_ride", cascade="all, delete-orphan"
     )
 
@@ -129,5 +135,5 @@ class GroupRideMember(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    group_ride: Mapped["GroupRide"] = relationship(back_populates="members")
-    rider: Mapped["Rider"] = relationship("Rider", lazy="selectin")  # noqa: F821
+    group_ride: Mapped[GroupRide] = relationship(back_populates="members")
+    rider: Mapped[Rider] = relationship("Rider", lazy="selectin")

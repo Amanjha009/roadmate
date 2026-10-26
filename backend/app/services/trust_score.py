@@ -11,6 +11,8 @@ trust_score = (
 
 from __future__ import annotations
 
+import uuid
+
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,7 +26,7 @@ MAX_HAZARD_BONUS = 10.0
 MISCONDUCT_PENALTY = 25.0
 
 
-async def compute_trust_score(db: AsyncSession, rider_id: "str | __import__('uuid').UUID") -> float:
+async def compute_trust_score(db: AsyncSession, rider_id: str | uuid.UUID) -> float:
     """Compute and persist the trust score for a rider.
 
     Returns the new score.

@@ -9,8 +9,13 @@ from datetime import datetime
 from sqlalchemy import Boolean, DateTime, Enum, Float, Integer, String, Text, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship as sa_relationship
+from typing import TYPE_CHECKING
 
 from app.models import Base
+
+if TYPE_CHECKING:
+    from app.models.bike import Bike
+    from app.models.trip import Trip
 
 
 # ── Enums ─────────────────────────────────────────────────────────────────────
@@ -74,10 +79,10 @@ class Rider(Base):
     emergency_contacts: Mapped[list["EmergencyContact"]] = sa_relationship(
         back_populates="rider", cascade="all, delete-orphan"
     )
-    bikes: Mapped[list["Bike"]] = sa_relationship(  # noqa: F821
+    bikes: Mapped[list[Bike]] = sa_relationship(
         "Bike", back_populates="rider", cascade="all, delete-orphan"
     )
-    trips: Mapped[list["Trip"]] = sa_relationship(  # noqa: F821
+    trips: Mapped[list[Trip]] = sa_relationship(
         "Trip", back_populates="rider", cascade="all, delete-orphan"
     )
 
