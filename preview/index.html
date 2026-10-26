@@ -1310,13 +1310,113 @@
             <!-- SCREEN 3: GROUP CONVOY & LIVE ROLL CALL -->
             <div class="app-screen" id="screen-convoy">
               <div class="screen-app-bar glass-surface-top">
-                <span class="bar-title">Convoy: Himalayan Wanderers</span>
-                <span class="bar-action status-green">Live Sync</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="bar-title" id="convoy-screen-title">Convoy: Himalayan Wanderers</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button class="convoy-header-mode-btn interactive-squish" id="btn-convoy-toggle-solo" onclick="window.appPreview && window.appPreview.toggleRideMode()">
+                    <span id="convoy-mode-toggle-text">Switch to Solo 🏍️</span>
+                  </button>
+                  <span class="bar-action status-green" id="convoy-sync-status">Live Sync</span>
+                </div>
               </div>
               <div class="screen-scroll-body">
+                <!-- SQUAD JOIN CODE HERO CARD (Pillar 3 & Group Rides) -->
+                <div class="squad-code-hero-card glass-surface" id="squad-code-hero-card">
+                  <div class="schc-top">
+                    <div class="schc-info">
+                      <span class="schc-eyebrow">GROUP TRIP JOIN CODE</span>
+                      <div class="schc-code-wrap">
+                        <span class="schc-code" id="active-squad-code">HIM-7492</span>
+                        <button class="schc-btn interactive-squish" onclick="window.appPreview && window.appPreview.copySquadCode()" title="Copy Squad Code">
+                          📋 Copy Code
+                        </button>
+                        <button class="schc-btn schc-btn-share interactive-squish" onclick="window.appPreview && window.appPreview.shareSquadInvite()" title="Share Invite">
+                          🔗 Share Invite
+                        </button>
+                      </div>
+                    </div>
+                    <div class="schc-badge" id="squad-role-badge">
+                      <span>SWEEP POSITION</span>
+                    </div>
+                  </div>
+                  <p class="schc-desc" id="squad-desc-text">
+                    Share this 6-character code with your personal group riders. They enter this code in RoadMate to join this exact trip with live radar, separation warnings, and convoy comms!
+                  </p>
+                  <div class="squad-quick-actions-bar">
+                    <button class="sqa-btn interactive-squish" onclick="window.appPreview && window.appPreview.openCreateGroupModal()">
+                      <span>＋</span> Create Group Trip
+                    </button>
+                    <button class="sqa-btn interactive-squish" onclick="window.appPreview && window.appPreview.openJoinGroupModal()">
+                      <span>🔑</span> Join Squad via Code
+                    </button>
+                    <button class="sqa-btn sqa-btn-solo interactive-squish" onclick="window.appPreview && window.appPreview.setRideMode('solo')">
+                      <span>🏍️</span> Solo Ride Mode
+                    </button>
+                  </div>
+                </div>
+
+                <!-- SOLO MODE COMMAND CENTER (Displayed when in Solo Mode) -->
+                <div class="solo-command-center glass-surface" id="solo-command-center" style="display: none;">
+                  <div class="scc-header">
+                    <div class="scc-icon">🏍️</div>
+                    <div>
+                      <h4 style="margin: 0; font-size: 16px; font-weight: 800; color: #FFF;">Solo Touring Mode</h4>
+                      <p style="margin: 2px 0 0; font-size: 11px; color: var(--text-secondary);">Independent Expedition • Individual Safety Shield Armed</p>
+                    </div>
+                  </div>
+                  <div class="scc-features-grid">
+                    <div class="scc-feature-item">
+                      <span class="scc-fi-icon">🛡️</span>
+                      <div>
+                        <strong>Solo Hazard Radar</strong>
+                        <small>PostGIS road hazard audio/visual alerts (5km radar)</small>
+                      </div>
+                    </div>
+                    <div class="scc-feature-item">
+                      <span class="scc-fi-icon">🆘</span>
+                      <div>
+                        <strong>AI Voice SOS & Fall Sensor</strong>
+                        <small>10s automatic crash responsiveness check & 112/108 dispatch</small>
+                      </div>
+                    </div>
+                    <div class="scc-feature-item">
+                      <span class="scc-fi-icon">📡</span>
+                      <div>
+                        <strong>Live Family Trail Link</strong>
+                        <small>Share real-time encrypted telemetry with emergency contacts</small>
+                      </div>
+                    </div>
+                    <div class="scc-feature-item">
+                      <span class="scc-fi-icon">📦</span>
+                      <div>
+                        <strong>Offline Sync</strong>
+                        <small>Zero-connectivity offline queuing for high mountain passes</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="scc-share-box">
+                    <span class="scc-share-label">PRIVATE FAMILY TRACKING URL:</span>
+                    <div class="scc-share-row">
+                      <code id="solo-tracking-url">https://roadmate.in/track/solo-aman-450</code>
+                      <button class="schc-btn interactive-squish" onclick="window.appPreview && window.appPreview.copySoloLink()">📋 Copy Link</button>
+                    </div>
+                  </div>
+                  <div class="scc-cta-row">
+                    <button class="cta-blaze-btn interactive-squish" style="flex: 1;" onclick="window.appPreview && window.appPreview.openCreateGroupModal()">
+                      👥 Start Group Trip & Generate Code
+                    </button>
+                    <button class="cta-blaze-btn interactive-squish" style="flex: 1; background: #262626; border: 1px solid #444;" onclick="window.appPreview && window.appPreview.openJoinGroupModal()">
+                      🔑 Join Group with Code
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Convoy Live Visuals Wrapper (Hidden when in Solo Mode) -->
+                <div id="convoy-live-visuals-wrap">
                 <!-- Overlapping Member Avatar Stack (Instagram Group Chat Style) -->
                 <div class="avatar-stack-container interactive-squish" id="convoy-avatar-stack" title="Tap to inspect full convoy squad roster" onclick="window.appPreview && window.appPreview.showToast('👥 Convoy Roster: Vikram (Lead), Rohit, Priya, Aman (Sweep) + 2 Guest Riders. All 6 connected.')">
-                  <div class="avatar-stack-group">
+                  <div class="avatar-stack-group" id="convoy-avatar-stack-group">
                     <div class="stacked-avatar" style="background: #FFD700; color: black; z-index: 5;">👑</div>
                     <div class="stacked-avatar" style="background: #2196F3; z-index: 4;">🏍️</div>
                     <div class="stacked-avatar" style="background: #9C27B0; z-index: 3;">🛵</div>
@@ -1324,8 +1424,8 @@
                     <div class="stacked-avatar" style="background: #374151; font-size: 11px; z-index: 1;">+2</div>
                   </div>
                   <div class="avatar-stack-info">
-                    <span class="avatar-stack-title">Himalayan Squad (6 Riders)</span>
-                    <span class="avatar-stack-sub">6/6 Synced • +950m Pack</span>
+                    <span class="avatar-stack-title" id="convoy-squad-title-badge">Himalayan Squad (6 Riders)</span>
+                    <span class="avatar-stack-sub" id="convoy-squad-sub-badge">6/6 Synced • +950m Pack</span>
                   </div>
                 </div>
 
