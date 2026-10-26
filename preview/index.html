@@ -631,25 +631,38 @@
               </div>
             </div>
 
-            <!-- SCREEN 1B: EXPLORE — DISCOVERY MAP & ROUTE CATALOG -->
+            <!-- SCREEN 1B: EXPLORE — DISCOVERY MAP & ROUTE CATALOG (Screenshot 2 Reference) -->
             <div class="app-screen" id="screen-explore">
               <div class="explore-container">
-                <!-- Search Input -->
-                <div class="explore-search-wrap">
-                  <div class="explore-search-box">
+                <!-- Top Header Bar -->
+                <div class="explore-top-bar">
+                  <h2 class="etb-title">Explore routes</h2>
+                  <img src="assets/images/roadmate_icon.svg" class="etb-icon" alt="Mountain Pass Icon">
+                </div>
+
+                <!-- Search Input with Filter Icon Button -->
+                <div class="explore-search-container">
+                  <div class="explore-search-input-box">
                     <span>🔍</span>
-                    <input type="text" id="explore-search-input" placeholder="Search passes, routes, dhabas, hazards..." oninput="window.appPreview && window.appPreview.filterExplore(this.value)">
+                    <input type="text" id="explore-search-input" placeholder="Search routes, passes, destinations..." oninput="window.appPreview && window.appPreview.filterExplore(this.value)">
+                    <button style="background: none; border: none; color: var(--color-steel-blue); cursor: pointer;" title="Filters">⚙️</button>
                   </div>
                 </div>
 
-                <!-- Category Filter Chips -->
-                <div class="explore-filter-chips">
-                  <button class="ef-chip active" data-category="all" onclick="window.appPreview && window.appPreview.setExploreCategory('all', this)">🌐 All</button>
-                  <button class="ef-chip" data-category="passes" onclick="window.appPreview && window.appPreview.setExploreCategory('passes', this)">🏔️ High Passes</button>
-                  <button class="ef-chip" data-category="routes" onclick="window.appPreview && window.appPreview.setExploreCategory('routes', this)">🛣️ Scenic Routes</button>
-                  <button class="ef-chip" data-category="hazards" onclick="window.appPreview && window.appPreview.setExploreCategory('hazards', this)">⚠️ Road Hazards</button>
-                  <button class="ef-chip" data-category="fuel" onclick="window.appPreview && window.appPreview.setExploreCategory('fuel', this)">⛽ Fuel Stops</button>
-                  <button class="ef-chip" data-category="women-safety" onclick="window.appPreview && window.appPreview.setExploreCategory('women-safety', this)">🛡️ Women-Safe</button>
+                <!-- Filter Pills matching Screenshot 2 -->
+                <div class="explore-filter-row">
+                  <button class="e-pill active" data-category="passes" onclick="window.appPreview && window.appPreview.setExploreCategory('passes', this)">
+                    <span>🏔️</span> High passes
+                  </button>
+                  <button class="e-pill" data-category="routes" onclick="window.appPreview && window.appPreview.setExploreCategory('routes', this)">
+                    <span>🛣️</span> Scenic
+                  </button>
+                  <button class="e-pill" data-category="hazards" onclick="window.appPreview && window.appPreview.setExploreCategory('hazards', this)">
+                    <span>⚠️</span> Road alerts
+                  </button>
+                  <button class="e-pill" data-category="women-safety" onclick="window.appPreview && window.appPreview.setExploreCategory('women-safety', this)">
+                    <span>🛡️</span> Women-Safe
+                  </button>
                 </div>
 
                 <!-- View Toggle Bar: Map vs List -->
@@ -661,8 +674,63 @@
                   </div>
                 </div>
 
-                <!-- Body Content: Map + List of Catalog Cards -->
+                <!-- Body Content: Route Cards matching Screenshot 2 -->
                 <div class="explore-body-content" id="explore-cards-container">
+                  
+                  <!-- Interactive Exploration Map -->
+                  <div class="explore-map-container" id="explore-map-wrapper" style="display: none;">
+                    <div id="explore-leaflet-map"></div>
+                  </div>
+
+                  <!-- Route 1: Rohtang Loop (Screenshot 2 Top Card) -->
+                  <div class="explore-route-card-v2 interactive-squish" data-cat="passes" onclick="window.appPreview && window.appPreview.openRouteDetail('rohtang')">
+                    <div class="erc-image-wrap">
+                      <img src="assets/images/hero.jpg" class="erc-image" alt="Rohtang Loop">
+                      <span class="erc-badge-tag tag-verified">VERIFIED</span>
+                    </div>
+                    <div class="erc-content">
+                      <div class="erc-title-row">
+                        <div>
+                          <h4 class="erc-title">Rohtang Loop</h4>
+                          <span class="erc-sub">Manali ➔ Rohtang Pass ➔ Koksar</span>
+                        </div>
+                        <div class="erc-actions-right">
+                          <button class="erc-action-btn" title="Save Route" onclick="event.stopPropagation(); window.appPreview && window.appPreview.showToast('🔖 Saved Rohtang Loop to My Routes')">🔖</button>
+                          <button class="erc-action-btn" title="View Detail">➔</button>
+                        </div>
+                      </div>
+                      <div class="erc-meta-chips">
+                        <span class="erc-meta-chip">🛣️ 51 km</span>
+                        <span class="erc-meta-chip">🌲 Scenic</span>
+                        <span class="erc-meta-chip">🏔️ High Pass</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Route 2: Spiti Valley Explorer (Screenshot 2 Bottom Card) -->
+                  <div class="explore-route-card-v2 interactive-squish" data-cat="routes" onclick="window.appPreview && window.appPreview.openRouteDetail('spiti')">
+                    <div class="erc-image-wrap">
+                      <img src="assets/images/spiti_water_crossing.jpg" class="erc-image" alt="Spiti Valley Explorer">
+                      <span class="erc-badge-tag tag-community">COMMUNITY</span>
+                    </div>
+                    <div class="erc-content">
+                      <div class="erc-title-row">
+                        <div>
+                          <h4 class="erc-title">Spiti Valley Explorer</h4>
+                          <span class="erc-sub">Shimla ➔ Kaza ➔ Chandratal</span>
+                        </div>
+                        <div class="erc-actions-right">
+                          <button class="erc-action-btn" title="Save Route" onclick="event.stopPropagation(); window.appPreview && window.appPreview.showToast('🔖 Saved Spiti Valley Explorer')">🔖</button>
+                          <button class="erc-action-btn" title="View Detail">➔</button>
+                        </div>
+                      </div>
+                      <div class="erc-meta-chips">
+                        <span class="erc-meta-chip">🛣️ 215 km</span>
+                        <span class="erc-meta-chip">🌊 Scenic</span>
+                        <span class="erc-meta-chip">🏔️ High Pass</span>
+                      </div>
+                    </div>
+                  </div>
                   
                   <!-- Interactive Exploration Map -->
                   <div class="explore-map-container" id="explore-map-wrapper" style="display: none;">
