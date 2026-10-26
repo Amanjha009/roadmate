@@ -43,6 +43,29 @@ RoadMate India follows a modern, decoupled micro-architecture combining a high-p
 
 ---
 
+## 🎨 Design System: Vintage Touring Soul × Modern Navy Precision
+
+RoadMate India features a human-centered visual identity combining vintage motorcycle instrumentation with modern high-precision digital standards.
+
+### Core Brand Tokens & Palette
+- **Midnight Navy (`#101C2C`)**: Primary brand canvas, dark cockpit background, and launch screen base.
+- **Deep Navy (`#17283D`)**: Elevated surfaces, cards, header containers, and search bars.
+- **Instrument Black (`#101318`)**: Telemetry wells, instruction turn blocks, and HUD displays.
+- **Graphite (`#202630`)**: Chip tracks, subtle borders, and card secondary surfaces.
+- **Warm Ivory (`#F7F6F2`)**: Light mode canvas, mountain road line strokes, and clean reading surfaces.
+- **Pure White (`#FFFFFF`)**: Tabular typography, active icon foregrounds, and waypoint markers.
+- **Steel Blue (`#62758A`)**: Dividers, inactive icon states, and contour accents.
+- **Heritage Copper (`#C47B46`)**: Primary CTAs (`▶ Start ride`, `✋ Check in`), road stamps, and summit waypoint.
+- **Touring Amber (`#F2B544`)**: Caution alerts, delayed riders, and upcoming checkpoints.
+- **Safe Green (`#3E9B70`)**: Verified passes (`VERIFIED` tag), online rider status, and safe corridors.
+- **Alert Red (`#D74743`)**: Protected SOS triggers and active rockfalls.
+- **Muted Text (`#A5AFBC`)**: Telemetry labels, distances, and timestamps.
+
+### Original Brand Emblem
+Geometric silhouette combining a twin mountain ridge with a winding alpine road and a Heritage Copper summit waypoint on a Midnight Navy rounded square (`preview/assets/images/roadmate_icon.svg`). Horizontal lockup includes the **RoadMate** wordmark and tagline `RIDE • EXPLORE • STAY SAFE`.
+
+---
+
 ## ⚡ Quick Start
 
 ### Prerequisites
