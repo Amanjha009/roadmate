@@ -240,6 +240,28 @@
 
         <!-- Phone Screen Interior -->
         <div class="phone-screen" id="phone-screen">
+
+          <!-- EXCEPTIONAL APPLICATION LOADING SEQUENCE (Section 7) -->
+          <div class="app-launch-sequence" id="app-launch-sequence">
+            <div class="als-emblem-wrap">
+              <svg class="als-emblem-svg" viewBox="0 0 512 512">
+                <rect width="512" height="512" rx="112" fill="#101C2C" />
+                <path d="M 120 340 L 230 148 C 238 134 254 134 262 148 L 330 265 L 368 202 C 375 190 390 190 397 202 L 442 278 C 452 295 440 318 420 318 L 360 318" fill="none" stroke="#F7F6F2" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 96 384 C 180 384 210 324 256 324 C 304 324 330 260 354 190" fill="none" stroke="#FFFFFF" stroke-width="38" stroke-linecap="round"/>
+                <path d="M 106 384 C 184 384 212 324 256 324 C 298 324 324 268 348 200" fill="none" stroke="#101C2C" stroke-width="6" stroke-dasharray="14 14" stroke-linecap="round"/>
+                <circle cx="356" cy="190" r="14" fill="#C47B46" stroke="#FFFFFF" stroke-width="4"/>
+              </svg>
+            </div>
+            <div class="als-wordmark">Road<span>Mate</span></div>
+            <svg class="als-pass-svg" viewBox="0 0 200 60">
+              <path class="als-pass-line" d="M 10 50 Q 60 10, 100 35 T 190 15" fill="none" stroke="#F7F6F2" stroke-width="3" stroke-linecap="round" />
+              <circle class="als-nav-point" cx="190" cy="15" r="5" fill="#C47B46" />
+            </svg>
+            <div class="als-tagline">"Every road has a story."</div>
+            <div class="als-progress-bar">
+              <div class="als-progress-fill"></div>
+            </div>
+          </div>
           
           <!-- System Status Bar -->
           <div class="phone-status-bar">
@@ -251,28 +273,23 @@
             </div>
           </div>
 
-          <!-- App Top Header Bar inside Phone -->
+          <!-- App Top Header Bar inside Phone (Screenshot 1 Reference) -->
           <header class="phone-app-header">
-            <div class="pah-brand" id="pah-brand-btn" title="RoadMate India Home Feed">
-              <svg class="pah-logo-svg" viewBox="0 0 24 24">
-                <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
-              </svg>
+            <div class="pah-brand" id="pah-brand-btn" title="RoadMate India — Every road has a story" onclick="window.appPreview && window.appPreview.replayLaunchSequence()">
+              <img src="assets/images/roadmate_icon.svg" class="pah-brand-icon-img" alt="RoadMate Icon">
               <div class="pah-brand-text">
                 <span class="pah-title">Road<span>Mate</span></span>
-                <span class="pah-sub">📍 Rohtang Pass • 3,980m</span>
+                <span class="pah-sub">RIDE • EXPLORE • STAY SAFE</span>
               </div>
             </div>
 
             <div class="pah-actions">
-              <button class="pah-btn" id="btn-quick-hud" title="Cockpit Handlebar HUD Display">🧭</button>
-              <button class="pah-btn btn-sos-glow" id="btn-quick-sos" title="Protected Emergency SOS">🚨 SOS</button>
+              <button class="pah-sos-pill interactive-squish" id="btn-quick-sos" title="Protected Emergency SOS (Pillar 5)" onclick="window.appPreview && window.appPreview.openSosModal()">
+                <span class="sos-exclaim">!</span> SOS
+              </button>
               <button class="pah-btn" id="btn-header-notifs" title="Touring Notifications">
                 🔔
                 <span class="pah-badge">2</span>
-              </button>
-              <button class="pah-btn" id="btn-header-messages" title="Convoy Comms Radio">
-                💬
-                <span class="pah-badge">1</span>
               </button>
             </div>
           </header>
@@ -280,9 +297,78 @@
           <!-- Active App Screen Content Area -->
           <div class="screen-viewport" id="screen-viewport">
 
-            <!-- SCREEN 0: HOME — INSTAGRAM-INSPIRED RIDER FEED -->
+            <!-- SCREEN 0: HOME — VINTAGE TOURING COCKPIT DASHBOARD -->
             <div class="app-screen active" id="screen-home">
               <div class="home-scroll-container" id="home-feed-scroll">
+                
+                <!-- RIDER GREETING BANNER (Screenshot 1 Reference) -->
+                <div class="rider-greeting-card">
+                  <div class="rgc-avatar-wrap">
+                    <img src="assets/images/rider.jpg" class="rgc-avatar" alt="Aman Jha">
+                  </div>
+                  <div class="rgc-text">
+                    <h3 class="rgc-greeting">Good morning, rider 👋</h3>
+                    <p class="rgc-sub">New roads. Same you. Bigger stories.</p>
+                  </div>
+                </div>
+
+                <!-- HERO NEXT RIDE CARD (Screenshot 1 Reference) -->
+                <div class="hero-next-ride-card">
+                  <div class="hnr-header">
+                    <span class="hnr-label">YOUR NEXT RIDE</span>
+                    <div class="hnr-title-row">
+                      <h2 class="hnr-title">Manali to Leh</h2>
+                    </div>
+                    <div class="hnr-badges-row">
+                      <span class="hnr-chip">⏱️ 5 Days</span>
+                      <span class="hnr-chip">🛣️ 1,260 km</span>
+                      <span class="hnr-chip">🏔️ Moderate</span>
+                    </div>
+                  </div>
+
+                  <!-- Route Map Snapshot -->
+                  <div class="hnr-map-snapshot" id="home-mini-map-wrap">
+                    <div id="home-mini-leaflet-map"></div>
+                    <div class="hnr-map-overlay-route">
+                      <span>📍 Manali ➔ Rohtang Pass ➔ Leh</span>
+                    </div>
+                  </div>
+
+                  <!-- Turn Instruction Banner -->
+                  <div class="hnr-turn-instruction">
+                    <div class="hnr-turn-icon">↱</div>
+                    <div class="hnr-turn-text">
+                      <span class="hnr-turn-primary">Turn right in 2.4 km</span>
+                      <span class="hnr-turn-sub">At Kothi - NH3</span>
+                    </div>
+                  </div>
+
+                  <!-- Hazard Radar Alert Banner -->
+                  <div class="hnr-hazard-alert" onclick="window.appPreview && window.appPreview.showPillarScreen('hazards')">
+                    <span class="hnr-hazard-icon">⚠️</span>
+                    <div class="hnr-hazard-info">
+                      <span class="hnr-hazard-title">Rockfall ahead • 850 m</span>
+                      <span class="hnr-hazard-sub">Use caution - Recent report verified by 4 riders</span>
+                    </div>
+                  </div>
+
+                  <!-- Telemetry Stats Row -->
+                  <div class="hnr-telemetry-row">
+                    <div class="hnr-tel-col">
+                      <span class="hnr-tel-val">51 km</span>
+                      <span class="hnr-tel-lbl">Distance remaining</span>
+                    </div>
+                    <div class="hnr-tel-col" style="text-align: right;">
+                      <span class="hnr-tel-val">1h 20m</span>
+                      <span class="hnr-tel-lbl">ETA rohtang</span>
+                    </div>
+                  </div>
+
+                  <!-- Primary Heritage Copper CTA -->
+                  <button class="btn-start-ride-copper interactive-squish" id="btn-home-start-ride" onclick="window.appPreview && window.appPreview.startRideFromHome()">
+                    <span>▶</span> Start ride
+                  </button>
+                </div>
                 
                 <!-- Stories Shelf with Branded Blaze Orange Rings -->
                 <div class="stories-shelf-wrapper">
