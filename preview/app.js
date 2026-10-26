@@ -403,13 +403,13 @@ class AppPreview {
       captainBike: 'BMW R1250 GS'
     };
 
-    this.initElements();
-    this.bindEvents();
-    this.startClock();
-    this.initMap();
-    this.initHomeMiniMap();
-    this.initLaunchSequence();
-    this.buildGridPreview();
+    try { this.initLaunchSequence(); } catch (e) { console.debug(e); }
+    try { this.initElements(); } catch (e) { console.debug(e); }
+    try { this.bindEvents(); } catch (e) { console.debug(e); }
+    try { this.startClock(); } catch (e) { console.debug(e); }
+    try { this.initMap(); } catch (e) { console.debug(e); }
+    try { this.initHomeMiniMap(); } catch (e) { console.debug(e); }
+    try { this.buildGridPreview(); } catch (e) { console.debug(e); }
   }
 
   initElements() {
