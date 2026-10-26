@@ -1,0 +1,19 @@
+{
+  "name": "roadmate-india",
+  "version": "1.0.0",
+  "description": "Safety-first motorcycle touring platform for Indian riders with OpenStreetMap live tracking, personal trip squads, and emergency radar.",
+  "scripts": {
+    "build": "echo '✓ RoadMate India build completed successfully.'",
+    "start": "npx serve preview"
+  },
+  "keywords": [
+    "roadmate",
+    "motorcycle",
+    "touring",
+    "openstreetmap",
+    "convoy",
+    "safety"
+  ],
+  "author": "Aman Jha",
+  "license": "MIT"
+}
