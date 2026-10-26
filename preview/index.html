@@ -243,7 +243,7 @@
         <div class="phone-screen" id="phone-screen">
 
           <!-- EXCEPTIONAL APPLICATION LOADING SEQUENCE (Section 7) -->
-          <div class="app-launch-sequence" id="app-launch-sequence">
+          <div class="app-launch-sequence" id="app-launch-sequence" onclick="this.classList.add('launch-complete'); this.style.display='none';" title="Tap to enter RoadMate">
             <div class="als-emblem-wrap">
               <svg class="als-emblem-svg" viewBox="0 0 512 512">
                 <rect width="512" height="512" rx="112" fill="#101C2C" />
@@ -263,6 +263,17 @@
               <div class="als-progress-fill"></div>
             </div>
           </div>
+          <script>
+            (function() {
+              var s = document.getElementById('app-launch-sequence');
+              if (s) {
+                setTimeout(function() {
+                  s.classList.add('launch-complete');
+                  s.style.display = 'none';
+                }, 1600);
+              }
+            })();
+          </script>
           
           <!-- System Status Bar -->
           <div class="phone-status-bar">
