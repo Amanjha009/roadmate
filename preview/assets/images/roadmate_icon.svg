@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="navyBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#17283D"/>
+      <stop offset="100%" stop-color="#101C2C"/>
+    </linearGradient>
+    <linearGradient id="roadGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F7F6F2"/>
+    </linearGradient>
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Rounded Square App Icon Container (Midnight Navy) -->
+  <rect width="512" height="512" rx="112" fill="url(#navyBg)" />
+
+  <!-- Mountain Silhouette (Twin High-Pass Ridges) -->
+  <g filter="url(#subtleGlow)">
+    <!-- Primary Mountain Peak -->
+    <path d="M 120 340 L 230 148 C 238 134 254 134 262 148 L 330 265 L 368 202 C 375 190 390 190 397 202 L 442 278 C 452 295 440 318 420 318 L 360 318" 
+          fill="none" 
+          stroke="#F7F6F2" 
+          stroke-width="26" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+
+    <!-- Mountain Ridge Snowcap Line -->
+    <path d="M 230 148 L 222 188 L 246 208 L 262 148" 
+          fill="#F7F6F2" 
+          opacity="0.9" />
+
+    <!-- Sweeping Winding Alpine Road Symbol cutting through the Pass -->
+    <path d="M 96 384 C 180 384 210 324 256 324 C 304 324 330 260 354 190" 
+          fill="none" 
+          stroke="url(#roadGradient)" 
+          stroke-width="38" 
+          stroke-linecap="round"/>
+
+    <!-- Dashed Center Highway Line in Midnight Navy -->
+    <path d="M 106 384 C 184 384 212 324 256 324 C 298 324 324 268 348 200" 
+          fill="none" 
+          stroke="#101C2C" 
+          stroke-width="6" 
+          stroke-dasharray="14 14" 
+          stroke-linecap="round"/>
+  </g>
+
+  <!-- Heritage Copper Waypoint Marker on the Pass Summit -->
+  <circle cx="356" cy="190" r="14" fill="#C47B46" stroke="#FFFFFF" stroke-width="4"/>
+</svg>
