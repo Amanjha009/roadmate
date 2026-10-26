@@ -387,6 +387,22 @@ class AppPreview {
     this.storyPrivacyClipped = true;
     this.storyHideMaxSpeed = true;
 
+    // Trip Group & Solo Mode State
+    this.rideMode = 'group'; // 'group' or 'solo'
+    this.isRideRunning = true; // Actual running simulation on OpenStreetMap
+    this.autoCenterCamera = true;
+    this.activeSquad = {
+      code: 'HIM-7492',
+      title: 'Himalayan Wanderers',
+      route: 'Manali → Rohtang Pass → Keylong',
+      destination: 'Keylong, Lahaul & Spiti',
+      isCaptain: false,
+      membersCount: 6,
+      capacity: 8,
+      captainName: 'Vikramaditya Rao',
+      captainBike: 'BMW R1250 GS'
+    };
+
     this.initElements();
     this.bindEvents();
     this.startClock();
