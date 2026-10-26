@@ -141,10 +141,9 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
               },
             ),
             children: [
-              // Dark Touring CartoDB Vector Tiles
+              // OpenStreetMap Standard Tiles for Motorcycle Touring
               TileLayer(
-                urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-                subdomains: const ['a', 'b', 'c', 'd'],
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.roadmate.india',
               ),
 
