@@ -407,6 +407,8 @@ class AppPreview {
     this.bindEvents();
     this.startClock();
     this.initMap();
+    this.initHomeMiniMap();
+    this.initLaunchSequence();
     this.buildGridPreview();
   }
 
