@@ -59,6 +59,7 @@ class GroupRide(Base):
     )
     title: Mapped[str] = mapped_column(String(300), nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    join_code: Mapped[str | None] = mapped_column(String(20), index=True, nullable=True)
     trip_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("trips.id", ondelete="SET NULL"), nullable=True
     )
