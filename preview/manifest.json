@@ -1,14 +1,20 @@
 {
   "name": "RoadMate India — Motorcycle Touring & Safety",
   "short_name": "RoadMate",
-  "description": "Safety-first motorcycle touring, convoy radar, and RideStory recap platform for Indian highways.",
+  "description": "Every road has a story. Vintage motorcycle touring soul with modern digital precision for Indian highways and mountain passes.",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#121212",
-  "theme_color": "#FF6B00",
+  "background_color": "#101C2C",
+  "theme_color": "#101C2C",
   "orientation": "portrait-primary",
   "categories": ["navigation", "travel", "lifestyle"],
   "icons": [
+    {
+      "src": "assets/images/roadmate_icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
     {
       "src": "icon-192.png",
       "sizes": "192x192",
