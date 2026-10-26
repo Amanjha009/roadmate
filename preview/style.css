@@ -4,67 +4,97 @@
    ───────────────────────────────────────────────────────────── */
 
 :root {
-  /* Core Brand Tokens (Preserved from spec) */
-  --bg-matte: #121212;
-  --surface-elevated: #1E1E1E;
-  --surface-variant: #2C2C2C;
-  --surface-border: #383838;
-  --brand-orange: #FF5C00;
-  --brand-orange-hover: #E55200;
-  --brand-orange-glow: rgba(255, 92, 0, 0.45);
-  --status-green: #4CAF50;
-  --status-amber: #FFC107;
-  --status-red: #F44336;
-  --status-purple: #9C27B0;
-  --status-blue: #2196F3;
-  --text-primary: #FFFFFF;
-  --text-secondary: #B0B0B0;
-  --text-tertiary: #757575;
+  /* ── Core Brand Tokens (Master Prompt Specification) ── */
+  --color-midnight-navy: #101C2C;
+  --color-deep-navy: #17283D;
+  --color-instrument-black: #101318;
+  --color-graphite: #202630;
+  --color-warm-ivory: #F7F6F2;
+  --color-pure-white: #FFFFFF;
+  --color-steel-blue: #62758A;
+  --color-heritage-copper: #C47B46;
+  --color-heritage-copper-hover: #B06935;
+  --color-touring-amber: #F2B544;
+  --color-safe-green: #3E9B70;
+  --color-alert-red: #D74743;
+  --color-muted-text: #A5AFBC;
 
-  /* Typography */
+  /* Aliased System Colors */
+  --bg-matte: var(--color-midnight-navy);
+  --surface-elevated: var(--color-deep-navy);
+  --surface-variant: var(--color-graphite);
+  --surface-border: rgba(98, 117, 138, 0.28);
+  --brand-orange: var(--color-heritage-copper);
+  --brand-orange-hover: var(--color-heritage-copper-hover);
+  --brand-orange-glow: rgba(196, 123, 70, 0.35);
+  --status-green: var(--color-safe-green);
+  --status-amber: var(--color-touring-amber);
+  --status-red: var(--color-alert-red);
+  --status-purple: #8B65A6;
+  --status-blue: #4A88C7;
+  --text-primary: var(--color-pure-white);
+  --text-secondary: var(--color-muted-text);
+  --text-tertiary: var(--color-steel-blue);
+
+  /* Typography with Tabular Numerals for Gauges & Telemetry */
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: 'Outfit', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
 
-  /* Smooth Rounded Radii */
+  /* 4-point Spacing & Metric Standard */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Radii */
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 22px;
-  --radius-xl: 34px;
+  --radius-pill: 9999px;
 
-  /* ── 3-TIER ELEVATION GLASS SYSTEM ── */
-  /* Tier 1: Base Ground Canvas */
-  --glass-tier-base: #121212;
-
-  /* Tier 2: Mid-Elevation (Floating Cards, Stats, Items over Map/Content) */
-  --glass-tier-mid-bg: rgba(24, 27, 34, 0.72);
+  /* ── Precision Glass & Instrument Surfaces ── */
+  --glass-tier-base: var(--color-midnight-navy);
+  --glass-tier-mid-bg: rgba(23, 40, 61, 0.82);
   --glass-blur-mid: 20px;
-  --glass-fallback-mid: rgba(24, 27, 34, 0.95);
+  --glass-fallback-mid: #17283D;
+  --glass-tier-top-bg: rgba(16, 28, 44, 0.90);
+  --glass-blur-top: 26px;
+  --glass-fallback-top: #101C2C;
 
-  /* Tier 3: Top-Elevation (Floating Nav Bars, Drawers, Sheets, Modals, Action Bars) */
-  --glass-tier-top-bg: rgba(20, 22, 28, 0.78);
-  --glass-blur-top: 28px;
-  --glass-fallback-top: rgba(20, 22, 28, 0.98);
+  --glass-edge: rgba(98, 117, 138, 0.25);
+  --glass-edge-accent: rgba(196, 123, 70, 0.45);
 
-  /* Glass Structural Borders & Highlights */
-  --glass-edge: rgba(255, 255, 255, 0.08);
-  --glass-edge-accent: rgba(255, 92, 0, 0.35);
-
-  /* Specular Sheen (Subtle white diagonal sheen at 4-8% opacity across top edge) */
-  --specular-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0) 100%);
+  --specular-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0) 100%);
   --specular-sheen-active: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0) 100%);
 
-  /* Physical Layer Shadows */
-  --glass-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.35);
-  --glass-shadow-md: 0 8px 32px rgba(0, 0, 0, 0.42);
-  --glass-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
-  --glass-shadow-floating: 0 12px 36px rgba(0, 0, 0, 0.55), 0 1px 0 inset rgba(255, 255, 255, 0.1);
+  --glass-shadow-sm: 0 4px 14px rgba(16, 28, 44, 0.35);
+  --glass-shadow-md: 0 8px 28px rgba(16, 19, 24, 0.45);
+  --glass-shadow-lg: 0 16px 44px rgba(16, 19, 24, 0.65);
+  --glass-shadow-floating: 0 12px 32px rgba(16, 19, 24, 0.55), 0 1px 0 inset rgba(255, 255, 255, 0.08);
 
-  /* Apple-Style Spring Physics & Micro-Interactions */
   --spring-physics: cubic-bezier(0.34, 1.3, 0.64, 1);
   --spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
   --spring-smooth: cubic-bezier(0.25, 0.9, 0.3, 1.05);
+}
+
+/* Light Theme Variables */
+[data-theme="light"] {
+  --bg-matte: var(--color-warm-ivory);
+  --surface-elevated: #FFFFFF;
+  --surface-variant: #EDEAE1;
+  --surface-border: rgba(98, 117, 138, 0.20);
+  --text-primary: var(--color-midnight-navy);
+  --text-secondary: #4A5868;
+  --text-tertiary: var(--color-steel-blue);
+  --glass-tier-base: var(--color-warm-ivory);
+  --glass-tier-mid-bg: rgba(255, 255, 255, 0.88);
+  --glass-tier-top-bg: rgba(247, 246, 242, 0.94);
+  --glass-edge: rgba(98, 117, 138, 0.22);
 }
 
 * {
@@ -76,14 +106,15 @@
 body {
   background-color: var(--glass-tier-base);
   background-image: 
-    radial-gradient(ellipse at 15% 0%, rgba(255, 92, 0, 0.14) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 100%, rgba(26, 32, 44, 0.65) 0%, transparent 60%);
+    radial-gradient(ellipse at 15% 0%, rgba(196, 123, 70, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 100%, rgba(23, 40, 61, 0.75) 0%, transparent 60%);
   color: var(--text-primary);
   font-family: var(--font-main);
   height: 100vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  font-feature-settings: "tnum" 1;
 }
 
 /* ─────────────────────────────────────────────────────────────
