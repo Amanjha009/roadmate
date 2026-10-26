@@ -1172,65 +1172,87 @@ class AppPreview {
     this.showToast(`🛡️ False Alarm Aborted: ${reason}`);
   }
 
-  // ── Leaflet Touring Map Initialization ─────────────────────────────────────
+  // ── Leaflet Touring Map Initialization (OpenStreetMap Engine) ──────────────
   initMap() {
     const mapEl = document.getElementById('real-leaflet-map');
     if (!mapEl || typeof L === 'undefined') return;
 
-    // Center around Rohtang Pass / Keylong Highway NH3
+    // Center on Leh-Manali Highway (NH3) Rohtang Pass Crest
     const center = [32.3712, 77.2144];
     this.map = L.map('real-leaflet-map', {
       zoomControl: false,
-      attributionControl: false
-    }).setView(center, 13);
+      attributionControl: true
+    }).setView(center, 14);
 
-    // 100% Free OpenStreetMap tiles rendered in high-contrast dark mode via CSS filter
-    this.darkTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '&copy; OpenStreetMap contributors'
+    // 100% Authentic OpenStreetMap Tile Layer
+    this.osmStandardTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      subdomains: ['a', 'b', 'c'],
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
     }).addTo(this.map);
 
-    this.topoTiles = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    this.osmTopoTiles = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
       maxZoom: 17,
-      attribution: '&copy; OpenStreetMap &copy; OpenTopoMap'
+      attribution: '&copy; OpenStreetMap contributors, SRTM | Map: OpenTopoMap'
     });
-    this.currentTileMode = 'dark';
+    this.currentTileMode = 'osm';
 
-    // Realistic Himalayan Touring Route: Manali -> Rohtang Pass -> Keylong -> Baralacha La
-    this.routeCoords = [
-      [32.2396, 77.1887], // 0: Manali
-      [32.3012, 77.2050], // 1: Marhi
-      [32.3712, 77.2144], // 2: Rohtang Pass Crest
-      [32.4020, 77.1820], // 3: Gramphu Hairpin
-      [32.4200, 77.1500], // 4: Koksar
-      [32.4800, 77.0600], // 5: Sissu
-      [32.5500, 77.0300], // 6: Keylong
-      [32.6500, 77.1200], // 7: Jispa
-      [32.7560, 77.3000]  // 8: Baralacha La
+    // Detailed, realistic NH3 Leh-Manali Highway road coordinates with altitudes & waypoints
+    this.routeWaypoints = [
+      { lat: 32.2396, lng: 77.1887, alt: 2050, name: "Manali Mall Road (2,050m)", turn: "Departing Manali on NH3 Leh Highway", distNext: "4.2 km" },
+      { lat: 32.2580, lng: 77.1940, alt: 2210, name: "Palchan Bridge", turn: "Keep right across Beas River Bridge", distNext: "3.8 km" },
+      { lat: 32.2740, lng: 77.2010, alt: 2480, name: "Kothi Canyon", turn: "Ascending gorge • Watch for loose gravel", distNext: "5.1 km" },
+      { lat: 32.2980, lng: 77.2080, alt: 2850, name: "Gulaba Checkpost", turn: "Passing BRO permit checkpoint", distNext: "6.2 km" },
+      { lat: 32.3210, lng: 77.2140, alt: 3300, name: "Marhi Paragliding Bend", turn: "In 350m: Sharp Left Hairpin • 2nd Gear", distNext: "4.4 km" },
+      { lat: 32.3420, lng: 77.2190, alt: 3650, name: "Rani Nallah Hairpins", turn: "Caution: Melting snow water crossing", distNext: "3.2 km" },
+      { lat: 32.3712, lng: 77.2144, alt: 3978, name: "Rohtang Pass Crest (3,978m)", turn: "Reaching Rohtang Summit • Stupendous Peaks", distNext: "5.6 km" },
+      { lat: 32.3920, lng: 77.1950, alt: 3620, name: "Gramphu Fork", turn: "Take sharp right fork for Keylong / Leh", distNext: "7.1 km" },
+      { lat: 32.4200, lng: 77.1500, alt: 3140, name: "Koksar BRO Checkpost", turn: "Entering Lahaul Valley • Smooth Tarmac", distNext: "12.0 km" },
+      { lat: 32.4800, lng: 77.0600, alt: 3120, name: "Sissu Waterfall", turn: "Cruising valley floor along Chandra River", distNext: "14.5 km" },
+      { lat: 32.5500, lng: 77.0300, alt: 3080, name: "Keylong Headquarters", turn: "Arriving Keylong • Convoy Staging Area", distNext: "Destination" }
     ];
 
-    this.routePolyline = L.polyline(this.routeCoords, {
+    // Build dense interpolation path along the highway curves
+    this.routeCoords = [];
+    for (let i = 0; i < this.routeWaypoints.length - 1; i++) {
+      const pA = this.routeWaypoints[i];
+      const pB = this.routeWaypoints[i + 1];
+      const steps = 12; // sub-points per segment for ultra-fluid running
+      for (let s = 0; s < steps; s++) {
+        const factor = s / steps;
+        this.routeCoords.push([
+          pA.lat + (pB.lat - pA.lat) * factor,
+          pA.lng + (pB.lng - pA.lng) * factor,
+          pA.alt + (pB.alt - pA.alt) * factor,
+          pA.name,
+          pA.turn
+        ]);
+      }
+    }
+    // Add final point
+    const lastWp = this.routeWaypoints[this.routeWaypoints.length - 1];
+    this.routeCoords.push([lastWp.lat, lastWp.lng, lastWp.alt, lastWp.name, lastWp.turn]);
+
+    this.routePolyline = L.polyline(this.routeCoords.map(c => [c[0], c[1]]), {
       color: '#FF5C00',
       weight: 5,
-      opacity: 0.9,
-      dashArray: '8, 8'
+      opacity: 0.95
     }).addTo(this.map);
 
-    // 1. My Bike Marker (RE Himalayan 450 with live position lerp)
+    // 1. My Bike Marker (RE Himalayan 450 with live position & bearing rotation)
     const bikeIcon = L.divIcon({
       className: 'custom-bike-marker',
       html: `
-        <div id="my-bike-marker-icon" style="background: #FF5C00; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 3px solid white; box-shadow: 0 0 15px #FF5C00; transition: transform 0.2s ease;">
+        <div id="my-bike-marker-icon" style="background: linear-gradient(135deg, #FF5C00, #E55200); color: white; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 3px solid white; box-shadow: 0 0 16px rgba(255, 92, 0, 0.8); transition: transform 0.15s ease-out;">
           🏍️
         </div>
       `,
-      iconSize: [36, 36],
-      iconAnchor: [18, 18]
+      iconSize: [38, 38],
+      iconAnchor: [19, 19]
     });
-    this.bikeMarker = L.marker([32.3712, 77.2144], { icon: bikeIcon }).addTo(this.map);
+    this.bikeMarker = L.marker([this.routeCoords[0][0], this.routeCoords[0][1]], { icon: bikeIcon }).addTo(this.map);
 
-    // 2. Squad Members (Live WebSocket Fan-out via Redis Pub/Sub)
-    // Captain Vikram (Lead)
+    // 2. Squad Members Markers (Vikram Lead, Rohit Pack, Priya Sweep)
     const captainIcon = L.divIcon({
       className: 'custom-captain-marker',
       html: `
@@ -1242,11 +1264,10 @@ class AppPreview {
       iconSize: [60, 48],
       iconAnchor: [30, 24]
     });
-    this.teammates.vikram = L.marker([32.3830, 77.2020], { icon: captainIcon })
+    this.teammates.vikram = L.marker([this.routeCoords[0][0] + 0.003, this.routeCoords[0][1] + 0.003], { icon: captainIcon })
       .addTo(this.map)
-      .bindPopup("<b>Road Captain (Vikram)</b><br>BMW R1250 GS • +950m • 4G Live");
+      .bindPopup("<b>Road Captain (Vikram)</b><br>BMW R1250 GS • +150m • 4G Live");
 
-    // Rohit (Pack Member)
     const rohitIcon = L.divIcon({
       className: 'custom-rohit-marker',
       html: `
@@ -1258,12 +1279,10 @@ class AppPreview {
       iconSize: [60, 48],
       iconAnchor: [30, 24]
     });
-    this.teammates.rohit = L.marker([32.3760, 77.2090], { icon: rohitIcon })
+    this.teammates.rohit = L.marker([this.routeCoords[0][0] + 0.0015, this.routeCoords[0][1] + 0.0015], { icon: rohitIcon })
       .addTo(this.map)
-      .bindPopup("<b>Rohit Verma</b><br>KTM 390 Adventure • +420m • 4G Live");
+      .bindPopup("<b>Rohit Verma</b><br>KTM 390 Adventure • +70m • 4G Live");
 
-    // Priya (Pack Member - Subject to Tunnel Reconnect Simulation)
-    this.priyaMarkerEl = null;
     const priyaIcon = L.divIcon({
       className: 'custom-priya-marker',
       html: `
@@ -1275,11 +1294,11 @@ class AppPreview {
       iconSize: [70, 48],
       iconAnchor: [35, 24]
     });
-    this.teammates.priya = L.marker([32.3650, 77.2180], { icon: priyaIcon })
+    this.teammates.priya = L.marker([this.routeCoords[0][0] - 0.002, this.routeCoords[0][1] - 0.002], { icon: priyaIcon })
       .addTo(this.map)
-      .bindPopup("<b>Priya Sundaram</b><br>Royal Enfield Scram 411 • -350m");
+      .bindPopup("<b>Priya Sundaram</b><br>Royal Enfield Scram 411 • -120m");
 
-    // 3. PostGIS Hazard Pin (Landslide)
+    // 3. PostGIS Hazard Pin (Rockfall on NH3)
     const hazardIcon = L.divIcon({
       className: 'custom-hazard-marker',
       html: `
@@ -1290,7 +1309,7 @@ class AppPreview {
       iconSize: [32, 32],
       iconAnchor: [16, 16]
     });
-    L.marker([32.3920, 77.1950], { icon: hazardIcon })
+    L.marker([32.3420, 77.2190], { icon: hazardIcon })
       .addTo(this.map)
       .bindPopup("<b>PostGIS Hazard: Fresh Rockfall</b><br>Reported 12m ago • Verified by 14 riders");
 
@@ -1312,34 +1331,45 @@ class AppPreview {
       L.marker(p.pos, { icon: poiIcon }).addTo(this.map).bindPopup(`<b>${p.name}</b><br><small>${p.desc}</small>`);
     });
 
-    // Recenter map FAB
+    // Recenter map FAB (toggles and re-centers auto-camera)
     const fabRecenter = document.getElementById('fab-recenter');
     if (fabRecenter) {
       fabRecenter.addEventListener('click', () => {
         if (this.bikeMarker) {
+          this.autoCenterCamera = true;
           this.map.panTo(this.bikeMarker.getLatLng(), { animate: true });
-          this.showToast('📍 Map Recentered on RE Himalayan 450 GPS Fix');
+          this.showToast('📍 Camera Locked on RE Himalayan 450 (Auto-Tracking Active)');
         }
       });
     }
 
-    // Toggle layer FAB (CartoDB Dark Matter vs OpenTopoMap)
+    // Toggle layer FAB (OpenStreetMap Clean vs OpenTopoMap vs Night HUD)
     const fabLayer = document.getElementById('fab-layer');
     if (fabLayer) {
       fabLayer.addEventListener('click', () => {
-        if (this.currentTileMode === 'dark') {
-          this.map.removeLayer(this.darkTiles);
-          this.map.addLayer(this.topoTiles);
+        if (this.currentTileMode === 'osm') {
+          this.map.removeLayer(this.osmStandardTiles);
+          this.map.addLayer(this.osmTopoTiles);
           this.currentTileMode = 'topo';
-          this.showToast('⛰️ Map Layer: OpenTopoMap Himalayan Topography active');
+          this.showToast('⛰️ Map Layer: OpenTopoMap Elevation & Mountain Contours');
+        } else if (this.currentTileMode === 'topo') {
+          this.map.removeLayer(this.osmTopoTiles);
+          this.map.addLayer(this.osmStandardTiles);
+          document.body.classList.add('night-hud-active');
+          this.currentTileMode = 'night';
+          this.showToast('🌙 Map Layer: OpenStreetMap Night Touring HUD');
         } else {
-          this.map.removeLayer(this.topoTiles);
-          this.map.addLayer(this.darkTiles);
-          this.currentTileMode = 'dark';
-          this.showToast('🌙 Map Layer: CartoDB Dark Matter Night HUD active');
+          document.body.classList.remove('night-hud-active');
+          this.currentTileMode = 'osm';
+          this.showToast('🗺️ Map Layer: Authentic OpenStreetMap Standard Tiles');
         }
       });
     }
+
+    // Allow user to manually drag map without camera fighting them (re-locks on fab-recenter)
+    this.map.on('dragstart', () => {
+      this.autoCenterCamera = false;
+    });
 
     // Report hazard FAB
     const fabReport = document.getElementById('fab-report-hazard');
@@ -1354,63 +1384,118 @@ class AppPreview {
     this.startFreshnessTicker();
   }
 
-  // ── Real-Time Position Interpolator (Smooth Animation without Snapping) ────
+  // ── Real-Time Position Interpolator (Actual Running on OpenStreetMap) ──────
   startSmoothInterpolation() {
     let lastTick = performance.now();
+    this.routeSegmentIndex = 0;
+    this.routeSegmentProgress = 0.0;
+    this.recordedDistanceKm = 0.0;
+
+    const calcBearing = (lat1, lon1, lat2, lon2) => {
+      const toRad = deg => deg * Math.PI / 180;
+      const toDeg = rad => rad * 180 / Math.PI;
+      const y = Math.sin(toRad(lon2 - lon1)) * Math.cos(toRad(lat2));
+      const x = Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
+                Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(toRad(lon2 - lon1));
+      return (toDeg(Math.atan2(y, x)) + 360) % 360;
+    };
 
     const interpolate = (now) => {
       const deltaMs = now - lastTick;
       lastTick = now;
 
-      // Update segment duration based on battery mode:
-      // Ride Room mode: moves across segment points smoothly every ~3.5 seconds
-      // Home Hub mode: relaxed interval of ~20 seconds
-      const segmentDurationMs = this.trackingMode === 'rideRoom' ? 3500 : 20000;
-      this.routeSegmentProgress += deltaMs / segmentDurationMs;
+      // Only advance position when ride is active
+      if (this.isRideRunning && this.routeCoords && this.routeCoords.length > 1) {
+        // Step duration: smooth natural speed ~65-90 km/h progression along curves
+        const segmentDurationMs = 1800; // ~1.8 seconds per curve slice
+        this.routeSegmentProgress += deltaMs / segmentDurationMs;
 
-      if (this.routeSegmentProgress >= 1.0) {
-        this.routeSegmentProgress = 0.0;
-        this.routeSegmentIndex++;
-        if (this.routeSegmentIndex >= this.routeCoords.length - 1) {
-          this.routeSegmentIndex = 1; // loop seamlessly along pass
+        if (this.routeSegmentProgress >= 1.0) {
+          this.routeSegmentProgress = 0.0;
+          this.routeSegmentIndex++;
+          if (this.routeSegmentIndex >= this.routeCoords.length - 1) {
+            this.routeSegmentIndex = 0; // loop back to start of mountain pass
+          }
+
+          // Trigger viewport polling if moved
+          if (this.freshnessSeconds >= 45) {
+            this.triggerViewportPoll(false);
+          }
         }
 
-        // Viewport movement check: if rider moved forward in Ride Room, check 200m rule
-        if (this.trackingMode === 'rideRoom' && this.freshnessSeconds >= 45) {
-          this.triggerViewportPoll(false);
-        }
-      }
+        // Smooth cubic easing for realistic motorcycle cornering
+        const t = this.routeSegmentProgress;
+        const easedT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
-      // Smooth Cubic Easing for natural motorcycle flow
-      const t = this.routeSegmentProgress;
-      const easedT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        const p0 = this.routeCoords[this.routeSegmentIndex];
+        const p1 = this.routeCoords[this.routeSegmentIndex + 1];
 
-      const p0 = this.routeCoords[this.routeSegmentIndex];
-      const p1 = this.routeCoords[this.routeSegmentIndex + 1];
+        if (p0 && p1 && this.bikeMarker) {
+          const curLat = p0[0] + (p1[0] - p0[0]) * easedT;
+          const curLng = p0[1] + (p1[1] - p0[1]) * easedT;
+          const curAlt = p0[2] + (p1[2] - p0[2]) * easedT;
 
-      if (p0 && p1 && this.bikeMarker) {
-        const curLat = p0[0] + (p1[0] - p0[0]) * easedT;
-        const curLng = p0[1] + (p1[1] - p0[1]) * easedT;
+          // 1. Update motorcycle marker position on OpenStreetMap
+          this.bikeMarker.setLatLng([curLat, curLng]);
 
-        // Native coordinate update (zero map re-renders)
-        this.bikeMarker.setLatLng([curLat, curLng]);
+          // 2. Smoothly rotate motorcycle marker to match road bearing
+          const bearing = calcBearing(p0[0], p0[1], p1[0], p1[1]);
+          const markerIcon = document.getElementById('my-bike-marker-icon');
+          if (markerIcon) {
+            markerIcon.style.transform = `rotate(${bearing - 45}deg)`;
+          }
 
-        // Move teammates smoothly in convoy formation
-        if (this.teammates.vikram) {
-          const vLat = curLat + 0.007;
-          const vLng = curLng - 0.006;
-          this.teammates.vikram.setLatLng([vLat, vLng]);
-        }
-        if (this.teammates.rohit) {
-          const rLat = curLat + 0.003;
-          const rLng = curLng - 0.003;
-          this.teammates.rohit.setLatLng([rLat, rLng]);
-        }
-        if (this.teammates.priya && !this.priyaReconnecting) {
-          // If online, Priya moves along
-          const pLat = curLat - 0.005;
-          const pLng = curLng + 0.004;
-          this.teammates.priya.setLatLng([pLat, pLng]);
+          // 3. Auto-pan camera to keep motorcycle in view on OpenStreetMap
+          if (this.autoCenterCamera && this.map && this.currentScreen === 'hud') {
+            this.map.panTo([curLat, curLng], { animate: false });
+          }
+
+          // 4. Dynamic realistic speedometer (accelerating on straights, braking on corners)
+          const angleDelta = Math.abs(bearing - (this._lastBearing || bearing));
+          this._lastBearing = bearing;
+          const baseSpeed = angleDelta > 15 ? 46 : 84; // hairpin vs straight
+          const speedVariance = Math.sin(now / 500) * 6;
+          const liveSpeed = Math.max(38, Math.min(96, baseSpeed + speedVariance));
+
+          const speedEl = document.getElementById('hud-speed-display');
+          if (speedEl) speedEl.textContent = Math.round(liveSpeed);
+
+          // 5. Dynamic altitude update
+          const altEl = document.querySelector('.alt-value');
+          if (altEl) altEl.textContent = `${Math.round(curAlt).toLocaleString()} m`;
+
+          // 6. Dynamic trip distance increment
+          this.recordedDistanceKm += (liveSpeed * (deltaMs / 3600000));
+          const distEl = document.getElementById('hud-rec-dist');
+          if (distEl) distEl.textContent = `${this.recordedDistanceKm.toFixed(1)} km`;
+
+          // 7. Dynamic Turn-by-Turn Instruction Banner
+          const turnNameEl = document.querySelector('.turn-name');
+          const turnDistEl = document.querySelector('.turn-dist');
+          if (turnNameEl && p0[4]) turnNameEl.textContent = p0[4];
+          if (turnDistEl) {
+            const distCountdown = Math.max(80, Math.round((1.0 - this.routeSegmentProgress) * 950));
+            turnDistEl.textContent = `${distCountdown} m`;
+          }
+
+          // 8. Convoy Teammates (Move in formation when Group Mode is active)
+          if (this.rideMode === 'group' && this.teammates) {
+            if (this.teammates.vikram) {
+              const vLat = curLat + 0.0025;
+              const vLng = curLng + 0.0025;
+              this.teammates.vikram.setLatLng([vLat, vLng]);
+            }
+            if (this.teammates.rohit) {
+              const rLat = curLat + 0.0012;
+              const rLng = curLng + 0.0012;
+              this.teammates.rohit.setLatLng([rLat, rLng]);
+            }
+            if (this.teammates.priya && !this.priyaReconnecting) {
+              const pLat = curLat - 0.002;
+              const pLng = curLng - 0.002;
+              this.teammates.priya.setLatLng([pLat, pLng]);
+            }
+          }
         }
       }
 
@@ -1419,6 +1504,7 @@ class AppPreview {
 
     requestAnimationFrame(interpolate);
   }
+
 
   // ── Layer Freshness & Viewport Polling Engine ──────────────────────────────
   startFreshnessTicker() {
