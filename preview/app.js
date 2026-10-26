@@ -3438,6 +3438,117 @@ class AppPreview {
       if (alertBanner) alertBanner.style.display = 'none';
     }
   }
+
+  initLaunchSequence() {
+    const splash = document.getElementById('app-launch-sequence');
+    if (!splash) return;
+    
+    // Tap to skip
+    splash.addEventListener('click', () => {
+      splash.classList.add('launch-complete');
+    });
+
+    // Auto complete after 2.4s
+    setTimeout(() => {
+      splash.classList.add('launch-complete');
+    }, 2400);
+  }
+
+  replayLaunchSequence() {
+    const splash = document.getElementById('app-launch-sequence');
+    if (!splash) return;
+    splash.classList.remove('launch-complete');
+    setTimeout(() => {
+      splash.classList.add('launch-complete');
+    }, 2400);
+  }
+
+  initHomeMiniMap() {
+    const container = document.getElementById('home-mini-leaflet-map');
+    if (!container || typeof L === 'undefined') return;
+    try {
+      if (this.homeMiniMap) {
+        this.homeMiniMap.remove();
+        this.homeMiniMap = null;
+      }
+      this.homeMiniMap = L.map('home-mini-leaflet-map', {
+        zoomControl: false,
+        attributionControl: false,
+        dragging: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false
+      }).setView([32.27, 77.20], 11);
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18
+      }).addTo(this.homeMiniMap);
+
+      // Route line from Manali to Rohtang Pass
+      const miniRoute = [
+        [32.2396, 77.1887], // Manali
+        [32.2750, 77.1950], // Palchan
+        [32.3120, 77.1990], // Kothi
+        [32.3450, 77.2180], // Gulaba
+        [32.3716, 77.2466]  // Rohtang Pass
+      ];
+
+      L.polyline(miniRoute, {
+        color: '#C47B46',
+        weight: 4,
+        opacity: 0.95
+      }).addTo(this.homeMiniMap);
+
+      // Start pin (Manali)
+      L.circleMarker([32.2396, 77.1887], {
+        radius: 6,
+        fillColor: '#3E9B70',
+        color: '#FFFFFF',
+        weight: 2,
+        fillOpacity: 1
+      }).addTo(this.homeMiniMap);
+
+      // Pass pin (Rohtang)
+      L.circleMarker([32.3716, 77.2466], {
+        radius: 6,
+        fillColor: '#D74743',
+        color: '#FFFFFF',
+        weight: 2,
+        fillOpacity: 1
+      }).addTo(this.homeMiniMap);
+
+      this.homeMiniMap.fitBounds(L.latLngBounds(miniRoute), { padding: [12, 12] });
+    } catch (e) {
+      console.debug('Home mini map note:', e);
+    }
+  }
+
+  startRideFromHome() {
+    this.switchScreen('hud');
+    this.toggleRealTimeRunning(true);
+    this.showToast('🏍️ Touring Navigation Engaged: Manali to Leh via NH3');
+  }
+
+  setConvoyTab(tab) {
+    ['riders', 'route', 'map'].forEach(t => {
+      const el = document.getElementById(`cst-tab-${t}`);
+      if (el) el.classList.toggle('active', t === tab);
+    });
+    if (tab === 'route') {
+      this.showToast('🛣️ Convoy Route: Manali ➔ Rohtang Pass ➔ Keylong (115 km stage)');
+    } else if (tab === 'map') {
+      this.switchScreen('hud');
+      this.showToast('🗺️ Displaying Live Convoy Radar on OpenStreetMap');
+    }
+  }
+
+  broadcastCheckIn() {
+    if (window.soundFX) window.soundFX.playConvoyPing();
+    this.showToast('✋ Check-in Broadcast Sent: All 5 squad riders notified');
+  }
+
+  callRegroupModal() {
+    this.showToast('📍 Calling Convoy Regroup at Next Safe Waypoint (Kothi Dhaba)');
+  }
 }
 
 // Instantiate on DOM Loaded
