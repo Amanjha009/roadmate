@@ -2759,6 +2759,8 @@ class AppPreview {
 
     if (this.recordingState === 'IDLE') {
       this.recordingState = 'ACTIVE';
+      this.isRideRunning = true;
+      this.autoCenterCamera = true;
       this.recordingSeconds = 0;
       this.recordedDistanceKm = 0.0;
       this.recordedElevationM = 0;
@@ -2785,17 +2787,19 @@ class AppPreview {
         }
       }, 1000);
 
-      this.showToast('🔴 Ride Recording Active: Filtering GPS fixes with Haversine velocity spike guard.');
+      this.showToast('🔴 Ride Recording Active: Live OpenStreetMap GPS tracking running.');
       sfx.playHazardBeep();
     } else if (this.recordingState === 'ACTIVE') {
       this.recordingState = 'PAUSED';
+      this.isRideRunning = false;
       clearInterval(this.recordingInterval);
       if (btnToggle) btnToggle.textContent = '▶️ Resume';
       if (dot) dot.className = 'rec-dot paused';
       if (label) label.textContent = 'PAUSED';
-      this.showToast('❚❚ Ride Recording Paused.');
+      this.showToast('❚❚ Ride Paused.');
     } else if (this.recordingState === 'PAUSED') {
       this.recordingState = 'RESUMED';
+      this.isRideRunning = true;
       if (btnToggle) btnToggle.textContent = '⏸️ Pause';
       if (dot) dot.className = 'rec-dot active';
       if (label) label.textContent = 'ACTIVE';
@@ -2816,12 +2820,13 @@ class AppPreview {
         }
       }, 1000);
 
-      this.showToast('▶️ Ride Recording Resumed.');
+      this.showToast('▶️ Ride Resumed on OpenStreetMap.');
     }
   }
 
   finishRideRecording() {
     this.recordingState = 'FINISHED';
+    this.isRideRunning = false;
     clearInterval(this.recordingInterval);
 
     const btnToggle = document.getElementById('btn-hud-record-toggle');
