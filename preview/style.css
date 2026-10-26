@@ -5838,4 +5838,415 @@ body.mode-responsive .smartphone-frame {
   font-weight: 700;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   TRIP GROUPS, SQUAD CODES & SOLO RIDE MODE STYLES
+   ───────────────────────────────────────────────────────────── */
+
+/* HUD Mode Switcher Container (Screen 1) */
+.hud-mode-switcher-container {
+  padding: 6px 14px 4px;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 21;
+  position: relative;
+}
+
+.hud-mode-pill-track {
+  display: flex;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 3px;
+  gap: 4px;
+}
+
+.hud-mode-pill-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-main);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-mode-pill-btn:hover {
+  color: #FFF;
+}
+
+.hud-mode-pill-btn.active {
+  background: linear-gradient(135deg, #FF5C00, #E55200);
+  color: #FFF;
+  box-shadow: 0 2px 10px rgba(255, 92, 0, 0.4);
+}
+
+.mode-code-badge {
+  background: rgba(0, 0, 0, 0.3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+  color: #FFE082;
+  border: 1px solid rgba(255, 224, 130, 0.3);
+}
+
+/* Active Mode Status Ribbon */
+.hud-active-mode-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 20;
+  position: relative;
+  animation: fadeInDown 0.3s ease;
+}
+
+.banner-group {
+  background: linear-gradient(90deg, rgba(255, 92, 0, 0.15), rgba(18, 18, 18, 0.95));
+  border-left: 3px solid var(--brand-orange);
+}
+
+.banner-solo {
+  background: linear-gradient(90deg, rgba(76, 175, 80, 0.15), rgba(18, 18, 18, 0.95));
+  border-left: 3px solid var(--status-green);
+}
+
+.hamb-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #FFF;
+}
+
+.hamb-dot {
+  color: var(--brand-orange);
+  font-size: 9px;
+  animation: pulseDot 1.5s infinite;
+}
+
+.hamb-dot.solo-dot {
+  color: var(--status-green);
+}
+
+.hamb-sep {
+  color: var(--text-tertiary);
+}
+
+.hamb-code {
+  color: #FFE082;
+  font-family: var(--font-mono);
+}
+
+.hamb-copy-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.hamb-copy-btn:hover {
+  opacity: 1;
+}
+
+.hamb-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hamb-count {
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+.hamb-action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFF;
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hamb-action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Squad Code Hero Card (Screen 3) */
+.squad-code-hero-card {
+  margin: 14px;
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 92, 0, 0.12), rgba(20, 22, 28, 0.85));
+  border: 1.5px solid rgba(255, 92, 0, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.schc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.schc-eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 800;
+  color: var(--brand-orange);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.schc-code-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.schc-code {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #FFF;
+  text-shadow: 0 0 12px rgba(255, 92, 0, 0.6);
+}
+
+.schc-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFF;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.schc-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.schc-btn-share {
+  background: rgba(255, 92, 0, 0.2);
+  border-color: rgba(255, 92, 0, 0.5);
+  color: #FFA726;
+}
+
+.schc-badge {
+  background: rgba(255, 92, 0, 0.2);
+  border: 1px solid rgba(255, 92, 0, 0.4);
+  color: #FFA726;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.schc-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0 0 12px;
+}
+
+.squad-quick-actions-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sqa-btn {
+  flex: 1 1 45%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FFF;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sqa-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.sqa-btn-solo {
+  border-color: rgba(76, 175, 80, 0.4);
+  color: #A5D6A7;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+/* Solo Mode Command Center */
+.solo-command-center {
+  margin: 14px;
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(20, 22, 28, 0.9));
+  border: 1.5px solid rgba(76, 175, 80, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.scc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.scc-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(76, 175, 80, 0.2);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.scc-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.scc-feature-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.scc-fi-icon {
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.scc-feature-item strong {
+  display: block;
+  font-size: 11px;
+  color: #FFF;
+}
+
+.scc-feature-item small {
+  display: block;
+  font-size: 9px;
+  color: var(--text-secondary);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.scc-share-box {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.scc-share-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--status-green);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.scc-share-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.scc-share-row code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #E0E0E0;
+  word-break: break-all;
+}
+
+.scc-cta-row {
+  display: flex;
+  gap: 8px;
+}
+
+.convoy-header-mode-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFF;
+  border-radius: 14px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.convoy-header-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.preset-code-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FFE082;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.preset-code-pill:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #FFE082;
+}
+
+@keyframes pulseDot {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
