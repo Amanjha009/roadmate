@@ -3446,32 +3446,35 @@ class AppPreview {
     // Tap to skip
     splash.addEventListener('click', () => {
       splash.classList.add('launch-complete');
+      splash.style.display = 'none';
     });
 
-    // Auto complete after 2.4s
+    // Auto complete after 1.8s
     setTimeout(() => {
       splash.classList.add('launch-complete');
-    }, 2400);
+      splash.style.display = 'none';
+    }, 1800);
   }
 
   replayLaunchSequence() {
     const splash = document.getElementById('app-launch-sequence');
     if (!splash) return;
+    splash.style.display = 'flex';
     splash.classList.remove('launch-complete');
     setTimeout(() => {
       splash.classList.add('launch-complete');
-    }, 2400);
+      splash.style.display = 'none';
+    }, 2000);
   }
 
   initHomeMiniMap() {
-    const container = document.getElementById('home-mini-leaflet-map');
-    if (!container || typeof L === 'undefined') return;
     try {
-      if (this.homeMiniMap) {
-        this.homeMiniMap.remove();
-        this.homeMiniMap = null;
+      const container = document.getElementById('home-mini-leaflet-map');
+      if (!container || typeof L === 'undefined') return;
+      if (container._leaflet_id) {
+        return;
       }
-      this.homeMiniMap = L.map('home-mini-leaflet-map', {
+      this.homeMiniMap = L.map(container, {
         zoomControl: false,
         attributionControl: false,
         dragging: false,
@@ -3483,7 +3486,6 @@ class AppPreview {
         maxZoom: 18
       }).addTo(this.homeMiniMap);
 
-      // Route line from Manali to Rohtang Pass
       const miniRoute = [
         [32.2396, 77.1887], // Manali
         [32.2750, 77.1950], // Palchan
@@ -3498,7 +3500,6 @@ class AppPreview {
         opacity: 0.95
       }).addTo(this.homeMiniMap);
 
-      // Start pin (Manali)
       L.circleMarker([32.2396, 77.1887], {
         radius: 6,
         fillColor: '#3E9B70',
@@ -3507,7 +3508,6 @@ class AppPreview {
         fillOpacity: 1
       }).addTo(this.homeMiniMap);
 
-      // Pass pin (Rohtang)
       L.circleMarker([32.3716, 77.2466], {
         radius: 6,
         fillColor: '#D74743',
