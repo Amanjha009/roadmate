@@ -2670,6 +2670,141 @@
             </div>
           </div>
 
+          <!-- MODAL 6: CREATE PERSONAL GROUP TRIP & GENERATE CODE -->
+          <div class="modal-form-overlay" id="modal-create-group-trip">
+            <div class="modal-form-card" style="max-width: 420px;">
+              <div class="mfc-header">
+                <div>
+                  <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #FFF;">👥 Create Group Trip</h3>
+                  <small style="color: var(--text-secondary); font-size: 11px;">Generate a Squad Code for friends & riders</small>
+                </div>
+                <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeModal('modal-create-group-trip')">✕</button>
+              </div>
+              <div class="mfc-body">
+                <div class="mfc-group">
+                  <label class="mfc-label">Group / Trip Name</label>
+                  <input type="text" id="cgt-title" class="mfc-input" placeholder="e.g. Spiti Valley Circuit" value="Spiti Valley Loop Expedition">
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Route Summary & Waypoints</label>
+                  <input type="text" id="cgt-route" class="mfc-input" placeholder="e.g. Shimla → Kaza → Kunzum La → Manali" value="Shimla → Narkanda → Kaza → Kunzum La → Manali">
+                </div>
+                <div class="mfc-row" style="display: flex; gap: 10px;">
+                  <div class="mfc-group" style="flex: 1;">
+                    <label class="mfc-label">Destination</label>
+                    <input type="text" id="cgt-destination" class="mfc-input" placeholder="e.g. Kaza, Spiti" value="Kaza (3,800m)">
+                  </div>
+                  <div class="mfc-group" style="flex: 1;">
+                    <label class="mfc-label">Max Riders</label>
+                    <select id="cgt-capacity" class="mfc-select">
+                      <option value="6">6 Riders</option>
+                      <option value="8" selected>8 Riders</option>
+                      <option value="12">12 Riders</option>
+                      <option value="20">20 Riders</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mfc-group">
+                  <label class="mfc-label">Road Captain's Bike</label>
+                  <input type="text" id="cgt-bike" class="mfc-input" value="Royal Enfield Himalayan 450">
+                </div>
+                <div class="mfc-checkbox-row" style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                  <input type="checkbox" id="cgt-women-only" style="accent-color: var(--brand-orange); width: 18px; height: 18px;">
+                  <label for="cgt-women-only" style="font-size: 12px; color: #E0E0E0; cursor: pointer;">
+                    🌸 Women-only touring convoy shield
+                  </label>
+                </div>
+
+                <!-- Generated Code Output Showcase (Revealed upon Creation) -->
+                <div id="cgt-success-card" class="glass-surface" style="display: none; border-radius: 12px; padding: 14px; margin-top: 10px; border: 1.5px solid #00E676; background: rgba(0, 230, 118, 0.08);">
+                  <div style="font-size: 11px; text-transform: uppercase; color: #00E676; font-weight: 800; letter-spacing: 1px;">✓ SQUAD CREATED SUCCESSFULLY</div>
+                  <div style="margin: 8px 0; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-family: var(--font-mono); font-size: 26px; font-weight: 900; color: #FFF; letter-spacing: 2px;" id="cgt-generated-code">RDM-8492</span>
+                    <button class="schc-btn interactive-squish" onclick="window.appPreview && window.appPreview.copyGeneratedCode()">📋 Copy</button>
+                  </div>
+                  <small style="color: var(--text-secondary); font-size: 11px; display: block; line-height: 1.4;">
+                    Share this code with your group. Individuals can join instantly from their RoadMate app!
+                  </small>
+                </div>
+              </div>
+              <div class="mfc-footer" id="cgt-footer-initial">
+                <button class="cta-blaze-btn interactive-squish" style="flex: 1;" onclick="window.appPreview && window.appPreview.submitCreateGroup()">
+                  🚀 Create Group & Generate Code
+                </button>
+              </div>
+              <div class="mfc-footer" id="cgt-footer-success" style="display: none;">
+                <button class="cta-blaze-btn interactive-squish" style="flex: 1;" onclick="window.appPreview && window.appPreview.enterCreatedGroupRoom()">
+                  🏍️ Enter Live Convoy Radar (Lead Position) ➔
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 7: JOIN SQUAD VIA 6-DIGIT CODE -->
+          <div class="modal-form-overlay" id="modal-join-group-code">
+            <div class="modal-form-card" style="max-width: 420px;">
+              <div class="mfc-header">
+                <div>
+                  <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #FFF;">🔑 Join Squad via Code</h3>
+                  <small style="color: var(--text-secondary); font-size: 11px;">Enter code to ride with an individual group</small>
+                </div>
+                <button class="cbs-close-btn" onclick="window.appPreview && window.appPreview.closeModal('modal-join-group-code')">✕</button>
+              </div>
+              <div class="mfc-body">
+                <div class="mfc-group">
+                  <label class="mfc-label">Enter 6-Character Squad Code</label>
+                  <div style="position: relative;">
+                    <input type="text" id="jgc-code-input" class="mfc-input" placeholder="e.g. HIM-7492" maxlength="10" style="font-family: var(--font-mono); font-size: 20px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: var(--brand-orange);" oninput="window.appPreview && window.appPreview.handleCodeInput(this.value)">
+                  </div>
+                  <!-- Quick Preset Code Pills -->
+                  <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+                    <span style="font-size: 10px; color: var(--text-tertiary); line-height: 22px;">Quick Test:</span>
+                    <button class="preset-code-pill interactive-squish" onclick="window.appPreview && window.appPreview.fillJoinCode('HIM-7492')">HIM-7492 (Himalayas)</button>
+                    <button class="preset-code-pill interactive-squish" onclick="window.appPreview && window.appPreview.fillJoinCode('SPI-8391')">SPI-8391 (Spiti)</button>
+                    <button class="preset-code-pill interactive-squish" onclick="window.appPreview && window.appPreview.fillJoinCode('GOA-4029')">GOA-4029 (Coastal)</button>
+                  </div>
+                </div>
+
+                <!-- Live Squad Preview Card -->
+                <div id="jgc-preview-box" class="glass-surface" style="border-radius: 12px; padding: 12px; border: 1px solid rgba(255, 92, 0, 0.4); background: rgba(255, 92, 0, 0.06);">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <strong style="color: #FFF; font-size: 14px;" id="jgc-preview-title">Himalayan Wanderers</strong>
+                    <span style="font-size: 10px; background: rgba(76, 175, 80, 0.2); color: #81C784; padding: 2px 6px; border-radius: 4px; font-weight: 700;" id="jgc-preview-status">● LIVE RADAR</span>
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;" id="jgc-preview-route">
+                    Route: Manali → Rohtang Pass → Keylong
+                  </div>
+                  <div style="font-size: 11px; color: #FFB300; margin-top: 2px;" id="jgc-preview-captain">
+                    👑 Captain: Vikramaditya Rao (BMW R1250 GS) • 5 Riders Checked In
+                  </div>
+                </div>
+
+                <div class="mfc-group" style="margin-top: 12px;">
+                  <label class="mfc-label">Your Rider Name</label>
+                  <input type="text" id="jgc-rider-name" class="mfc-input" value="Aman Jha">
+                </div>
+                <div class="mfc-row" style="display: flex; gap: 10px;">
+                  <div class="mfc-group" style="flex: 1;">
+                    <label class="mfc-label">Your Motorcycle</label>
+                    <input type="text" id="jgc-bike-model" class="mfc-input" value="RE Himalayan 450">
+                  </div>
+                  <div class="mfc-group" style="flex: 1;">
+                    <label class="mfc-label">Squad Role</label>
+                    <select id="jgc-role" class="mfc-select">
+                      <option value="member" selected>Pack Member 🏍️</option>
+                      <option value="sweep">Sweeper 🛡️</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="mfc-footer">
+                <button class="cta-blaze-btn interactive-squish" style="flex: 1;" onclick="window.appPreview && window.appPreview.submitJoinGroupByCode()">
+                  🏍️ Join Squad & Ride Together
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- NOTIFICATIONS SHEET -->
           <div class="comments-bottom-sheet" id="notifications-sheet">
             <div class="cbs-handle-bar"></div>
