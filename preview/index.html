@@ -1461,61 +1461,85 @@
               </div>
             </div>
 
-            <!-- SCREEN 3: GROUP CONVOY & LIVE ROLL CALL -->
+            <!-- SCREEN 3: GROUP CONVOY & LIVE ROLL CALL (Screenshot 3 Reference) -->
             <div class="app-screen" id="screen-convoy">
-              <div class="screen-app-bar glass-surface-top">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span class="bar-title" id="convoy-screen-title">Convoy: Himalayan Wanderers</span>
+              <!-- Top Convoy Header matching Screenshot 3 -->
+              <div class="convoy-v2-header">
+                <div class="cv2-back-title" onclick="window.appPreview && window.appPreview.switchScreen('home')">
+                  <span class="cv2-back-icon">❮</span>
+                  <h3 class="cv2-title">Himalayan Wanderers</h3>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <button class="convoy-header-mode-btn interactive-squish" id="btn-convoy-toggle-solo" onclick="window.appPreview && window.appPreview.toggleRideMode()">
-                    <span id="convoy-mode-toggle-text">Switch to Solo 🏍️</span>
+                    <span id="convoy-mode-toggle-text">Solo 🏍️</span>
                   </button>
-                  <span class="bar-action status-green" id="convoy-sync-status">Live Sync</span>
+                  <button class="cv2-more-btn" onclick="window.appPreview && window.appPreview.showToast('📋 Convoy Settings: Squad Code HIM-7492')">•••</button>
                 </div>
               </div>
-              <div class="screen-scroll-body">
+
+              <div class="screen-scroll-body" style="padding-bottom: 70px;">
+                <!-- Synced Well with Avatar Rings matching Screenshot 3 -->
+                <div class="convoy-synced-well">
+                  <div class="csw-avatars-row">
+                    <div class="csw-avatar-ring"><img src="assets/images/rider.jpg" alt="Rohit"></div>
+                    <div class="csw-avatar-ring"><img src="assets/images/hero.jpg" alt="Aman"></div>
+                    <div class="csw-avatar-ring"><img src="assets/images/women_rider_priya.jpg" alt="Priya"></div>
+                    <div class="csw-avatar-ring" style="border-color: var(--color-touring-amber);"><img src="assets/images/hazard.jpg" alt="Sandeep"></div>
+                  </div>
+                  <div class="csw-status-text">
+                    <span class="csw-dot-green"></span>
+                    <span>4 riders synced • 1 rider delayed</span>
+                  </div>
+                </div>
+
+                <!-- Segmented Tabs matching Screenshot 3 -->
+                <div class="convoy-segmented-tabs" role="tablist">
+                  <button class="cst-tab active" id="cst-tab-riders" onclick="window.appPreview && window.appPreview.setConvoyTab('riders')">
+                    <span>👥</span> Riders
+                  </button>
+                  <button class="cst-tab" id="cst-tab-route" onclick="window.appPreview && window.appPreview.setConvoyTab('route')">
+                    <span>🛣️</span> Route
+                  </button>
+                  <button class="cst-tab" id="cst-tab-map" onclick="window.appPreview && window.appPreview.setConvoyTab('map')">
+                    <span>🗺️</span> Map
+                  </button>
+                </div>
+
                 <!-- SQUAD JOIN CODE HERO CARD (Pillar 3 & Group Rides) -->
-                <div class="squad-code-hero-card glass-surface" id="squad-code-hero-card">
+                <div class="squad-code-hero-card glass-surface" id="squad-code-hero-card" style="margin: 0 14px 12px 14px;">
                   <div class="schc-top">
                     <div class="schc-info">
                       <span class="schc-eyebrow">GROUP TRIP JOIN CODE</span>
                       <div class="schc-code-wrap">
                         <span class="schc-code" id="active-squad-code">HIM-7492</span>
                         <button class="schc-btn interactive-squish" onclick="window.appPreview && window.appPreview.copySquadCode()" title="Copy Squad Code">
-                          📋 Copy Code
+                          📋 Copy
                         </button>
                         <button class="schc-btn schc-btn-share interactive-squish" onclick="window.appPreview && window.appPreview.shareSquadInvite()" title="Share Invite">
-                          🔗 Share Invite
+                          🔗 Invite
                         </button>
                       </div>
                     </div>
                     <div class="schc-badge" id="squad-role-badge">
-                      <span>SWEEP POSITION</span>
+                      <span>SWEEP ROLE</span>
                     </div>
                   </div>
-                  <p class="schc-desc" id="squad-desc-text">
-                    Share this 6-character code with your personal group riders. They enter this code in RoadMate to join this exact trip with live radar, separation warnings, and convoy comms!
-                  </p>
                   <div class="squad-quick-actions-bar">
                     <button class="sqa-btn interactive-squish" onclick="window.appPreview && window.appPreview.openCreateGroupModal()">
-                      <span>＋</span> Create Group Trip
+                      <span>＋</span> New Squad
                     </button>
                     <button class="sqa-btn interactive-squish" onclick="window.appPreview && window.appPreview.openJoinGroupModal()">
-                      <span>🔑</span> Join Squad via Code
-                    </button>
-                    <button class="sqa-btn sqa-btn-solo interactive-squish" onclick="window.appPreview && window.appPreview.setRideMode('solo')">
-                      <span>🏍️</span> Solo Ride Mode
+                      <span>🔑</span> Join Code
                     </button>
                   </div>
                 </div>
 
                 <!-- SOLO MODE COMMAND CENTER (Displayed when in Solo Mode) -->
-                <div class="solo-command-center glass-surface" id="solo-command-center" style="display: none;">
+                <div class="solo-command-center glass-surface" id="solo-command-center" style="display: none; margin: 0 14px 12px 14px;">
                   <div class="scc-header">
                     <div class="scc-icon">🏍️</div>
                     <div>
-                      <h4 style="margin: 0; font-size: 16px; font-weight: 800; color: #FFF;">Solo Touring Mode</h4>
+                      <h4 style="margin: 0; font-size: 15px; font-weight: 800; color: #FFF;">Solo Touring Mode</h4>
                       <p style="margin: 2px 0 0; font-size: 11px; color: var(--text-secondary);">Independent Expedition • Individual Safety Shield Armed</p>
                     </div>
                   </div>
@@ -1530,157 +1554,130 @@
                     <div class="scc-feature-item">
                       <span class="scc-fi-icon">🆘</span>
                       <div>
-                        <strong>AI Voice SOS & Fall Sensor</strong>
-                        <small>10s automatic crash responsiveness check & 112/108 dispatch</small>
+                        <strong>Voice SOS & Crash Shield</strong>
+                        <small>10s automatic crash check & 112/108 dispatch</small>
                       </div>
-                    </div>
-                    <div class="scc-feature-item">
-                      <span class="scc-fi-icon">📡</span>
-                      <div>
-                        <strong>Live Family Trail Link</strong>
-                        <small>Share real-time encrypted telemetry with emergency contacts</small>
-                      </div>
-                    </div>
-                    <div class="scc-feature-item">
-                      <span class="scc-fi-icon">📦</span>
-                      <div>
-                        <strong>Offline Sync</strong>
-                        <small>Zero-connectivity offline queuing for high mountain passes</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="scc-share-box">
-                    <span class="scc-share-label">PRIVATE FAMILY TRACKING URL:</span>
-                    <div class="scc-share-row">
-                      <code id="solo-tracking-url">https://roadmate.in/track/solo-aman-450</code>
-                      <button class="schc-btn interactive-squish" onclick="window.appPreview && window.appPreview.copySoloLink()">📋 Copy Link</button>
                     </div>
                   </div>
                   <div class="scc-cta-row">
                     <button class="cta-blaze-btn interactive-squish" style="flex: 1;" onclick="window.appPreview && window.appPreview.openCreateGroupModal()">
-                      👥 Start Group Trip & Generate Code
+                      👥 Start Group Trip
                     </button>
                     <button class="cta-blaze-btn interactive-squish" style="flex: 1; background: #262626; border: 1px solid #444;" onclick="window.appPreview && window.appPreview.openJoinGroupModal()">
-                      🔑 Join Group with Code
+                      🔑 Join Group Code
                     </button>
                   </div>
                 </div>
 
-                <!-- Convoy Live Visuals Wrapper (Hidden when in Solo Mode) -->
+                <!-- Convoy Live Visuals Wrapper -->
                 <div id="convoy-live-visuals-wrap">
-                <!-- Overlapping Member Avatar Stack (Instagram Group Chat Style) -->
-                <div class="avatar-stack-container interactive-squish" id="convoy-avatar-stack" title="Tap to inspect full convoy squad roster" onclick="window.appPreview && window.appPreview.showToast('👥 Convoy Roster: Vikram (Lead), Rohit, Priya, Aman (Sweep) + 2 Guest Riders. All 6 connected.')">
-                  <div class="avatar-stack-group" id="convoy-avatar-stack-group">
-                    <div class="stacked-avatar" style="background: #FFD700; color: black; z-index: 5;">👑</div>
-                    <div class="stacked-avatar" style="background: #2196F3; z-index: 4;">🏍️</div>
-                    <div class="stacked-avatar" style="background: #9C27B0; z-index: 3;">🛵</div>
-                    <div class="stacked-avatar" style="background: #FF5C00; z-index: 2;">🛡️</div>
-                    <div class="stacked-avatar" style="background: #374151; font-size: 11px; z-index: 1;">+2</div>
+                  <!-- Roster List Header matching Screenshot 3 -->
+                  <div class="convoy-roster-header">
+                    <span class="crh-title">Rider List (5)</span>
+                    <span class="crh-time">Last update</span>
                   </div>
-                  <div class="avatar-stack-info">
-                    <span class="avatar-stack-title" id="convoy-squad-title-badge">Himalayan Squad (6 Riders)</span>
-                    <span class="avatar-stack-sub" id="convoy-squad-sub-badge">6/6 Synced • +950m Pack</span>
+
+                  <!-- Rider List Items (Screenshot 3) -->
+                  <div class="convoy-member-list" style="margin: 0 14px 12px 14px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(98, 117, 138, 0.25);">
+                    
+                    <!-- Rider 1: Rohit Verma (Road Captain) -->
+                    <div class="convoy-rider-row">
+                      <div class="crr-left">
+                        <div class="crr-avatar-wrap" style="border-color: #FFD700;">
+                          <img src="assets/images/rider.jpg" alt="Rohit Verma">
+                        </div>
+                        <div class="crr-info">
+                          <span class="crr-name">Rohit Verma</span>
+                          <span class="crr-role">Road Captain • 1.2 km ahead</span>
+                        </div>
+                      </div>
+                      <div class="crr-status-col">
+                        <span class="crr-status-pill online">● Online</span>
+                        <span class="crr-distance">2 min ago</span>
+                      </div>
+                    </div>
+
+                    <!-- Rider 2: Aman Jha (Rider) -->
+                    <div class="convoy-rider-row">
+                      <div class="crr-left">
+                        <div class="crr-avatar-wrap">
+                          <img src="assets/images/hero.jpg" alt="Aman Jha">
+                        </div>
+                        <div class="crr-info">
+                          <span class="crr-name">Aman Jha</span>
+                          <span class="crr-role">Rider • behind 3 km</span>
+                        </div>
+                      </div>
+                      <div class="crr-status-col">
+                        <span class="crr-status-pill online">● Online</span>
+                        <span class="crr-distance">4 min ago</span>
+                      </div>
+                    </div>
+
+                    <!-- Rider 3: Priya Singh (Rider) -->
+                    <div class="convoy-rider-row">
+                      <div class="crr-left">
+                        <div class="crr-avatar-wrap">
+                          <img src="assets/images/women_rider_priya.jpg" alt="Priya Singh">
+                        </div>
+                        <div class="crr-info">
+                          <span class="crr-name">Priya Singh</span>
+                          <span class="crr-role">Rider • 5 km ahead</span>
+                        </div>
+                      </div>
+                      <div class="crr-status-col">
+                        <span class="crr-status-pill online">● Online</span>
+                        <span class="crr-distance">5 min ago</span>
+                      </div>
+                    </div>
+
+                    <!-- Rider 4: Sandeep Rao (Delayed) -->
+                    <div class="convoy-rider-row" style="background: rgba(242, 181, 68, 0.08); border-left: 3px solid var(--color-touring-amber);">
+                      <div class="crr-left">
+                        <div class="crr-avatar-wrap" style="border-color: var(--color-touring-amber);">
+                          <img src="assets/images/hazard.jpg" alt="Sandeep Rao">
+                        </div>
+                        <div class="crr-info">
+                          <span class="crr-name">Sandeep Rao</span>
+                          <span class="crr-role">Rider • Last known: 8 km back</span>
+                        </div>
+                      </div>
+                      <div class="crr-status-col">
+                        <span class="crr-status-pill delayed">▲ Delayed</span>
+                        <span class="crr-distance">12 min ago</span>
+                      </div>
+                    </div>
+
+                    <!-- Rider 5: Neha Kapoor (Sweep Rider) -->
+                    <div class="convoy-rider-row">
+                      <div class="crr-left">
+                        <div class="crr-avatar-wrap" style="border-color: var(--color-heritage-copper);">
+                          <img src="assets/images/spiti_water_crossing.jpg" alt="Neha Kapoor">
+                        </div>
+                        <div class="crr-info">
+                          <span class="crr-name">Neha Kapoor</span>
+                          <span class="crr-role">Sweep Rider • behind 7 km</span>
+                        </div>
+                      </div>
+                      <div class="crr-status-col">
+                        <span class="crr-status-pill online">● Online</span>
+                        <span class="crr-distance">3 min ago</span>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
+              </div>
 
-                <!-- Convoy Radar Visualizer in Liquid Glass -->
-                <div class="convoy-radar-box glass-surface">
-                  <div class="radar-circle circle-outer"></div>
-                  <div class="radar-circle circle-mid"></div>
-                  <div class="radar-circle circle-inner"></div>
-                  <div class="radar-sweep-arm"></div>
-                  
-                  <!-- Convoy Member Dots -->
-                  <div class="rider-dot captain-dot" style="top: 25%; left: 52%;" title="Vikram (Road Captain)">
-                    <span class="dot-label">👑 Vikram (Lead)</span>
-                  </div>
-                  <div class="rider-dot pack-dot" style="top: 42%; left: 48%;" title="Rohit (Member)">
-                    <span class="dot-label">Rohit (+210m)</span>
-                  </div>
-                  <div class="rider-dot pack-dot" style="top: 55%; left: 51%;" title="Priya (Member)">
-                    <span class="dot-label">Priya (+480m)</span>
-                  </div>
-                  <div class="rider-dot me-dot" style="top: 75%; left: 50%;" title="You (Sweep Position)">
-                    <span class="dot-label">🛵 YOU (Sweep)</span>
-                  </div>
-                </div>
-
-                <div class="convoy-quick-metrics">
-                  <div class="c-metric">
-                    <span class="c-val">6 / 6</span>
-                    <span class="c-lbl">Riders Checked In</span>
-                  </div>
-                  <div class="c-metric">
-                    <span class="c-val text-orange">950 m</span>
-                    <span class="c-lbl">Pack Separation</span>
-                  </div>
-                  <div class="c-metric">
-                    <span class="c-val text-green">Optimal</span>
-                    <span class="c-lbl">Pacing Speed</span>
-                  </div>
-                </div>
-
-                <div class="convoy-member-list">
-                  <div class="convoy-member-card">
-                    <div class="m-avatar lead-avatar">👑</div>
-                    <div class="m-info">
-                      <strong>Vikramaditya Rao</strong>
-                      <span>Road Captain • BMW R1250 GS • +950m</span>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
-                      <span class="m-status-pill pill-lead">LEAD</span>
-                      <span class="freshness-tag freshness-live">● LIVE (4s ago)</span>
-                    </div>
-                  </div>
-
-                  <div class="convoy-member-card">
-                    <div class="m-avatar pack-avatar">🏍️</div>
-                    <div class="m-info">
-                      <strong>Rohit Verma</strong>
-                      <span>Pack Rider • KTM 390 ADV • +640m</span>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
-                      <span class="m-status-pill pill-ok">SYNCED</span>
-                      <span class="freshness-tag freshness-delayed">▲ DELAYED (42s ago)</span>
-                    </div>
-                  </div>
-
-                  <div class="convoy-member-card" style="border-left: 3px solid #F44336 !important;">
-                    <div class="m-avatar pack-avatar" style="opacity: 0.6;">🛵</div>
-                    <div class="m-info">
-                      <strong style="color: #FF8A80;">Priya Sundaram</strong>
-                      <span>Hairpin Dead-Zone • RE Scram 411 • Last seen 32.251°N, 77.192°E</span>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
-                      <span class="m-status-pill" style="background: rgba(244, 67, 54, 0.2); color: #FF8A80;">CELL DEAD-ZONE</span>
-                      <span class="freshness-tag freshness-offline">✖ OFFLINE (4m ago)</span>
-                    </div>
-                  </div>
-
-                  <div class="convoy-member-card sweep-card">
-                    <div class="m-avatar sweep-avatar">🛡️</div>
-                    <div class="m-info">
-                      <strong>Aman Jha (You)</strong>
-                      <span>Sweep Position • RE Himalayan 450 • Last Rider</span>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 3px;">
-                      <span class="m-status-pill pill-sweep">SWEEP</span>
-                      <span class="freshness-tag freshness-live" id="convoy-you-freshness">● LIVE (Local Fix)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="convoy-buttons-row" style="flex-wrap: wrap;">
-                  <button class="convoy-ping-btn interactive-squish" id="btn-convoy-ping" style="flex: 1 1 45%;">
-                    <span>📡 Mesh Ping</span>
-                  </button>
-                  <button class="convoy-regroup-btn interactive-squish" id="btn-convoy-regroup" style="flex: 1 1 45%;">
-                    <span>📍 Call Regroup</span>
-                  </button>
-                  <button class="convoy-ping-btn interactive-squish" id="btn-convoy-im-ok" style="flex: 1 1 100%; background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.4); color: #81C784;">
-                    <span>📸 Broadcast "I'm OK / Stopping for Photo"</span>
-                  </button>
-                </div>
+              <!-- Fixed Bottom Dual Action Buttons matching Screenshot 3 -->
+              <div class="convoy-bottom-actions-row">
+                <button class="btn-convoy-checkin interactive-squish" onclick="window.appPreview && window.appPreview.broadcastCheckIn()">
+                  <span>✋</span> Check in
+                </button>
+                <button class="btn-convoy-regroup interactive-squish" onclick="window.appPreview && window.appPreview.callRegroupModal()">
+                  <span>👥</span> Regroup
+                </button>
+              </div>
 
                 <!-- Floating Glass Convoy Roster Bottom Sheet -->
                 <div class="convoy-roster-sheet" id="convoy-roster-sheet">
