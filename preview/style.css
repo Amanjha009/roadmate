@@ -858,9 +858,15 @@ button:active,
   background: #191a1a;
 }
 
-/* Dark mode filter for Leaflet default tiles */
+/* OpenStreetMap Tiles Styling — Crystal Clear Authentic OSM */
 .leaflet-tile {
-  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+  filter: contrast(1.04) saturate(1.08);
+  transition: filter 0.3s ease;
+}
+
+/* Night HUD mode for OpenStreetMap when user toggles dark theme */
+.night-hud-active .leaflet-tile {
+  filter: brightness(0.72) invert(1) contrast(2.2) hue-rotate(195deg) saturate(0.35) brightness(0.8);
 }
 
 /* Live Map Dynamic Status Bar (Floating Glass Pill) */
