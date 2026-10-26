@@ -1,52 +1,66 @@
 import 'package:flutter/material.dart';
 
-/// RoadMate India "Dark Touring" color palette.
+/// RoadMate India — "Vintage Touring Soul × Modern Navy Precision"
+/// Design Tokens & Palette specification.
 ///
-/// Designed for maximum readability on motorcycle mounts under direct
-/// sunlight and through tinted visors. Every color passes WCAG AA
-/// contrast against its intended background.
+/// Combines vintage motorcycle instrumentation with modern high-precision
+/// touring digital standards.
 class AppColors {
   AppColors._();
 
-  /// Matte charcoal — primary background.
-  static const Color background = Color(0xFF121212);
+  // ── Core Brand Palette ────────────────────────────────────────────────
+  /// Midnight Navy — primary brand canvas & dark background.
+  static const Color midnightNavy = Color(0xFF101C2C);
 
-  /// Elevated surface — bottom bar, dialogs.
-  static const Color surface = Color(0xFF1E1E1E);
+  /// Deep Navy — elevated surface, cards, headers, containers.
+  static const Color deepNavy = Color(0xFF17283D);
 
-  /// Cards, text-field fills, chips.
-  static const Color surfaceVariant = Color(0xFF2C2C2C);
+  /// Instrument Black — cockpit displays, HUD panels, deep contrast areas.
+  static const Color instrumentBlack = Color(0xFF101318);
 
-  /// Safety blaze orange — primary brand/CTA color.
-  static const Color primary = Color(0xFFFF5C00);
+  /// Graphite — secondary telemetry wells, subtle borders, card tracks.
+  static const Color graphite = Color(0xFF202630);
 
-  /// Pressed / focused variant of primary.
-  static const Color primaryVariant = Color(0xFFE55200);
+  /// Warm Ivory — light theme canvas, clean reading surfaces, emblem strokes.
+  static const Color warmIvory = Color(0xFFF7F6F2);
 
-  /// Text rendered on top of [primary] backgrounds.
-  static const Color onPrimary = Color(0xFFFFFFFF);
+  /// Pure White — crisp typography, icon foregrounds, high-contrast markers.
+  static const Color pureWhite = Color(0xFFFFFFFF);
 
-  /// Default body/title text.
-  static const Color textPrimary = Color(0xFFFFFFFF);
+  /// Steel Blue — dividers, inactive icon states, contour accents.
+  static const Color steelBlue = Color(0xFF62758A);
 
-  /// Secondary labels, captions.
-  static const Color textSecondary = Color(0xFFB0B0B0);
+  /// Heritage Copper — iconic warm touring accent, primary CTAs, road stamps.
+  static const Color heritageCopper = Color(0xFFC47B46);
 
-  /// Hints, disabled text.
-  static const Color textTertiary = Color(0xFF757575);
+  /// Heritage Copper Pressed/Active state.
+  static const Color heritageCopperDark = Color(0xFFA66434);
 
-  /// "All clear" — safe ride conditions, verified status.
-  static const Color statusGreen = Color(0xFF4CAF50);
+  /// Touring Amber — caution, upcoming turns, pending checkpoints.
+  static const Color touringAmber = Color(0xFFF2B544);
 
-  /// "Caution" — moderate hazard, pending verification.
-  static const Color statusAmber = Color(0xFFFFC107);
+  /// Safe Green — verified passes, rider online status, safe corridors.
+  static const Color safeGreen = Color(0xFF3E9B70);
 
-  /// "Danger / SOS" — high severity hazard, crash alert.
-  static const Color statusRed = Color(0xFFF44336);
+  /// Alert Red — SOS emergency triggers, active rockfalls, impassable hazards.
+  static const Color alertRed = Color(0xFFD74743);
 
-  /// Dividers and subtle borders.
-  static const Color divider = Color(0xFF2C2C2C);
+  /// Muted Text — metadata, secondary telemetry, subtle timestamps.
+  static const Color mutedText = Color(0xFFA5AFBC);
 
-  /// Error state (Material dark-theme error tint).
-  static const Color error = Color(0xFFCF6679);
+  // ── Backwards-Compatible Semantic Mappings ─────────────────────────────
+  static const Color background = midnightNavy;
+  static const Color surface = deepNavy;
+  static const Color surfaceVariant = graphite;
+  static const Color primary = heritageCopper;
+  static const Color primaryVariant = heritageCopperDark;
+  static const Color onPrimary = pureWhite;
+  static const Color textPrimary = pureWhite;
+  static const Color textSecondary = mutedText;
+  static const Color textTertiary = steelBlue;
+  static const Color statusGreen = safeGreen;
+  static const Color statusAmber = touringAmber;
+  static const Color statusRed = alertRed;
+  static const Color divider = steelBlue;
+  static const Color error = alertRed;
 }
