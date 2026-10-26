@@ -60,6 +60,7 @@ class GroupRideOut(BaseModel):
     captain_id: UUID
     title: str
     description: str | None
+    join_code: str | None = None
     trip_id: UUID | None
     route_summary: str
     required_gear: list[str] | None
@@ -76,8 +77,62 @@ class GroupRideOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class CreateTripGroupRequest(BaseModel):
+    """Request to create a personal trip group and generate a shareable join code."""
+    title: str = Field(..., max_length=150, description="Name of the trip group")
+    route_summary: str = Field(..., description="Route or starting point to destination")
+    destination: str | None = Field(None, description="Trip destination")
+    max_riders: int = Field(12, ge=2, le=100)
+    captain_name: str = Field("Aman Jha", description="Name of the group creator / Road Captain")
+    captain_bike: str = Field("Royal Enfield Himalayan 450", description="Captain's motorcycle model")
+    is_women_only: bool = False
+
+
+class JoinTripGroupRequest(BaseModel):
+    """Request from an individual rider to join an existing trip group using the code."""
+    join_code: str = Field(..., max_length=20, description="The unique 6-character group code")
+    rider_name: str = Field("Rider", max_length=100, description="Name of joining rider")
+    bike_model: str = Field("Motorcycle", max_length=100, description="Motorcycle make and model")
+    role: MemberRoleEnum = Field(MemberRoleEnum.member, description="Desired role: member or sweep")
+
+
+class GroupRideSessionOut(BaseModel):
+    """Full session details for a live or planned trip group."""
+    group_id: str
+    join_code: str
+    title: str
+    route_summary: str
+    destination: str | None = None
+    captain_name: str
+    captain_bike: str | None = None
+    status: str = "live"
+    max_riders: int = 12
+    created_at: str
+    members_count: int
+    members: list[dict[str, Any]] = []
+    websocket_room_id: str
+    websocket_url: str
+    share_text: str
+
+
+class SoloRideSessionOut(BaseModel):
+    """Session details when traveling in Solo Mode."""
+    session_id: str
+    mode: str = "solo"
+    rider_name: str
+    bike_model: str
+    route_title: str
+    started_at: str
+    is_hazard_radar_active: bool = True
+    is_crash_detection_active: bool = True
+    is_voice_sos_active: bool = True
+    tracking_share_url: str
+    offline_sync_ready: bool = True
+
+
 class LocationUpdate(BaseModel):
     """Live position update from a member."""
 
     latitude: float = Field(..., ge=-90, le=90)
     longitude: float = Field(..., ge=-180, le=180)
+
