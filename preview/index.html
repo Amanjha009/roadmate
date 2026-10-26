@@ -1001,6 +1001,50 @@
                 </div>
               </div>
 
+              <!-- DYNAMIC RIDE MODE SWITCHER: Solo Travel vs Group Squad -->
+              <div class="hud-mode-switcher-container">
+                <div class="hud-mode-pill-track">
+                  <button class="hud-mode-pill-btn active interactive-squish" id="btn-mode-group" onclick="window.appPreview && window.appPreview.setRideMode('group')">
+                    <span class="mode-icon">👥</span>
+                    <span class="mode-label">Group Squad</span>
+                    <span class="mode-code-badge" id="hud-squad-code-badge">HIM-7492</span>
+                  </button>
+                  <button class="hud-mode-pill-btn interactive-squish" id="btn-mode-solo" onclick="window.appPreview && window.appPreview.setRideMode('solo')">
+                    <span class="mode-icon">🏍️</span>
+                    <span class="mode-label">Solo Mode</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Active Mode Status Ribbon: Group Convoy Active -->
+              <div class="hud-active-mode-banner banner-group" id="hud-group-status-banner">
+                <div class="hamb-left">
+                  <span class="hamb-dot">●</span>
+                  <strong id="hud-banner-squad-name">Himalayan Wanderers</strong>
+                  <span class="hamb-sep">•</span>
+                  <span class="hamb-code" id="hud-banner-code-tag">Code: <strong id="hud-banner-code-val">HIM-7492</strong></span>
+                  <button class="hamb-copy-btn interactive-squish" onclick="window.appPreview && window.appPreview.copySquadCode()" title="Copy Squad Code">📋</button>
+                </div>
+                <div class="hamb-right">
+                  <span class="hamb-count" id="hud-banner-count">6 Riders Synced</span>
+                  <button class="hamb-action-btn interactive-squish" onclick="window.appPreview && window.appPreview.switchScreen('convoy')">Convoy Radar ➔</button>
+                </div>
+              </div>
+
+              <!-- Active Mode Status Ribbon: Solo Mode Active -->
+              <div class="hud-active-mode-banner banner-solo" id="hud-solo-status-banner" style="display: none;">
+                <div class="hamb-left">
+                  <span class="hamb-dot solo-dot">●</span>
+                  <strong>Solo Mode Active</strong>
+                  <span class="hamb-sep">•</span>
+                  <span class="hamb-sub">Safety Shield & Radar Armed</span>
+                </div>
+                <div class="hamb-right">
+                  <button class="hamb-action-btn interactive-squish" onclick="window.appPreview && window.appPreview.openCreateGroupModal()">＋ Create Squad</button>
+                  <button class="hamb-action-btn interactive-squish" onclick="window.appPreview && window.appPreview.openJoinGroupModal()">🔑 Join Code</button>
+                </div>
+              </div>
+
               <!-- Ride Recording Lifecycle State Machine Ribbon -->
               <div class="hud-recording-bar" id="hud-recording-bar">
                 <div class="rec-status-indicator">
