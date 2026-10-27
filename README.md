@@ -1,4 +1,4 @@
-# RoadMate India 🏍️
+# RoadMate India 
 
 > **Safety-first motorcycle touring app for Indian riders**
 
